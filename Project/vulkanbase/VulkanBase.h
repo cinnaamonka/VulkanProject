@@ -50,7 +50,7 @@ public:
 		initWindow();
 		initVulkan();
 		mainLoop();
-		cleanup();
+		Cleanup();
 	}
 
 private:
@@ -74,28 +74,33 @@ private:
 		createGraphicsPipeline();
 		createFrameBuffers();
 		// week 02
-		createCommandPool();
-		createCommandBuffer();
+		CreateCommandPool();
+		CreateCommandBuffer();
 
 		// week 06
 		createSyncObjects();
 	}
 
-	void mainLoop() {
-		while (!glfwWindowShouldClose(window)) {
+	void mainLoop() 
+	{
+		while (!glfwWindowShouldClose(window)) 
+		{
 			glfwPollEvents();
 			// week 06
-			drawFrame();
+			DrawFrame();
 		}
 		vkDeviceWaitIdle(device);
 	}
 
-	void cleanup() {
+	void Cleanup() 
+	{
 		vkDestroySemaphore(device, renderFinishedSemaphore, nullptr);
 		vkDestroySemaphore(device, imageAvailableSemaphore, nullptr);
 		vkDestroyFence(device, inFlightFence, nullptr);
 
+		// command pool destroyed
 		vkDestroyCommandPool(device, commandPool, nullptr);
+
 		for (auto framebuffer : swapChainFramebuffers) {
 			vkDestroyFramebuffer(device, framebuffer, nullptr);
 		}
@@ -139,21 +144,22 @@ private:
 	GLFWwindow* window;
 	void initWindow();
 
-	void drawScene();
+	void DrawScene();
 
 	// Week 02
 	// Queue families
 	// CommandBuffer concept
 
+	// class member to store command pool
 	VkCommandPool commandPool;
 	VkCommandBuffer commandBuffer;
 
 	QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
 
-	void drawFrame(uint32_t imageIndex);
-	void createCommandBuffer();
-	void createCommandPool(); 
-	void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex);
+	void DrawFrame(uint32_t imageIndex);
+	void CreateCommandBuffer();
+	void CreateCommandPool(); 
+	void RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex);
 	
 	// Week 03
 	// Renderpass concept
@@ -215,7 +221,7 @@ private:
 	void createInstance();
 
 	void createSyncObjects();
-	void drawFrame();
+	void DrawFrame();
 
 	static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData) {
 		std::cerr << "validation layer: " << pCallbackData->pMessage << std::endl;

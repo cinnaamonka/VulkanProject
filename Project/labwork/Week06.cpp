@@ -36,7 +36,7 @@ void VulkanBase::createSyncObjects() {
 
 }
 
-void VulkanBase::drawFrame() {
+void VulkanBase::DrawFrame() {
 	vkWaitForFences(device, 1, &inFlightFence, VK_TRUE, UINT64_MAX);
 	vkResetFences(device, 1, &inFlightFence);
 
@@ -44,7 +44,7 @@ void VulkanBase::drawFrame() {
 	vkAcquireNextImageKHR(device, swapChain, UINT64_MAX, imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
 
 	vkResetCommandBuffer(commandBuffer, /*VkCommandBufferResetFlagBits*/ 0);
-	recordCommandBuffer(commandBuffer, imageIndex);
+	RecordCommandBuffer(commandBuffer, imageIndex);
 
 	VkSubmitInfo submitInfo{};
 	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
