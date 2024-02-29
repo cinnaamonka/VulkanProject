@@ -1,6 +1,7 @@
 #include "vulkanbase/VulkanBase.h"
 
-void VulkanBase::pickPhysicalDevice() {
+void VulkanBase::pickPhysicalDevice()
+{
 	uint32_t deviceCount = 0;
 	vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
 
@@ -27,21 +28,23 @@ void VulkanBase::pickPhysicalDevice() {
 	}
 }
 
-bool VulkanBase::isDeviceSuitable(VkPhysicalDevice device) {
-	QueueFamilyIndices indices = findQueueFamilies(device);
+bool VulkanBase::isDeviceSuitable(VkPhysicalDevice device) 
+{
+	QueueFamilyIndices indices = commandPool.FindQueueFamilies(device,surface);
 	bool extensionsSupported = checkDeviceExtensionSupport(device);
 	return indices.isComplete() && extensionsSupported;
-
 }
 
-void VulkanBase::createLogicalDevice() {
-	QueueFamilyIndices indices = findQueueFamilies(physicalDevice);
+void VulkanBase::createLogicalDevice() 
+{
+	QueueFamilyIndices indices = commandPool.FindQueueFamilies(physicalDevice,surface);
 
 	std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
 	std::set<uint32_t> uniqueQueueFamilies = { indices.graphicsFamily.value(), indices.presentFamily.value() };
 
 	float queuePriority = 1.0f;
-	for (uint32_t queueFamily : uniqueQueueFamilies) {
+	for (uint32_t queueFamily : uniqueQueueFamilies) 
+	{
 		VkDeviceQueueCreateInfo queueCreateInfo{};
 		queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
 		queueCreateInfo.queueFamilyIndex = queueFamily;

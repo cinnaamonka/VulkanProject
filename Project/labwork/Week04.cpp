@@ -1,4 +1,5 @@
 #include "vulkanbase/VulkanBase.h"
+#include "CommandPool.h"
 
 SwapChainSupportDetails VulkanBase::querySwapChainSupport(VkPhysicalDevice device) {
 	SwapChainSupportDetails details;
@@ -64,7 +65,8 @@ VkExtent2D VulkanBase::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabili
 	}
 }
 
-void VulkanBase::createSwapChain() {
+void VulkanBase::createSwapChain()
+{
 	SwapChainSupportDetails swapChainSupport = querySwapChainSupport(physicalDevice);
 
 	VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(swapChainSupport.formats);
@@ -87,7 +89,7 @@ void VulkanBase::createSwapChain() {
 	createInfo.imageArrayLayers = 1;
 	createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
-	QueueFamilyIndices indices = findQueueFamilies(physicalDevice);
+	QueueFamilyIndices indices = commandPool.FindQueueFamilies(physicalDevice,surface);
 	uint32_t queueFamilyIndices[] = { indices.graphicsFamily.value(), indices.presentFamily.value() };
 
 	if (indices.graphicsFamily != indices.presentFamily) {

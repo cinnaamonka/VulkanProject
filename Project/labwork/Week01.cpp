@@ -10,8 +10,8 @@ void VulkanBase::initWindow()
 
 
 
-void VulkanBase::DrawScene() 
-{
-	// vertex count,instance count,first vertex,first instance
-	vkCmdDraw(commandBuffer, 6, 1, 0, 0);
-}
+//void VulkanBase::DrawScene() 
+//{
+//	// vertex count,instance count,first vertex,first instance
+//	vkCmdDraw(commandBuffer.GetCommandBuffer(), 6, 1, 0, 0);
+//}

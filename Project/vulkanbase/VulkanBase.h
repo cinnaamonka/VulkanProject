@@ -13,40 +13,41 @@
 #include <cstring>
 #include <cstdlib>
 #include <cstdint>
-#include <optional>
 #include <set>
 #include <limits>
 #include <algorithm>
 
+
 #include "GP2Shader.h"
+#include "CommandPool.h"
+#include "CommandBuffer.h"
+#include "Renderer.h"
 
 
-const std::vector<const char*> validationLayers = {
+const std::vector<const char*> validationLayers =
+{
 	"VK_LAYER_KHRONOS_validation"
 };
 
-const std::vector<const char*> deviceExtensions = {
+const std::vector<const char*> deviceExtensions = 
+{
 	VK_KHR_SWAPCHAIN_EXTENSION_NAME
 };
 
-struct QueueFamilyIndices {
-	std::optional<uint32_t> graphicsFamily;
-	std::optional<uint32_t> presentFamily;
-
-	bool isComplete() {
-		return graphicsFamily.has_value() && presentFamily.has_value();
-	}
-};
-
-struct SwapChainSupportDetails {
+struct SwapChainSupportDetails 
+{
 	VkSurfaceCapabilitiesKHR capabilities;
 	std::vector<VkSurfaceFormatKHR> formats;
 	std::vector<VkPresentModeKHR> presentModes;
 };
 
-class VulkanBase {
+class VulkanBase 
+{
 public:
-	void run() {
+	VulkanBase();
+
+	void run() 
+	{
 		initWindow();
 		initVulkan();
 		mainLoop();
@@ -54,7 +55,8 @@ public:
 	}
 
 private:
-	void initVulkan() {
+	void initVulkan()
+	{
 		// week 06
 		createInstance();
 		setupDebugMessenger();
@@ -74,8 +76,9 @@ private:
 		createGraphicsPipeline();
 		createFrameBuffers();
 		// week 02
-		CreateCommandPool();
-		CreateCommandBuffer();
+		commandPool.CreateCommandPool(device, physicalDevice,surface);
+		commandBuffer.CreateCommandBuffer(commandPool,device);
+		renderer.Init(renderPass, swapChainFramebuffers, swapChainExtent, graphicsPipeline, commandBuffer.GetCommandBuffer());
 
 		// week 06
 		createSyncObjects();
@@ -99,9 +102,10 @@ private:
 		vkDestroyFence(device, inFlightFence, nullptr);
 
 		// command pool destroyed
-		vkDestroyCommandPool(device, commandPool, nullptr);
+		commandPool.DestroyCommandPool(device);
 
-		for (auto framebuffer : swapChainFramebuffers) {
+		for (auto framebuffer : swapChainFramebuffers) 
+		{
 			vkDestroyFramebuffer(device, framebuffer, nullptr);
 		}
 
@@ -109,11 +113,13 @@ private:
 		vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
 		vkDestroyRenderPass(device, renderPass, nullptr);
 
-		for (auto imageView : swapChainImageViews) {
+		for (auto imageView : swapChainImageViews)
+		{
 			vkDestroyImageView(device, imageView, nullptr);
 		}
 
-		if (enableValidationLayers) {
+		if (enableValidationLayers)
+		{
 			DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
 		}
 		vkDestroySwapchainKHR(device, swapChain, nullptr);
@@ -126,8 +132,10 @@ private:
 		glfwTerminate();
 	}
 
-	void createSurface() {
-		if (glfwCreateWindowSurface(instance, window, nullptr, &surface) != VK_SUCCESS) {
+	void createSurface()
+	{
+		if (glfwCreateWindowSurface(instance, window, nullptr, &surface) != VK_SUCCESS)
+		{
 			throw std::runtime_error("failed to create window surface!");
 		}
 	}
@@ -144,23 +152,29 @@ private:
 	GLFWwindow* window;
 	void initWindow();
 
-	void DrawScene();
+	//void DrawScene();
 
 	// Week 02
 	// Queue families
 	// CommandBuffer concept
 
 	// class member to store command pool
-	VkCommandPool commandPool;
-	VkCommandBuffer commandBuffer;
+	CommandPool commandPool;
+	VulkanCommandBuffer commandBuffer;
+	Renderer renderer;
+	//QueueFamilyIndices queueFamilies = commandPool.FindQueueFamilies(physicalDevice,surface);
 
-	QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
+	//QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device);
 
-	void DrawFrame(uint32_t imageIndex);
-	void CreateCommandBuffer();
-	void CreateCommandPool(); 
-	void RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex);
-	
+    //void DrawFrame(uint32_t imageIndex, VkCommandBuffer commandBuffer);
+	void DrawFrame();
+
+private:
+
+	//void CreateCommandBuffer();
+	//void CreateCommandPool(); 
+	//void RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex);
+
 	// Week 03
 	// Renderpass concept
 	// Graphics pipeline
@@ -221,7 +235,7 @@ private:
 	void createInstance();
 
 	void createSyncObjects();
-	void DrawFrame();
+	
 
 	static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData) {
 		std::cerr << "validation layer: " << pCallbackData->pMessage << std::endl;
