@@ -7,6 +7,7 @@
 #include <GLFW/glfw3native.h>
 #include "VulkanUtil.h"
 
+
 #include <iostream>
 #include <stdexcept>
 #include <vector>
@@ -79,6 +80,7 @@ private:
 		commandPool.CreateCommandPool(device, physicalDevice,surface);
 		commandBuffer.CreateCommandBuffer(commandPool,device);
 		renderer.Init(renderPass, swapChainFramebuffers, swapChainExtent, graphicsPipeline, commandBuffer.GetCommandBuffer());
+		CreateVertexBuffer();
 
 		// week 06
 		createSyncObjects();
@@ -123,6 +125,8 @@ private:
 			DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
 		}
 		vkDestroySwapchainKHR(device, swapChain, nullptr);
+		vkDestroyBuffer(device, vertexBuffer, nullptr); 
+		vkFreeMemory(device, vertexBufferMemory, nullptr);
 		vkDestroyDevice(device, nullptr);
 
 		vkDestroySurfaceKHR(instance, surface, nullptr);
@@ -152,28 +156,32 @@ private:
 	GLFWwindow* window;
 	void initWindow();
 
-	//void DrawScene();
-
 	// Week 02
 	// Queue families
 	// CommandBuffer concept
-
-	// class member to store command pool
 	CommandPool commandPool;
 	VulkanCommandBuffer commandBuffer;
 	Renderer renderer;
-	//QueueFamilyIndices queueFamilies = commandPool.FindQueueFamilies(physicalDevice,surface);
-
-	//QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device);
-
-    //void DrawFrame(uint32_t imageIndex, VkCommandBuffer commandBuffer);
+	
 	void DrawFrame();
 
-private:
+	//interleaving vertex aatributes
+	const std::vector<Vertex> vertices = 
+	{
+	{{-0.25f, -0.25f}, {1.0f, 0.0f, 0.0f}},
+	{{0.25f, -0.25f}, {0.0f, 1.0f, 0.0f}},
+	{{-0.25f, 0.25f}, {0.0f, 0.0f, 1.0f}},
+	{{-0.25f, 0.25f}, {0.0f, 0.0f, 1.0f}},
+	{{0.25f, -0.25f}, {0.0f, 1.0f, 0.0f}},
+	{{0.25f, 0.25f}, {1.0f, 0.0f, 0.0f}}
+	};
 
-	//void CreateCommandBuffer();
-	//void CreateCommandPool(); 
-	//void RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex);
+
+	VkBuffer vertexBuffer; 
+	VkDeviceMemory vertexBufferMemory;
+	void CreateVertexBuffer(); 
+
+	uint32_t FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
 
 	// Week 03
 	// Renderpass concept

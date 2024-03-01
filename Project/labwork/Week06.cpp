@@ -46,7 +46,7 @@ void VulkanBase::DrawFrame()
 
 	vkResetCommandBuffer(commandBuffer.GetCommandBuffer(), /*VkCommandBufferResetFlagBits*/ 0);
 	renderer.Init(renderPass, swapChainFramebuffers, swapChainExtent, graphicsPipeline, commandBuffer.GetCommandBuffer());
-	commandBuffer.RecordCommandBuffer(imageIndex,renderer);
+	commandBuffer.RecordCommandBuffer(imageIndex,renderer,graphicsPipeline,vertexBuffer,vertices);
 
 	VkSubmitInfo submitInfo{};
 	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -65,7 +65,8 @@ void VulkanBase::DrawFrame()
 	submitInfo.signalSemaphoreCount = 1;
 	submitInfo.pSignalSemaphores = signalSemaphores;
 
-	if (vkQueueSubmit(graphicsQueue, 1, &submitInfo, inFlightFence) != VK_SUCCESS) {
+	if (vkQueueSubmit(graphicsQueue, 1, &submitInfo, inFlightFence) != VK_SUCCESS) 
+	{
 		throw std::runtime_error("failed to submit draw command buffer!");
 	}
 

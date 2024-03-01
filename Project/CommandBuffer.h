@@ -3,6 +3,8 @@
 #include <vulkan/vulkan.h>
 #include <functional>
 
+#include "Structs.h"
+
 class CommandPool;
 class Renderer;
 
@@ -16,7 +18,7 @@ public:
 	void CreateCommandBuffer(const CommandPool& commandPool, const VkDevice device);
 	VkCommandBuffer GetCommandBuffer() const;
 
-	void RecordCommandBuffer(uint32_t imageIndex, Renderer& renderer);
+	void RecordCommandBuffer(uint32_t imageIndex, Renderer& renderer,const VkPipeline& graphicsPipeline, VkBuffer vertexBuffer, const std::vector<Vertex>& vertices);
 
 
 private:

@@ -4,12 +4,12 @@
 
 VulkanCommandBuffer::VulkanCommandBuffer()
 {
-   //std::function<void(uint32_t, VkCommandBuffer)> drawFrameFunction,const VkDevice& device,const VkCommandPool& commandPool
+   
 }
 
 VulkanCommandBuffer::~VulkanCommandBuffer()
 {
-    /*vkFreeCommandBuffers(m_Device, m_CommandPool, 1, &commandBuffer);*/
+  
 }
 
 VkCommandBuffer VulkanCommandBuffer::GetCommandBuffer() const
@@ -17,7 +17,7 @@ VkCommandBuffer VulkanCommandBuffer::GetCommandBuffer() const
     return commandBuffer;
 }
 
-void VulkanCommandBuffer::RecordCommandBuffer(uint32_t imageIndex,Renderer& renderer)
+void VulkanCommandBuffer::RecordCommandBuffer(uint32_t imageIndex, Renderer& renderer, const VkPipeline& graphicsPipeline, VkBuffer vertexBuffer, const std::vector<Vertex>& vertices)
 {
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -36,6 +36,14 @@ void VulkanCommandBuffer::RecordCommandBuffer(uint32_t imageIndex,Renderer& rend
     {
         throw std::runtime_error("failed to record command buffer!");
     }
+
+    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
+
+    VkBuffer vertexBuffers[] = { vertexBuffer };
+    VkDeviceSize offsets[] = { 0 };
+    vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
+
+    vkCmdDraw(commandBuffer, static_cast<uint32_t>(vertices.size()), 1, 0, 0);
 }
 
 void VulkanCommandBuffer::CreateCommandBuffer(const CommandPool& commandPool,const VkDevice device)
