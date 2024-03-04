@@ -7,7 +7,6 @@ VulkanBase::VulkanBase()
 
 }
 
-
 void VulkanBase::CreateVertexBuffer()
 {
 	VkBufferCreateInfo bufferInfo{};
@@ -24,12 +23,12 @@ void VulkanBase::CreateVertexBuffer()
 	VkMemoryRequirements memRequirements;
 	vkGetBufferMemoryRequirements(device, vertexBuffer, &memRequirements);
 
-	VkMemoryAllocateInfo allocInfo{}; 
-	allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO; 
-	allocInfo.allocationSize = memRequirements.size; 
-	allocInfo.memoryTypeIndex = FindMemoryType(memRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT); 
+	VkMemoryAllocateInfo allocInfo{};
+	allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+	allocInfo.allocationSize = memRequirements.size;
+	allocInfo.memoryTypeIndex = FindMemoryType(memRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
-	if (vkAllocateMemory(device, &allocInfo, nullptr, &vertexBufferMemory) != VK_SUCCESS) 
+	if (vkAllocateMemory(device, &allocInfo, nullptr, &vertexBufferMemory) != VK_SUCCESS)
 	{
 		throw std::runtime_error("failed to allocate vertex buffer memory!");
 	}
@@ -37,11 +36,12 @@ void VulkanBase::CreateVertexBuffer()
 	vkBindBufferMemory(device, vertexBuffer, vertexBufferMemory, 0);
 
 	void* data;
-	vkMapMemory(device, vertexBufferMemory, 0, bufferInfo.size, 0, &data); 
+	vkMapMemory(device, vertexBufferMemory, 0, bufferInfo.size, 0, &data);
 
 	memcpy(data, vertices.data(), (size_t)bufferInfo.size);
 
 	vkUnmapMemory(device, vertexBufferMemory);
+
 }
 uint32_t VulkanBase::FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties)
 {

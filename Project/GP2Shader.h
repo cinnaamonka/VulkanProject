@@ -15,7 +15,8 @@ public:
 	};
 
 	~GP2Shader() = default;
-	std::vector<VkPipelineShaderStageCreateInfo>& getShaderStages() {
+	std::vector<VkPipelineShaderStageCreateInfo>& getShaderStages()
+	{
 		return m_ShaderStages;
 	};
 

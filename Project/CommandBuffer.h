@@ -18,7 +18,7 @@ public:
 	void CreateCommandBuffer(const CommandPool& commandPool, const VkDevice device);
 	VkCommandBuffer GetCommandBuffer() const;
 
-	void RecordCommandBuffer(uint32_t imageIndex, Renderer& renderer,const VkPipeline& graphicsPipeline, VkBuffer vertexBuffer, const std::vector<Vertex>& vertices);
+	void RecordCommandBuffer(uint32_t imageIndex, Renderer& renderer,const VkPipeline& graphicsPipeline, const VkBuffer& vertexBuffer, const std::vector<Vertex>& vertices);
 
 
 private:

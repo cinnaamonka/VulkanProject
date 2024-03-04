@@ -21,9 +21,8 @@ void Renderer::Init(const VkRenderPass& renderPass,
 	this->commandBuffer = commandBuffer;
 }
 
-void Renderer::DrawFrame(uint32_t imageIndex, const VkCommandBuffer& commandBuffer)
+void Renderer::DrawFrame(uint32_t imageIndex, const VkCommandBuffer& commandBuffer, const VkBuffer& vertexBuffer,const std::vector<Vertex>& vertices)
 {
-	VkRenderPassBeginInfo renderPassInfo{};
 	renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 	renderPassInfo.renderPass = this->renderPass;
 	// Using the imageIndex parameter which was passed in, we can pick the right framebuffer for the current swapchain image.
@@ -41,6 +40,10 @@ void Renderer::DrawFrame(uint32_t imageIndex, const VkCommandBuffer& commandBuff
 	//the second parameter specifies if the pipeline object is a graphics or compute pipeline. 
 	vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
 
+	VkBuffer vertexBuffers[] = { vertexBuffer };
+	VkDeviceSize offsets[] = { 0 };
+	vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
+
 	VkViewport viewport{};
 	viewport.x = 0.0f;
 	viewport.y = 0.0f;
@@ -56,6 +59,12 @@ void Renderer::DrawFrame(uint32_t imageIndex, const VkCommandBuffer& commandBuff
 	vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
 	DrawScene();
+
+	vkCmdDraw(commandBuffer, static_cast<uint32_t>(vertices.size()), 1, 0, 0);
+
+	// end of my code
+
+
 	vkCmdEndRenderPass(commandBuffer);
 }
 

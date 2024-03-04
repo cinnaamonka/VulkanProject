@@ -1,5 +1,6 @@
 #pragma once
 #include "vulkanbase/VulkanUtil.h"
+#include "Structs.h"
 
 class VulkanCommandBuffer;
 
@@ -10,7 +11,7 @@ public:
 	~Renderer() {};
 
 	void DrawScene();
-	void DrawFrame(uint32_t imageIndex, const VkCommandBuffer& commandBuffer);
+	void DrawFrame(uint32_t imageIndex, const VkCommandBuffer& commandBuffer,const VkBuffer& vertexBuffer, const std::vector<Vertex>& vertices);
 
 	void Init(const VkRenderPass& renderPass,
 		      const std::vector<VkFramebuffer>& swapChain, 
@@ -24,4 +25,6 @@ private:
 	std::vector<VkFramebuffer> swapChainFramebuffers;
 	VkExtent2D swapChainExtent;
 	VkPipeline graphicsPipeline;
+
+	VkRenderPassBeginInfo renderPassInfo{};
 };

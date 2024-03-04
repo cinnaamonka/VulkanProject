@@ -78,9 +78,9 @@ private:
 		createFrameBuffers();
 		// week 02
 		commandPool.CreateCommandPool(device, physicalDevice,surface);
+		CreateVertexBuffer();
 		commandBuffer.CreateCommandBuffer(commandPool,device);
 		renderer.Init(renderPass, swapChainFramebuffers, swapChainExtent, graphicsPipeline, commandBuffer.GetCommandBuffer());
-		CreateVertexBuffer();
 
 		// week 06
 		createSyncObjects();
@@ -126,7 +126,7 @@ private:
 		}
 		vkDestroySwapchainKHR(device, swapChain, nullptr);
 		vkDestroyBuffer(device, vertexBuffer, nullptr); 
-		vkFreeMemory(device, vertexBufferMemory, nullptr);
+	/*	vkFreeMemory(device, vertexBufferMemory, nullptr);*/
 		vkDestroyDevice(device, nullptr);
 
 		vkDestroySurfaceKHR(instance, surface, nullptr);
@@ -177,7 +177,7 @@ private:
 	};
 
 
-	VkBuffer vertexBuffer; 
+	VkBuffer vertexBuffer;
 	VkDeviceMemory vertexBufferMemory;
 	void CreateVertexBuffer(); 
 

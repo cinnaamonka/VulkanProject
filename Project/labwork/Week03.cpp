@@ -1,10 +1,12 @@
 #include "vulkanbase/VulkanBase.h"
 
-
-void VulkanBase::createFrameBuffers() {
+void VulkanBase::createFrameBuffers() 
+{
 	swapChainFramebuffers.resize(swapChainImageViews.size());
-	for (size_t i = 0; i < swapChainImageViews.size(); i++) {
-		VkImageView attachments[] = {
+	for (size_t i = 0; i < swapChainImageViews.size(); i++) 
+	{
+		VkImageView attachments[] = 
+		{
 			swapChainImageViews[i]
 		};
 
@@ -24,8 +26,8 @@ void VulkanBase::createFrameBuffers() {
 }
 
 
-
-void VulkanBase::createRenderPass() {
+void VulkanBase::createRenderPass() 
+{
 	VkAttachmentDescription colorAttachment{};
 	colorAttachment.format = swapChainImageFormat;
 	colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
@@ -105,13 +107,15 @@ void VulkanBase::createGraphicsPipeline()
 
 	VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
 	pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-	pipelineLayoutInfo.setLayoutCount = 0;
+	pipelineLayoutInfo.setLayoutCount = 0; // Set to the number of descriptor set layouts if applicable
+	pipelineLayoutInfo.pSetLayouts = nullptr; // Set to the array of descriptor set layouts if applicable
 	pipelineLayoutInfo.pushConstantRangeCount = 0;
+	pipelineLayoutInfo.pPushConstantRanges = nullptr;
 
 	if (vkCreatePipelineLayout(device, &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
 		throw std::runtime_error("failed to create pipeline layout!");
 	}
-
+	
 	VkGraphicsPipelineCreateInfo pipelineInfo{};
 
 	pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -131,8 +135,10 @@ void VulkanBase::createGraphicsPipeline()
 	pipelineInfo.subpass = 0;
 	pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
+
 #pragma endregion
-	if (vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &graphicsPipeline) != VK_SUCCESS) {
+	if (vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &graphicsPipeline) != VK_SUCCESS) 
+	{
 		throw std::runtime_error("failed to create graphics pipeline!");
 	}
 	m_GradientShader.destroyShaderModules(device);
