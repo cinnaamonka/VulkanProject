@@ -1,10 +1,10 @@
 #include "Mesh.h"
 
-void Mesh::Initialize(const VkPhysicalDevice& physicalDevice,const VkDevice& device)
+void Mesh::Initialize(const VkPhysicalDevice& physicalDevice,const VkDevice& device, const std::vector<Vertex> vertexes)
 {
     VkBufferCreateInfo bufferInfo{};
     bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-    bufferInfo.size = sizeof(m_Vertices[0]) * m_Vertices.size();
+    bufferInfo.size = sizeof(vertexes[0]) * vertexes.size();
     bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
     bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
@@ -30,7 +30,7 @@ void Mesh::Initialize(const VkPhysicalDevice& physicalDevice,const VkDevice& dev
 
     void* data;
     vkMapMemory(device, m_VkDeviceMemory, 0, bufferInfo.size, 0, &data);
-    memcpy(data, m_Vertices.data(), (size_t)bufferInfo.size);
+    memcpy(data, vertexes.data(), (size_t)bufferInfo.size);
     vkUnmapMemory(device, m_VkDeviceMemory);
 }
 

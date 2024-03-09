@@ -2,18 +2,16 @@
 #include <vulkan/vulkan.h>
 #include "Mesh.h"
 
-class Oval: public Mesh
+class Oval : public Mesh
 {
 public:
-	Oval() {};
+	Oval(glm::vec2 center,float radius, int numVertexes);
 	~Oval() {};
 
-	void InitializeOval(const VkPhysicalDevice& physicalDevice, const VkDevice& device, glm::vec2 center,float radius,int numVertices);
+	void InitializeOval(const VkPhysicalDevice& physicalDevice, const VkDevice& device);
 
 private:
-	 float m_Radius = 0.5f;
-	 
-	 glm::vec2 m_Center;
-
-	 int m_VertixesNum;
+	glm::vec2 m_Center;
+	float m_Radius = 0.5f;
+	int m_VertixesNum;
 };

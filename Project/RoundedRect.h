@@ -5,11 +5,10 @@
 class RoundedRect : public Mesh
 {
 public: 
-	RoundedRect() {};
+	RoundedRect(glm::vec2 leftPos, double width, double height, double radius, int numOfSegments);
 	~RoundedRect() {};
 
-	void InitializeRoundedRect(const VkPhysicalDevice& physicalDevice, const VkDevice& device, glm::vec2 center,double width,
-		double height, float radius, int numVertices);
+	void InitializeRoundedRect(const VkPhysicalDevice& physicalDevice, const VkDevice& device);
 private:
 	glm::vec2 m_LeftPos;
 	double m_Width;

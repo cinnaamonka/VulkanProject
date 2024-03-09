@@ -6,7 +6,11 @@ class RectMesh : public Mesh
 {
     
 public:
-    RectMesh() {};
-    void InitializeRect(const VkPhysicalDevice& physicalDevice, const VkDevice& device, glm::vec2 left, double width, double height);
-
+    RectMesh(glm::vec2 left,double width,double height);
+    ~RectMesh() {};
+    void InitializeRect(const VkPhysicalDevice& physicalDevice, const VkDevice& device);
+private:
+    glm::vec2 m_LeftPos;
+    double m_Width;
+    double m_Height;
 };

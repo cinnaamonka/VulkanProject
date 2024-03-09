@@ -79,15 +79,16 @@ private:
 		createRenderPass();
 		createGraphicsPipeline();
 		createFrameBuffers();
-	/*	m_RectMesh.InitializeRect(physicalDevice, device, { -0.25,0.25 }, 0.5, 0.5);
-		m_OvalMesh.InitializeOval(physicalDevice, device, { -0.25,-0.25 }, 0.25, 20);*/
-		
-		//m_RoundedRectMesh.InitializeRoundedRect(physicalDevice, device, { -0.25,-0.25 }, 0.8, 0.8, 0.1f, 20);
+
 		// week 02  
 
 		m_CommandPool.CreateCommandPool(device, FindQueueFamilies(physicalDevice));
 
-		m_Scene.AddRoundedRectangleMesh(-0.95f, -0.25f, 0.15f, 0.25f, 0.1f, 0.3f, 10, physicalDevice, device);
+		m_Scene.AddMesh(m_RectMesh, physicalDevice, device);
+		m_Scene.AddMesh(m_OvalMesh, physicalDevice, device);
+		m_Scene.AddMesh(m_RoundedRectMesh, physicalDevice, device);
+
+		//m_Scene.AddRoundedRectangleMesh(-0.95f, -0.25f, 0.15f, 0.25f, 0.1f, 0.3f, 10, physicalDevice, device);
 		m_CommandBuffer = m_CommandPool.CreateCommandBuffer(device);
 
 		// week 06
@@ -111,7 +112,7 @@ private:
 		vkDestroySemaphore(device, imageAvailableSemaphore, nullptr);
 		vkDestroyFence(device, inFlightFence, nullptr);
 
-		m_CommandPool.DestroyCommandPool(device); 
+		m_CommandPool.DestroyCommandPool(device);
 
 		for (auto framebuffer : swapChainFramebuffers)
 		{
@@ -173,7 +174,7 @@ private:
 	QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device);
 
 	void DrawFrame(VkCommandBuffer commandBuffer, uint32_t imageIndex);
-	
+
 	Mesh m_Mesh{};
 	Scene m_Scene{};
 
@@ -181,10 +182,9 @@ private:
 	// Renderpass concept
 	// Graphics pipeline
 
-	RectMesh m_RectMesh{};
-	Oval m_OvalMesh{};
-	RoundedRect m_RoundedRectMesh{};
-	std::vector<Mesh> m_Meshes;
+	RectMesh m_RectMesh{ {-0.25,-0.25},0.5,0.3 };
+	Oval m_OvalMesh{ { -0.25f,0.25f},0.2f,20 };
+	RoundedRect m_RoundedRectMesh{ {0.25,0.25},0.3,0.2,0.1,20 };
 
 	std::vector<VkFramebuffer> swapChainFramebuffers;
 	VkPipelineLayout pipelineLayout;

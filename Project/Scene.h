@@ -14,6 +14,8 @@ public:
 	Scene& operator=(const Scene& other) = delete;
 	Scene& operator=(Scene&& other) noexcept = delete;
 
+	void AddMesh(Mesh& mesh, const VkPhysicalDevice& physicalDevice,const VkDevice& device);
+
 	void AddRectangleMesh(float top, float left, float bottom, float right, const VkPhysicalDevice& physicalDevice,
 					  const VkDevice& device);
 	void AddOvalMesh(float centerX, float centerY, float radiusX, float radiusY, int numberOfSegments, 
