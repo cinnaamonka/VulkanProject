@@ -1,17 +1,13 @@
 #include "vulkanbase/VulkanBase.h"
 
-void VulkanBase::initWindow() 
+VulkanBase::VulkanBase()
+{
+}
+
+void VulkanBase::initWindow()
 {
 	glfwInit();
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 	window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
 }
-
-
-
-//void VulkanBase::DrawScene() 
-//{
-//	// vertex count,instance count,first vertex,first instance
-//	vkCmdDraw(commandBuffer.GetCommandBuffer(), 6, 1, 0, 0);
-//}

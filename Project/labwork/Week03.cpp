@@ -120,7 +120,7 @@ void VulkanBase::createGraphicsPipeline()
 
 	pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
 	pipelineInfo.stageCount = 2;
-	pipelineInfo.pStages = m_GradientShader.getShaderStages().data();
+	pipelineInfo.pStages = m_GradientShader.GetShaderStageInfos().data();
 	pipelineInfo.pVertexInputState = &m_GradientShader.createVertexInputStateInfo();
 	pipelineInfo.pInputAssemblyState = &m_GradientShader.createInputAssemblyStateInfo();
 
@@ -141,5 +141,5 @@ void VulkanBase::createGraphicsPipeline()
 	{
 		throw std::runtime_error("failed to create graphics pipeline!");
 	}
-	m_GradientShader.destroyShaderModules(device);
+	m_GradientShader.DestroyShaderModules(device);
 }

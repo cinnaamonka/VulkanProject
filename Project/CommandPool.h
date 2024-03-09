@@ -2,20 +2,30 @@
 #include <stdexcept>
 #include <vulkan/vulkan.h>
 #include "Structs.h"
+#include "CommandBuffer.h"
 
 class CommandPool
 {
 public:
-	CommandPool();
-	~CommandPool();
+	CommandPool() :
+		m_CommandPool{ VK_NULL_HANDLE }
+	{}
 
-	QueueFamilyIndices FindQueueFamilies(const VkPhysicalDevice& device,const VkSurfaceKHR& surface);
+	~CommandPool() = default;
+
+	CommandPool(const CommandPool& other) = delete;
+	CommandPool(CommandPool&& other) noexcept = delete;
+	CommandPool& operator=(const CommandPool& other) = delete;
+	CommandPool& operator=(CommandPool&& other) noexcept = delete;
+
+	void CreateCommandPool(const VkDevice& device, const QueueFamilyIndices& familyIndices);
 	
 	VkCommandPool GetCommandPool() const;
 
-	void CreateCommandPool(const VkDevice& device, const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface);
-
 	void DestroyCommandPool(const VkDevice& device);
+
+	VulkanCommandBuffer CreateCommandBuffer(const VkDevice& device) const;  
+	 
 private:
 
     VkCommandPool m_CommandPool;

@@ -22,11 +22,11 @@
 #include "GP2Shader.h"
 #include "CommandPool.h"
 #include "CommandBuffer.h"
-#include "Renderer.h"
 #include "Mesh.h"
 #include "Rect.h"
 #include "Oval.h"
-
+#include "RoundedRect.h"
+#include "Scene.h"
 
 const std::vector<const char*> validationLayers =
 {
@@ -75,17 +75,20 @@ private:
 		createImageViews();
 
 		// week 03
-		m_GradientShader.initialize(device);
+		m_GradientShader.Init(device);
 		createRenderPass();
 		createGraphicsPipeline();
 		createFrameBuffers();
-	//	m_RectMesh.InitializeRect(physicalDevice, device, { -0.25,-0.25 }, 0.5, 0.5);
-		m_OvalMesh.InitializeOval(physicalDevice, device, { -0.25,-0.25 }, 0.25, 20);
-		// week 02
-		commandPool.CreateCommandPool(device, physicalDevice, surface);
-		CreateVertexBuffer(m_OvalMesh);
-		commandBuffer.CreateCommandBuffer(commandPool, device);
-		renderer.Init(renderPass, swapChainFramebuffers, swapChainExtent, graphicsPipeline, commandBuffer.GetCommandBuffer());
+	/*	m_RectMesh.InitializeRect(physicalDevice, device, { -0.25,0.25 }, 0.5, 0.5);
+		m_OvalMesh.InitializeOval(physicalDevice, device, { -0.25,-0.25 }, 0.25, 20);*/
+		
+		//m_RoundedRectMesh.InitializeRoundedRect(physicalDevice, device, { -0.25,-0.25 }, 0.8, 0.8, 0.1f, 20);
+		// week 02  
+
+		m_CommandPool.CreateCommandPool(device, FindQueueFamilies(physicalDevice));
+
+		m_Scene.AddRoundedRectangleMesh(-0.95f, -0.25f, 0.15f, 0.25f, 0.1f, 0.3f, 10, physicalDevice, device);
+		m_CommandBuffer = m_CommandPool.CreateCommandBuffer(device);
 
 		// week 06
 		createSyncObjects();
@@ -97,7 +100,7 @@ private:
 		{
 			glfwPollEvents();
 			// week 06
-			DrawFrame(m_OvalMesh);
+			DrawFrame();
 		}
 		vkDeviceWaitIdle(device);
 	}
@@ -108,8 +111,7 @@ private:
 		vkDestroySemaphore(device, imageAvailableSemaphore, nullptr);
 		vkDestroyFence(device, inFlightFence, nullptr);
 
-		// command pool destroyed
-		commandPool.DestroyCommandPool(device);
+		m_CommandPool.DestroyCommandPool(device); 
 
 		for (auto framebuffer : swapChainFramebuffers)
 		{
@@ -130,9 +132,7 @@ private:
 			DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
 		}
 		vkDestroySwapchainKHR(device, swapChain, nullptr);
-		m_OvalMesh.DestroyMesh(device);
-		/*	vkDestroyBuffer(device, vertexBuffer, nullptr);
-			vkFreeMemory(device, vertexBufferMemory, nullptr);*/
+		m_Scene.DestroyMeshes(device);
 		vkDestroyDevice(device, nullptr);
 
 		vkDestroySurfaceKHR(instance, surface, nullptr);
@@ -152,9 +152,6 @@ private:
 		}
 	}
 
-	GP2Shader m_GradientShader{ "shaders/shader.vert.spv", "shaders/shader.frag.spv" };
-
-
 	// Week 01: 
 	// Actual window
 	// simple fragment + vertex shader creation functions
@@ -164,29 +161,30 @@ private:
 	GLFWwindow* window;
 	void initWindow();
 
+	GP2Shader m_GradientShader{ "shaders/shader.vert.spv", "shaders/shader.frag.spv" };
+
 	// Week 02
 	// Queue families
 	// CommandBuffer concept
-	CommandPool commandPool;
-	VulkanCommandBuffer commandBuffer;
-	Renderer renderer;
 
-	void DrawFrame(const Mesh& mesh);
+	CommandPool m_CommandPool;
+	VulkanCommandBuffer m_CommandBuffer;
 
-	//interleaving vertex aatributes
+	QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device);
+
+	void DrawFrame(VkCommandBuffer commandBuffer, uint32_t imageIndex);
 	
-
-	RectMesh m_RectMesh{};
-	Oval m_OvalMesh{};
-	/*VkBuffer vertexBuffer;
-	VkDeviceMemory vertexBufferMemory;*/
-	void CreateVertexBuffer(const Mesh& mesh);
-
-	uint32_t FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
+	Mesh m_Mesh{};
+	Scene m_Scene{};
 
 	// Week 03
 	// Renderpass concept
 	// Graphics pipeline
+
+	RectMesh m_RectMesh{};
+	Oval m_OvalMesh{};
+	RoundedRect m_RoundedRectMesh{};
+	std::vector<Mesh> m_Meshes;
 
 	std::vector<VkFramebuffer> swapChainFramebuffers;
 	VkPipelineLayout pipelineLayout;
@@ -245,6 +243,7 @@ private:
 	void createInstance();
 
 	void createSyncObjects();
+	void DrawFrame();
 
 
 	static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData) {

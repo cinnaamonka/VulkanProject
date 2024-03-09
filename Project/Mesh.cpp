@@ -1,13 +1,10 @@
 #include "Mesh.h"
 
-void Mesh::Initialize(const VkPhysicalDevice& physicalDevice,const VkDevice& device, const std::vector<Vertex> vertices)
+void Mesh::Initialize(const VkPhysicalDevice& physicalDevice,const VkDevice& device)
 {
-    VkDeviceSize bufferSize = sizeof(Vertex) * m_Vertices.size();
-
-    // Create buffer
     VkBufferCreateInfo bufferInfo{};
     bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-    bufferInfo.size = bufferSize;
+    bufferInfo.size = sizeof(m_Vertices[0]) * m_Vertices.size();
     bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
     bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
@@ -19,7 +16,6 @@ void Mesh::Initialize(const VkPhysicalDevice& physicalDevice,const VkDevice& dev
     VkMemoryRequirements memRequirements;
     vkGetBufferMemoryRequirements(device, m_VkBuffer, &memRequirements);
 
-    // Allocate memory
     VkMemoryAllocateInfo allocInfo{};
     allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     allocInfo.allocationSize = memRequirements.size;
@@ -30,8 +26,12 @@ void Mesh::Initialize(const VkPhysicalDevice& physicalDevice,const VkDevice& dev
         throw std::runtime_error("failed to allocate buffer memory!");
     }
 
-    // Bind memory to the buffer
     vkBindBufferMemory(device, m_VkBuffer, m_VkDeviceMemory, 0);
+
+    void* data;
+    vkMapMemory(device, m_VkDeviceMemory, 0, bufferInfo.size, 0, &data);
+    memcpy(data, m_Vertices.data(), (size_t)bufferInfo.size);
+    vkUnmapMemory(device, m_VkDeviceMemory);
 }
 
 void Mesh::DestroyMesh(const VkDevice& device)
@@ -41,19 +41,17 @@ void Mesh::DestroyMesh(const VkDevice& device)
     vkFreeMemory(device, m_VkDeviceMemory, nullptr);
 }
 
-void Mesh::Draw(const VkCommandBuffer& buffer, const VkPipeline pipeline)
+void Mesh::Draw(const VkCommandBuffer& buffer) const
 {
-    vkCmdBindPipeline(buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
-
     VkBuffer vertexBuffers[] = { m_VkBuffer };
     VkDeviceSize offsets[] = { 0 };
     vkCmdBindVertexBuffers(buffer, 0, 1, vertexBuffers, offsets);
-
     vkCmdDraw(buffer, static_cast<uint32_t>(m_Vertices.size()), 1, 0, 0);
-
-    vkCmdEndRenderPass(buffer);
 }
-
+void Mesh::AddVertex(glm::vec2 pos, glm::vec3 color)
+{
+    m_Vertices.push_back(Vertex{ pos, color });
+}
 
 uint32_t Mesh::FindMemoryType(VkPhysicalDevice physicalDevice, uint32_t typeFilter, VkMemoryPropertyFlags properties)
 {

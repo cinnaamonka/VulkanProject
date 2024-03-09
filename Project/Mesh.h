@@ -9,27 +9,16 @@ class Mesh
 public:
 	void DestroyMesh(const VkDevice& device);
 
-	void Draw(const VkCommandBuffer& buffer,const VkPipeline pipeline);
+	void Draw(const VkCommandBuffer& buffer) const;
 
-	const VkBuffer& GetBuffer() const
-	{
-		return m_VkBuffer;
-	}
-	const VkDeviceMemory& GetMemory() const
-	{
-		return m_VkDeviceMemory;
-	}
-	const std::vector<Vertex>& GetVertices() const
-	{
-		return m_Vertices;
-	}
+	void AddVertex(glm::vec2 pos, glm::vec3 color);
+
+	void Initialize(const VkPhysicalDevice& physicalDevice, const VkDevice& device);
 	 
 private:
 	uint32_t FindMemoryType(VkPhysicalDevice physicalDevice,
 							uint32_t typeFilter,
 							VkMemoryPropertyFlags properties);
-protected:
-	void Initialize(const VkPhysicalDevice& physicalDevice, const VkDevice& device, const std::vector<Vertex> vertices);
 
 	VkBuffer m_VkBuffer;
 	VkDeviceMemory m_VkDeviceMemory;

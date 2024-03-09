@@ -65,7 +65,7 @@ VkExtent2D VulkanBase::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabili
 	}
 }
 
-void VulkanBase::createSwapChain()
+void VulkanBase::createSwapChain() 
 {
 	SwapChainSupportDetails swapChainSupport = querySwapChainSupport(physicalDevice);
 
@@ -89,7 +89,7 @@ void VulkanBase::createSwapChain()
 	createInfo.imageArrayLayers = 1;
 	createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
-	QueueFamilyIndices indices = commandPool.FindQueueFamilies(physicalDevice,surface);
+	QueueFamilyIndices indices = FindQueueFamilies(physicalDevice);
 	uint32_t queueFamilyIndices[] = { indices.graphicsFamily.value(), indices.presentFamily.value() };
 
 	if (indices.graphicsFamily != indices.presentFamily) {
@@ -108,7 +108,8 @@ void VulkanBase::createSwapChain()
 
 	createInfo.oldSwapchain = VK_NULL_HANDLE;
 
-	if (vkCreateSwapchainKHR(device, &createInfo, nullptr, &swapChain) != VK_SUCCESS) {
+	if (vkCreateSwapchainKHR(device, &createInfo, nullptr, &swapChain) != VK_SUCCESS) 
+	{
 		throw std::runtime_error("failed to create swap chain!");
 	}
 
@@ -120,7 +121,8 @@ void VulkanBase::createSwapChain()
 	swapChainExtent = extent;
 }
 
-void VulkanBase::createImageViews() {
+void VulkanBase::createImageViews() 
+{
 	swapChainImageViews.resize(swapChainImages.size());
 
 	for (size_t i = 0; i < swapChainImages.size(); i++) {

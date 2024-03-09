@@ -4,6 +4,7 @@
 #include <functional>
 
 #include "Structs.h"
+#include "Mesh.h"
 
 class CommandPool;
 class Renderer;
@@ -11,18 +12,28 @@ class Renderer;
 class VulkanCommandBuffer
 {
 public:
-	VulkanCommandBuffer();
+	VulkanCommandBuffer() = default;
+	~VulkanCommandBuffer() = default;
+	VulkanCommandBuffer(const VulkanCommandBuffer& other) = default;
+	VulkanCommandBuffer(VulkanCommandBuffer&& other) noexcept = default;
+	VulkanCommandBuffer& operator=(const VulkanCommandBuffer& other) = default;
+	VulkanCommandBuffer& operator=(VulkanCommandBuffer&& other) noexcept = default;
 
-	~VulkanCommandBuffer();
 
-	void CreateCommandBuffer(const CommandPool& commandPool, const VkDevice device);
-	VkCommandBuffer GetCommandBuffer() const;
+	void SubmitCommandBuffer(VkSubmitInfo& info)const;
+	void RecordCommandBuffer();
+	void EndRecordCommandBuffer();
+	void ResetCommandBuffer() const;
 
-	void RecordCommandBuffer(uint32_t imageIndex, Renderer& renderer,const VkPipeline& graphicsPipeline, const VkBuffer& vertexBuffer, const std::vector<Vertex>& vertices);
+	void SetVKCommandBuffer(const VkCommandBuffer& vkCommandBuffer) 
+	{
+		m_CommandBuffer = vkCommandBuffer;
+	}
 
+	VkCommandBuffer GetVkCommandBuffer()const { return m_CommandBuffer; }
 
 private:
 
-	VkCommandBuffer commandBuffer;
+	VkCommandBuffer m_CommandBuffer;
 
 };

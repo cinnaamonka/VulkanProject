@@ -3,26 +3,23 @@
 #include "Structs.h"
 #include <iostream>
 
-void GP2Shader::initialize(const VkDevice& vkDevice)
+void GP2Shader::Init(const VkDevice& device)
 {
-	m_ShaderStages.push_back(createVertexShaderInfo(vkDevice));
-	m_ShaderStages.push_back(createFragmentShaderInfo(vkDevice));
+	m_VecShadersStageInfos.push_back(createFragmentShaderInfo(device));
+	m_VecShadersStageInfos.push_back(createVertexShaderInfo(device));
 }
-
-void GP2Shader::destroyShaderModules(const VkDevice& vkDevice)
+void GP2Shader::DestroyShaderModules(const VkDevice& device)
 {
-	for (VkPipelineShaderStageCreateInfo& stageInfo : m_ShaderStages)
+	for (VkPipelineShaderStageCreateInfo& stageInfo : m_VecShadersStageInfos)
 	{
-		vkDestroyShaderModule(vkDevice, stageInfo.module, nullptr);
+		vkDestroyShaderModule(device, stageInfo.module, nullptr);
 	}
-
-	m_ShaderStages.clear();
+	m_VecShadersStageInfos.clear();
 }
-
-VkPipelineShaderStageCreateInfo GP2Shader::createFragmentShaderInfo(const VkDevice& vkDevice)
+VkPipelineShaderStageCreateInfo GP2Shader::createFragmentShaderInfo(const VkDevice& device)
 {
 	std::vector<char> fragShaderCode = readFile(m_FragmentShaderFile);
-	VkShaderModule fragShaderModule = createShaderModule(vkDevice,fragShaderCode);
+	VkShaderModule fragShaderModule = createShaderModule(device, fragShaderCode);
 
 	VkPipelineShaderStageCreateInfo fragShaderStageInfo{};
 	fragShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -33,10 +30,10 @@ VkPipelineShaderStageCreateInfo GP2Shader::createFragmentShaderInfo(const VkDevi
 	return fragShaderStageInfo;
 }
 
-VkPipelineShaderStageCreateInfo GP2Shader::createVertexShaderInfo(const VkDevice& vkDevice)
+VkPipelineShaderStageCreateInfo GP2Shader::createVertexShaderInfo(const VkDevice& device)
 {
 	std::vector<char> vertShaderCode = readFile(m_VertexShaderFile);
-	VkShaderModule vertShaderModule = createShaderModule(vkDevice,vertShaderCode);
+	VkShaderModule vertShaderModule = createShaderModule(device, vertShaderCode);
 
 	VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
 	vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -46,21 +43,17 @@ VkPipelineShaderStageCreateInfo GP2Shader::createVertexShaderInfo(const VkDevice
 	return vertShaderStageInfo;
 }
 
-VkPipelineVertexInputStateCreateInfo GP2Shader::createVertexInputStateInfo() 
+VkPipelineVertexInputStateCreateInfo GP2Shader::createVertexInputStateInfo()
 {
-	static VkVertexInputBindingDescription bindingDescription = Vertex::GetBindingDescription();
-	static std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions = Vertex::GetAttributeDescriptions();
+	VkPipelineVertexInputStateCreateInfo vertexInputInfo{ };
 
-	VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
 	vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 	vertexInputInfo.vertexBindingDescriptionCount = 1;
-	vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
-	vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
-	vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
-
+	vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(m_AttributeDescriptions.size());
+	vertexInputInfo.pVertexBindingDescriptions = &m_InputBinding;
+	vertexInputInfo.pVertexAttributeDescriptions = m_AttributeDescriptions.data();
 	return vertexInputInfo;
 }
-
 
 VkPipelineInputAssemblyStateCreateInfo GP2Shader::createInputAssemblyStateInfo()
 {
@@ -71,7 +64,7 @@ VkPipelineInputAssemblyStateCreateInfo GP2Shader::createInputAssemblyStateInfo()
 	return inputAssembly;
 }
 
-VkShaderModule GP2Shader::createShaderModule(const VkDevice& vkDevice,const std::vector<char>& code)
+VkShaderModule GP2Shader::createShaderModule(const VkDevice& device, const std::vector<char>& code)
 {
 	VkShaderModuleCreateInfo createInfo{};
 	createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
@@ -79,8 +72,7 @@ VkShaderModule GP2Shader::createShaderModule(const VkDevice& vkDevice,const std:
 	createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
 
 	VkShaderModule shaderModule;
-	if (vkCreateShaderModule(vkDevice, &createInfo, nullptr, &shaderModule) != VK_SUCCESS)
-	{
+	if (vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
 		throw std::runtime_error("failed to create shader module!");
 	}
 
