@@ -23,6 +23,9 @@
 #include "CommandPool.h"
 #include "CommandBuffer.h"
 #include "Renderer.h"
+#include "Mesh.h"
+#include "Rect.h"
+#include "Oval.h"
 
 
 const std::vector<const char*> validationLayers =
@@ -30,24 +33,24 @@ const std::vector<const char*> validationLayers =
 	"VK_LAYER_KHRONOS_validation"
 };
 
-const std::vector<const char*> deviceExtensions = 
+const std::vector<const char*> deviceExtensions =
 {
 	VK_KHR_SWAPCHAIN_EXTENSION_NAME
 };
 
-struct SwapChainSupportDetails 
+struct SwapChainSupportDetails
 {
 	VkSurfaceCapabilitiesKHR capabilities;
 	std::vector<VkSurfaceFormatKHR> formats;
 	std::vector<VkPresentModeKHR> presentModes;
 };
 
-class VulkanBase 
+class VulkanBase
 {
 public:
 	VulkanBase();
 
-	void run() 
+	void run()
 	{
 		initWindow();
 		initVulkan();
@@ -76,28 +79,30 @@ private:
 		createRenderPass();
 		createGraphicsPipeline();
 		createFrameBuffers();
+	//	m_RectMesh.InitializeRect(physicalDevice, device, { -0.25,-0.25 }, 0.5, 0.5);
+		m_OvalMesh.InitializeOval(physicalDevice, device, { -0.25,-0.25 }, 0.25, 20);
 		// week 02
-		commandPool.CreateCommandPool(device, physicalDevice,surface);
-		CreateVertexBuffer();
-		commandBuffer.CreateCommandBuffer(commandPool,device);
+		commandPool.CreateCommandPool(device, physicalDevice, surface);
+		CreateVertexBuffer(m_OvalMesh);
+		commandBuffer.CreateCommandBuffer(commandPool, device);
 		renderer.Init(renderPass, swapChainFramebuffers, swapChainExtent, graphicsPipeline, commandBuffer.GetCommandBuffer());
 
 		// week 06
 		createSyncObjects();
 	}
 
-	void mainLoop() 
+	void mainLoop()
 	{
-		while (!glfwWindowShouldClose(window)) 
+		while (!glfwWindowShouldClose(window))
 		{
 			glfwPollEvents();
 			// week 06
-			DrawFrame();
+			DrawFrame(m_OvalMesh);
 		}
 		vkDeviceWaitIdle(device);
 	}
 
-	void Cleanup() 
+	void Cleanup()
 	{
 		vkDestroySemaphore(device, renderFinishedSemaphore, nullptr);
 		vkDestroySemaphore(device, imageAvailableSemaphore, nullptr);
@@ -106,7 +111,7 @@ private:
 		// command pool destroyed
 		commandPool.DestroyCommandPool(device);
 
-		for (auto framebuffer : swapChainFramebuffers) 
+		for (auto framebuffer : swapChainFramebuffers)
 		{
 			vkDestroyFramebuffer(device, framebuffer, nullptr);
 		}
@@ -125,8 +130,9 @@ private:
 			DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
 		}
 		vkDestroySwapchainKHR(device, swapChain, nullptr);
-		vkDestroyBuffer(device, vertexBuffer, nullptr); 
-	/*	vkFreeMemory(device, vertexBufferMemory, nullptr);*/
+		m_OvalMesh.DestroyMesh(device);
+		/*	vkDestroyBuffer(device, vertexBuffer, nullptr);
+			vkFreeMemory(device, vertexBufferMemory, nullptr);*/
 		vkDestroyDevice(device, nullptr);
 
 		vkDestroySurfaceKHR(instance, surface, nullptr);
@@ -134,6 +140,8 @@ private:
 
 		glfwDestroyWindow(window);
 		glfwTerminate();
+
+
 	}
 
 	void createSurface()
@@ -144,8 +152,8 @@ private:
 		}
 	}
 
-	GP2Shader m_GradientShader{"shaders/shader.vert.spv", "shaders/shader.frag.spv"};
-	
+	GP2Shader m_GradientShader{ "shaders/shader.vert.spv", "shaders/shader.frag.spv" };
+
 
 	// Week 01: 
 	// Actual window
@@ -162,35 +170,29 @@ private:
 	CommandPool commandPool;
 	VulkanCommandBuffer commandBuffer;
 	Renderer renderer;
-	
-	void DrawFrame();
+
+	void DrawFrame(const Mesh& mesh);
 
 	//interleaving vertex aatributes
-	const std::vector<Vertex> vertices = 
-	{
-	{{-0.25f, -0.25f}, {1.0f, 0.0f, 0.0f}},
-	{{0.25f, -0.25f}, {0.0f, 1.0f, 0.0f}},
-	{{-0.25f, 0.25f}, {0.0f, 0.0f, 1.0f}},
-	{{-0.25f, 0.25f}, {0.0f, 0.0f, 1.0f}},
-	{{0.25f, -0.25f}, {0.0f, 1.0f, 0.0f}},
-	{{0.25f, 0.25f}, {1.0f, 0.0f, 0.0f}}
-	};
+	
 
-
-	VkBuffer vertexBuffer;
-	VkDeviceMemory vertexBufferMemory;
-	void CreateVertexBuffer(); 
+	RectMesh m_RectMesh{};
+	Oval m_OvalMesh{};
+	/*VkBuffer vertexBuffer;
+	VkDeviceMemory vertexBufferMemory;*/
+	void CreateVertexBuffer(const Mesh& mesh);
 
 	uint32_t FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
 
 	// Week 03
 	// Renderpass concept
 	// Graphics pipeline
-	
+
 	std::vector<VkFramebuffer> swapChainFramebuffers;
 	VkPipelineLayout pipelineLayout;
 	VkPipeline graphicsPipeline;
 	VkRenderPass renderPass;
+
 
 	void createFrameBuffers();
 	void createRenderPass();
@@ -219,7 +221,7 @@ private:
 	VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
 	VkQueue graphicsQueue;
 	VkQueue presentQueue;
-	
+
 	void pickPhysicalDevice();
 	bool isDeviceSuitable(VkPhysicalDevice device);
 	void createLogicalDevice();
@@ -243,7 +245,7 @@ private:
 	void createInstance();
 
 	void createSyncObjects();
-	
+
 
 	static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData) {
 		std::cerr << "validation layer: " << pCallbackData->pMessage << std::endl;

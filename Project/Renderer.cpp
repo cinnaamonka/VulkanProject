@@ -6,6 +6,7 @@ void Renderer::DrawScene()
 {
 	// vertex count,instance count,first vertex,first instance
 	vkCmdDraw(commandBuffer, 6, 1, 0, 0);
+	
 }
 
 void Renderer::Init(const VkRenderPass& renderPass,
@@ -58,12 +59,12 @@ void Renderer::DrawFrame(uint32_t imageIndex, const VkCommandBuffer& commandBuff
 	scissor.extent = swapChainExtent;
 	vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
-	DrawScene();
+	//DrawScene();
+	//mesh.Draw(commandBuffer,graphicsPipeline);
 
 	vkCmdDraw(commandBuffer, static_cast<uint32_t>(vertices.size()), 1, 0, 0);
 
 	// end of my code
-
 
 	vkCmdEndRenderPass(commandBuffer);
 }

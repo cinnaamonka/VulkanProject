@@ -28,8 +28,6 @@ void VulkanCommandBuffer::RecordCommandBuffer(uint32_t imageIndex, Renderer& ren
 		throw std::runtime_error("failed to begin recording command buffer!");
 	}
 
-	// Assume DrawFrame function is a member function of your VulkanBase class
-	// You may need to modify this part based on your actual implementation
 	renderer.DrawFrame(imageIndex, commandBuffer, vertexBuffer, vertices);
 
 	if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS)

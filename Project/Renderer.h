@@ -1,6 +1,7 @@
 #pragma once
 #include "vulkanbase/VulkanUtil.h"
 #include "Structs.h"
+#include "Mesh.h"
 
 class VulkanCommandBuffer;
 

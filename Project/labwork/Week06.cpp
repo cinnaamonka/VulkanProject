@@ -36,7 +36,7 @@ void VulkanBase::createSyncObjects() {
 
 }
 
-void VulkanBase::DrawFrame()
+void VulkanBase::DrawFrame(const Mesh& mesh)
 {
 	vkWaitForFences(device, 1, &inFlightFence, VK_TRUE, UINT64_MAX);
 	vkResetFences(device, 1, &inFlightFence);
@@ -46,7 +46,7 @@ void VulkanBase::DrawFrame()
 
 	vkResetCommandBuffer(commandBuffer.GetCommandBuffer(), /*VkCommandBufferResetFlagBits*/ 0);
 	renderer.Init(renderPass, swapChainFramebuffers, swapChainExtent, graphicsPipeline, commandBuffer.GetCommandBuffer());
-	commandBuffer.RecordCommandBuffer(imageIndex,renderer,graphicsPipeline,vertexBuffer,vertices);
+	commandBuffer.RecordCommandBuffer(imageIndex,renderer,graphicsPipeline,mesh.GetBuffer(), mesh.GetVertices());
 
 	VkSubmitInfo submitInfo{};
 	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
