@@ -2112,22 +2112,6 @@ build Project\CMakeFiles\VulkanLab01.dir\main.cpp.obj: CXX_COMPILER__VulkanLab01
   TARGET_COMPILE_PDB = Project\CMakeFiles\VulkanLab01.dir\
   TARGET_PDB = Project\VulkanLab01.pdb
 
-build Project\CMakeFiles\VulkanLab01.dir\labwork\Week01.cpp.obj: CXX_COMPILER__VulkanLab01_unscanned_Debug C$:\Users\parni\Desktop\2023-2024\4$ semester\GraphicsProgramming2\VulkanProject\Project\labwork\Week01.cpp || cmake_object_order_depends_target_VulkanLab01
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++17
-  INCLUDES = -IC:\VulkanSDK\1.3.261.1\Include -I"C:\Users\parni\Desktop\2023-2024\4 semester\GraphicsProgramming2\VulkanProject\Project" -I"C:\Users\parni\Desktop\2023-2024\4 semester\GraphicsProgramming2\VulkanProject\out\build\x64-Debug\_deps\glfw-src\include"
-  OBJECT_DIR = Project\CMakeFiles\VulkanLab01.dir
-  OBJECT_FILE_DIR = Project\CMakeFiles\VulkanLab01.dir\labwork
-  TARGET_COMPILE_PDB = Project\CMakeFiles\VulkanLab01.dir\
-  TARGET_PDB = Project\VulkanLab01.pdb
-
-build Project\CMakeFiles\VulkanLab01.dir\labwork\Week02.cpp.obj: CXX_COMPILER__VulkanLab01_unscanned_Debug C$:\Users\parni\Desktop\2023-2024\4$ semester\GraphicsProgramming2\VulkanProject\Project\labwork\Week02.cpp || cmake_object_order_depends_target_VulkanLab01
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++17
-  INCLUDES = -IC:\VulkanSDK\1.3.261.1\Include -I"C:\Users\parni\Desktop\2023-2024\4 semester\GraphicsProgramming2\VulkanProject\Project" -I"C:\Users\parni\Desktop\2023-2024\4 semester\GraphicsProgramming2\VulkanProject\out\build\x64-Debug\_deps\glfw-src\include"
-  OBJECT_DIR = Project\CMakeFiles\VulkanLab01.dir
-  OBJECT_FILE_DIR = Project\CMakeFiles\VulkanLab01.dir\labwork
-  TARGET_COMPILE_PDB = Project\CMakeFiles\VulkanLab01.dir\
-  TARGET_PDB = Project\VulkanLab01.pdb
-
 build Project\CMakeFiles\VulkanLab01.dir\labwork\Week03.cpp.obj: CXX_COMPILER__VulkanLab01_unscanned_Debug C$:\Users\parni\Desktop\2023-2024\4$ semester\GraphicsProgramming2\VulkanProject\Project\labwork\Week03.cpp || cmake_object_order_depends_target_VulkanLab01
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++17
   INCLUDES = -IC:\VulkanSDK\1.3.261.1\Include -I"C:\Users\parni\Desktop\2023-2024\4 semester\GraphicsProgramming2\VulkanProject\Project" -I"C:\Users\parni\Desktop\2023-2024\4 semester\GraphicsProgramming2\VulkanProject\out\build\x64-Debug\_deps\glfw-src\include"
@@ -2240,6 +2224,22 @@ build Project\CMakeFiles\VulkanLab01.dir\Scene.cpp.obj: CXX_COMPILER__VulkanLab0
   TARGET_COMPILE_PDB = Project\CMakeFiles\VulkanLab01.dir\
   TARGET_PDB = Project\VulkanLab01.pdb
 
+build Project\CMakeFiles\VulkanLab01.dir\GraphicsPipeline.cpp.obj: CXX_COMPILER__VulkanLab01_unscanned_Debug C$:\Users\parni\Desktop\2023-2024\4$ semester\GraphicsProgramming2\VulkanProject\Project\GraphicsPipeline.cpp || cmake_object_order_depends_target_VulkanLab01
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++17
+  INCLUDES = -IC:\VulkanSDK\1.3.261.1\Include -I"C:\Users\parni\Desktop\2023-2024\4 semester\GraphicsProgramming2\VulkanProject\Project" -I"C:\Users\parni\Desktop\2023-2024\4 semester\GraphicsProgramming2\VulkanProject\out\build\x64-Debug\_deps\glfw-src\include"
+  OBJECT_DIR = Project\CMakeFiles\VulkanLab01.dir
+  OBJECT_FILE_DIR = Project\CMakeFiles\VulkanLab01.dir
+  TARGET_COMPILE_PDB = Project\CMakeFiles\VulkanLab01.dir\
+  TARGET_PDB = Project\VulkanLab01.pdb
+
+build Project\CMakeFiles\VulkanLab01.dir\RenderPass.cpp.obj: CXX_COMPILER__VulkanLab01_unscanned_Debug C$:\Users\parni\Desktop\2023-2024\4$ semester\GraphicsProgramming2\VulkanProject\Project\RenderPass.cpp || cmake_object_order_depends_target_VulkanLab01
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++17
+  INCLUDES = -IC:\VulkanSDK\1.3.261.1\Include -I"C:\Users\parni\Desktop\2023-2024\4 semester\GraphicsProgramming2\VulkanProject\Project" -I"C:\Users\parni\Desktop\2023-2024\4 semester\GraphicsProgramming2\VulkanProject\out\build\x64-Debug\_deps\glfw-src\include"
+  OBJECT_DIR = Project\CMakeFiles\VulkanLab01.dir
+  OBJECT_FILE_DIR = Project\CMakeFiles\VulkanLab01.dir
+  TARGET_COMPILE_PDB = Project\CMakeFiles\VulkanLab01.dir\
+  TARGET_PDB = Project\VulkanLab01.pdb
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target VulkanLab01
@@ -2248,7 +2248,7 @@ build Project\CMakeFiles\VulkanLab01.dir\Scene.cpp.obj: CXX_COMPILER__VulkanLab0
 #############################################
 # Link the executable Project\VulkanLab01.exe
 
-build Project\VulkanLab01.exe: CXX_EXECUTABLE_LINKER__VulkanLab01_Debug Project\CMakeFiles\VulkanLab01.dir\main.cpp.obj Project\CMakeFiles\VulkanLab01.dir\labwork\Week01.cpp.obj Project\CMakeFiles\VulkanLab01.dir\labwork\Week02.cpp.obj Project\CMakeFiles\VulkanLab01.dir\labwork\Week03.cpp.obj Project\CMakeFiles\VulkanLab01.dir\labwork\Week04.cpp.obj Project\CMakeFiles\VulkanLab01.dir\labwork\Week05.cpp.obj Project\CMakeFiles\VulkanLab01.dir\labwork\Week06.cpp.obj Project\CMakeFiles\VulkanLab01.dir\GP2Shader.cpp.obj Project\CMakeFiles\VulkanLab01.dir\vulkanbase\VulkanUtil.cpp.obj Project\CMakeFiles\VulkanLab01.dir\CommandPool.cpp.obj Project\CMakeFiles\VulkanLab01.dir\CommandBuffer.cpp.obj Project\CMakeFiles\VulkanLab01.dir\vulkanbase\VulkanBase.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Mesh.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Rect.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Oval.cpp.obj Project\CMakeFiles\VulkanLab01.dir\RoundedRect.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Scene.cpp.obj | C$:\VulkanSDK\1.3.261.1\Lib\vulkan-1.lib _deps\glfw-build\src\glfw3.lib || Project\Shaders _deps\glfw-build\src\glfw3.lib
+build Project\VulkanLab01.exe: CXX_EXECUTABLE_LINKER__VulkanLab01_Debug Project\CMakeFiles\VulkanLab01.dir\main.cpp.obj Project\CMakeFiles\VulkanLab01.dir\labwork\Week03.cpp.obj Project\CMakeFiles\VulkanLab01.dir\labwork\Week04.cpp.obj Project\CMakeFiles\VulkanLab01.dir\labwork\Week05.cpp.obj Project\CMakeFiles\VulkanLab01.dir\labwork\Week06.cpp.obj Project\CMakeFiles\VulkanLab01.dir\GP2Shader.cpp.obj Project\CMakeFiles\VulkanLab01.dir\vulkanbase\VulkanUtil.cpp.obj Project\CMakeFiles\VulkanLab01.dir\CommandPool.cpp.obj Project\CMakeFiles\VulkanLab01.dir\CommandBuffer.cpp.obj Project\CMakeFiles\VulkanLab01.dir\vulkanbase\VulkanBase.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Mesh.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Rect.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Oval.cpp.obj Project\CMakeFiles\VulkanLab01.dir\RoundedRect.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Scene.cpp.obj Project\CMakeFiles\VulkanLab01.dir\GraphicsPipeline.cpp.obj Project\CMakeFiles\VulkanLab01.dir\RenderPass.cpp.obj | C$:\VulkanSDK\1.3.261.1\Lib\vulkan-1.lib _deps\glfw-build\src\glfw3.lib || Project\Shaders _deps\glfw-build\src\glfw3.lib
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
   LINK_LIBRARIES = C:\VulkanSDK\1.3.261.1\Lib\vulkan-1.lib  _deps\glfw-build\src\glfw3.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib

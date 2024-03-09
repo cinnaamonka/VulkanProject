@@ -27,6 +27,8 @@
 #include "Oval.h"
 #include "RoundedRect.h"
 #include "Scene.h"
+#include "GraphicsPipeline.h"
+#include "RenderPass.h"
 
 const std::vector<const char*> validationLayers =
 {
@@ -76,19 +78,16 @@ private:
 
 		// week 03
 		m_GradientShader.Init(device);
-		createRenderPass();
-		createGraphicsPipeline();
-		createFrameBuffers();
+		m_RenderPass.CreateRenderPass(device,swapChainImageFormat);
+		m_GraphicsPipeline.CreateGraphicsPipeline(device, m_GradientShader, m_RenderPass);
+		m_GraphicsPipeline.CreateFrameBuffers(device, swapChainImageViews, swapChainExtent, m_RenderPass);
 
 		// week 02  
-
 		m_CommandPool.CreateCommandPool(device, FindQueueFamilies(physicalDevice));
 
 		m_Scene.AddMesh(m_RectMesh, physicalDevice, device);
 		m_Scene.AddMesh(m_OvalMesh, physicalDevice, device);
 		m_Scene.AddMesh(m_RoundedRectMesh, physicalDevice, device);
-
-		//m_Scene.AddRoundedRectangleMesh(-0.95f, -0.25f, 0.15f, 0.25f, 0.1f, 0.3f, 10, physicalDevice, device);
 		m_CommandBuffer = m_CommandPool.CreateCommandBuffer(device);
 
 		// week 06
@@ -114,14 +113,10 @@ private:
 
 		m_CommandPool.DestroyCommandPool(device);
 
-		for (auto framebuffer : swapChainFramebuffers)
-		{
-			vkDestroyFramebuffer(device, framebuffer, nullptr);
-		}
-
-		vkDestroyPipeline(device, graphicsPipeline, nullptr);
-		vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
-		vkDestroyRenderPass(device, renderPass, nullptr);
+		m_GraphicsPipeline.DestroySwapChainFramebuffers(device);
+		m_GraphicsPipeline.DestroyGraphicsPipeline(device);
+		m_GraphicsPipeline.DestroyPipelineLayout(device);
+		m_RenderPass.DestroyRenderPass(device);
 
 		for (auto imageView : swapChainImageViews)
 		{
@@ -186,15 +181,16 @@ private:
 	Oval m_OvalMesh{ { -0.25f,0.25f},0.2f,20 };
 	RoundedRect m_RoundedRectMesh{ {0.25,0.25},0.3,0.2,0.1,20 };
 
-	std::vector<VkFramebuffer> swapChainFramebuffers;
-	VkPipelineLayout pipelineLayout;
-	VkPipeline graphicsPipeline;
-	VkRenderPass renderPass;
+	//VkPipelineLayout pipelineLayout;
+	/*VkPipeline graphicsPipeline;*/
+	/*VkRenderPass renderPass;*/
 
+	GraphicsPipeline m_GraphicsPipeline;
+	RenderPass m_RenderPass;
 
-	void createFrameBuffers();
-	void createRenderPass();
-	void createGraphicsPipeline();
+	//void createFrameBuffers();
+	//void createRenderPass();
+	//void createGraphicsPipeline();
 
 	// Week 04
 	// Swap chain and image view support
