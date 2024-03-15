@@ -19,16 +19,16 @@
 #include <algorithm>
 
 
-#include "GP2Shader.h"
-#include "CommandPool.h"
-#include "CommandBuffer.h"
-#include "Mesh.h"
-#include "Rect.h"
-#include "Oval.h"
-#include "RoundedRect.h"
-#include "Scene.h"
-#include "GraphicsPipeline.h"
-#include "RenderPass.h"
+#include "../Engine/GP2Shader.h"
+#include "../Engine/CommandPool.h"
+#include "../Engine/CommandBuffer.h"
+#include "../Engine/Mesh.h"
+#include "../Engine/Rect.h"
+#include "../Engine/Oval.h"
+#include "../Engine/RoundedRect.h"
+#include "../Engine/Scene.h"
+#include "../Engine/GraphicsPipeline.h"
+#include "../Engine/RenderPass.h"
 
 const std::vector<const char*> validationLayers =
 {

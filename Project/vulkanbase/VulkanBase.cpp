@@ -1,5 +1,5 @@
 #include "VulkanBase.h"
-#include "Rect.h"
+#include "../Engine/Rect.h"
 
 #include <functional>
 
@@ -39,9 +39,9 @@ void VulkanBase::InitVulkan()
 	// week 02  
 	m_CommandPool.CreateCommandPool(device, FindQueueFamilies(physicalDevice));
 
-	m_Scene.AddMesh(m_RectMesh, physicalDevice, device);
-	m_Scene.AddMesh(m_OvalMesh, physicalDevice, device);
-	m_Scene.AddMesh(m_RoundedRectMesh, physicalDevice, device);
+	m_Scene.AddMesh(m_RectMesh, physicalDevice, device,graphicsQueue,m_CommandPool);
+	m_Scene.AddMesh(m_OvalMesh, physicalDevice, device, graphicsQueue, m_CommandPool);
+	m_Scene.AddMesh(m_RoundedRectMesh, physicalDevice, device, graphicsQueue, m_CommandPool);
 	m_CommandBuffer = m_CommandPool.CreateCommandBuffer(device);
 
 	// week 06
