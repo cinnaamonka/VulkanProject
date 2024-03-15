@@ -7,6 +7,102 @@ VulkanBase::VulkanBase()
 {
 }
 
+void VulkanBase::Run()
+{
+	initWindow();
+	InitVulkan();
+	MainLoop();
+	Cleanup();
+}
+
+void VulkanBase::InitVulkan()
+{
+	// week 06
+	createInstance();
+	setupDebugMessenger();
+	CreateSurface();
+
+	// week 05
+	pickPhysicalDevice();
+	createLogicalDevice();
+
+	// week 04 
+	createSwapChain();
+	createImageViews();
+
+	// week 03
+	m_GradientShader.Init(device);
+	m_RenderPass.CreateRenderPass(device, swapChainImageFormat);
+	m_GraphicsPipeline.CreateGraphicsPipeline(device, m_GradientShader, m_RenderPass);
+	m_GraphicsPipeline.CreateFrameBuffers(device, swapChainImageViews, swapChainExtent, m_RenderPass);
+
+	// week 02  
+	m_CommandPool.CreateCommandPool(device, FindQueueFamilies(physicalDevice));
+
+	m_Scene.AddMesh(m_RectMesh, physicalDevice, device);
+	m_Scene.AddMesh(m_OvalMesh, physicalDevice, device);
+	m_Scene.AddMesh(m_RoundedRectMesh, physicalDevice, device);
+	m_CommandBuffer = m_CommandPool.CreateCommandBuffer(device);
+
+	// week 06
+	createSyncObjects();
+}
+
+void VulkanBase::MainLoop()
+{
+	while (!glfwWindowShouldClose(window))
+	{
+		glfwPollEvents();
+		// week 06
+		DrawFrame();
+	}
+	vkDeviceWaitIdle(device);
+}
+
+void VulkanBase::Cleanup()
+{
+	vkDestroySemaphore(device, renderFinishedSemaphore, nullptr);
+	vkDestroySemaphore(device, imageAvailableSemaphore, nullptr);
+	vkDestroyFence(device, inFlightFence, nullptr);
+
+	m_CommandPool.DestroyCommandPool(device);
+
+	m_GraphicsPipeline.DestroySwapChainFramebuffers(device);
+	m_GraphicsPipeline.DestroyGraphicsPipeline(device);
+	m_GraphicsPipeline.DestroyPipelineLayout(device);
+	m_RenderPass.DestroyRenderPass(device);
+
+	for (auto imageView : swapChainImageViews)
+	{
+		vkDestroyImageView(device, imageView, nullptr);
+	}
+
+	if (enableValidationLayers)
+	{
+		DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
+	}
+	vkDestroySwapchainKHR(device, swapChain, nullptr);
+	m_Scene.DestroyMeshes(device);
+	vkDestroyDevice(device, nullptr);
+
+	vkDestroySurfaceKHR(instance, surface, nullptr);
+	vkDestroyInstance(instance, nullptr);
+
+	glfwDestroyWindow(window);
+	glfwTerminate();
+
+
+}
+
+void VulkanBase::CreateSurface()
+{
+	if (glfwCreateWindowSurface(instance, window, nullptr, &surface) != VK_SUCCESS)
+	{
+		throw std::runtime_error("failed to create window surface!");
+	}
+}
+
+
 void VulkanBase::initWindow()
 {
 	glfwInit();

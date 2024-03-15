@@ -52,102 +52,15 @@ class VulkanBase
 public:
 	VulkanBase();
 
-	void run()
-	{
-		initWindow();
-		initVulkan();
-		mainLoop();
-		Cleanup();
-	}
-
+	void Run();
 private:
-	void initVulkan()
-	{
-		// week 06
-		createInstance();
-		setupDebugMessenger();
-		createSurface();
+	void InitVulkan();
+	void MainLoop();
+	void Cleanup();
+	
 
-		// week 05
-		pickPhysicalDevice();
-		createLogicalDevice();
-
-		// week 04 
-		createSwapChain();
-		createImageViews();
-
-		// week 03
-		m_GradientShader.Init(device);
-		m_RenderPass.CreateRenderPass(device,swapChainImageFormat);
-		m_GraphicsPipeline.CreateGraphicsPipeline(device, m_GradientShader, m_RenderPass);
-		m_GraphicsPipeline.CreateFrameBuffers(device, swapChainImageViews, swapChainExtent, m_RenderPass);
-
-		// week 02  
-		m_CommandPool.CreateCommandPool(device, FindQueueFamilies(physicalDevice));
-
-		m_Scene.AddMesh(m_RectMesh, physicalDevice, device);
-		m_Scene.AddMesh(m_OvalMesh, physicalDevice, device);
-		m_Scene.AddMesh(m_RoundedRectMesh, physicalDevice, device);
-		m_CommandBuffer = m_CommandPool.CreateCommandBuffer(device);
-
-		// week 06
-		createSyncObjects();
-	}
-
-	void mainLoop()
-	{
-		while (!glfwWindowShouldClose(window))
-		{
-			glfwPollEvents();
-			// week 06
-			DrawFrame();
-		}
-		vkDeviceWaitIdle(device);
-	}
-
-	void Cleanup()
-	{
-		vkDestroySemaphore(device, renderFinishedSemaphore, nullptr);
-		vkDestroySemaphore(device, imageAvailableSemaphore, nullptr);
-		vkDestroyFence(device, inFlightFence, nullptr);
-
-		m_CommandPool.DestroyCommandPool(device);
-
-		m_GraphicsPipeline.DestroySwapChainFramebuffers(device);
-		m_GraphicsPipeline.DestroyGraphicsPipeline(device);
-		m_GraphicsPipeline.DestroyPipelineLayout(device);
-		m_RenderPass.DestroyRenderPass(device);
-
-		for (auto imageView : swapChainImageViews)
-		{
-			vkDestroyImageView(device, imageView, nullptr);
-		}
-
-		if (enableValidationLayers)
-		{
-			DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
-		}
-		vkDestroySwapchainKHR(device, swapChain, nullptr);
-		m_Scene.DestroyMeshes(device);
-		vkDestroyDevice(device, nullptr);
-
-		vkDestroySurfaceKHR(instance, surface, nullptr);
-		vkDestroyInstance(instance, nullptr);
-
-		glfwDestroyWindow(window);
-		glfwTerminate();
-
-
-	}
-
-	void createSurface()
-	{
-		if (glfwCreateWindowSurface(instance, window, nullptr, &surface) != VK_SUCCESS)
-		{
-			throw std::runtime_error("failed to create window surface!");
-		}
-	}
-
+	void CreateSurface();
+	
 	// Week 01: 
 	// Actual window
 	// simple fragment + vertex shader creation functions
@@ -181,16 +94,8 @@ private:
 	Oval m_OvalMesh{ { -0.25f,0.25f},0.2f,20 };
 	RoundedRect m_RoundedRectMesh{ {0.25,0.25},0.3,0.2,0.1,20 };
 
-	//VkPipelineLayout pipelineLayout;
-	/*VkPipeline graphicsPipeline;*/
-	/*VkRenderPass renderPass;*/
-
 	GraphicsPipeline m_GraphicsPipeline;
 	RenderPass m_RenderPass;
-
-	//void createFrameBuffers();
-	//void createRenderPass();
-	//void createGraphicsPipeline();
 
 	// Week 04
 	// Swap chain and image view support
