@@ -7,7 +7,7 @@ class BaseBuffer
 {
 public:
 	BaseBuffer() = default;
-	~BaseBuffer() = default;
+	virtual ~BaseBuffer() = default;
 
     BaseBuffer(const BaseBuffer& other) = delete;
     BaseBuffer(BaseBuffer&& other) noexcept = delete;

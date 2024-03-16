@@ -1,7 +1,7 @@
 #include "Mesh.h"
 #include "BaseBuffer.h"
 #include "CommandPool.h"
-
+#include "VertexBuffer.h"
 
 void Mesh::DestroyMesh(const VkDevice& device)
 {
@@ -29,7 +29,7 @@ void Mesh::Initialize(const VkPhysicalDevice& physicalDevice, const VkDevice& de
     VkBuffer stagingBuffer;
     VkDeviceMemory stagingBufferMemory;
 
-    BaseBuffer::CreateBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+    VertexBuffer::CreateVertexBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
         stagingBuffer, stagingBufferMemory, device, physicalDevice);
 
     void* data;
@@ -37,7 +37,7 @@ void Mesh::Initialize(const VkPhysicalDevice& physicalDevice, const VkDevice& de
     memcpy(data, vertexes.data(), (size_t)bufferSize);
     vkUnmapMemory(device, stagingBufferMemory);
 
-    BaseBuffer::CreateBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+    VertexBuffer::CreateVertexBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         m_VkBuffer, m_VkDeviceMemory, device, physicalDevice);
 
     BaseBuffer::CopyBuffer(stagingBuffer, m_VkBuffer, bufferSize, device, commandPool, graphicsQueue);
