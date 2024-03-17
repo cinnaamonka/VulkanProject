@@ -2,9 +2,17 @@
 #include "BaseBuffer.h"
 #include "CommandPool.h"
 #include "VertexBuffer.h"
+#include "IndexBuffer.h"
 
+Mesh::Mesh():
+    m_Indexes{},
+    m_VkBuffer{}
+{
+
+}
 void Mesh::DestroyMesh(const VkDevice& device)
 {
+    IndexBuffer::DestroyIndexBuffer(device,indexBuffer, indexBufferMemory);
 
     vkDestroyBuffer(device, m_VkBuffer, nullptr);
     vkFreeMemory(device, m_VkDeviceMemory, nullptr);
@@ -15,19 +23,23 @@ void Mesh::Draw(const VkCommandBuffer& buffer) const
     VkBuffer vertexBuffers[] = { m_VkBuffer };
     VkDeviceSize offsets[] = { 0 };
     vkCmdBindVertexBuffers(buffer, 0, 1, vertexBuffers, offsets);
-    vkCmdDraw(buffer, static_cast<uint32_t>(m_Vertices.size()), 1, 0, 0);
+    vkCmdBindIndexBuffer(buffer, indexBuffer, 0, VK_INDEX_TYPE_UINT16);
+    vkCmdDrawIndexed(buffer, static_cast<uint32_t>(m_Indexes.size()), 1, 0, 0, 0);
 }
 void Mesh::AddVertex(glm::vec2 pos, glm::vec3 color)
 {
     m_Vertices.push_back(Vertex{ pos, color });
 }
 
-void Mesh::Initialize(const VkPhysicalDevice& physicalDevice, const VkDevice& device, const std::vector<Vertex> vertexes, const VkQueue& graphicsQueue, const CommandPool& commandPool)
+void Mesh::Initialize(const VkPhysicalDevice& physicalDevice, const VkDevice& device, const std::vector<Vertex> vertexes,
+    const VkQueue& graphicsQueue, const CommandPool& commandPool, std::vector<uint16_t> indices)
 {
+    m_Indexes = indices;
+
     VkDeviceSize bufferSize = sizeof(vertexes[0]) * vertexes.size();
 
-    VkBuffer stagingBuffer;
-    VkDeviceMemory stagingBufferMemory;
+    VkBuffer stagingBuffer{};
+    VkDeviceMemory stagingBufferMemory{};
 
     VertexBuffer::CreateVertexBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
         stagingBuffer, stagingBufferMemory, device, physicalDevice);
@@ -44,6 +56,8 @@ void Mesh::Initialize(const VkPhysicalDevice& physicalDevice, const VkDevice& de
 
     vkDestroyBuffer(device, stagingBuffer, nullptr);
     vkFreeMemory(device, stagingBufferMemory, nullptr);
+
+    IndexBuffer::CreateIndexBuffer(indices, device, commandPool, graphicsQueue, physicalDevice,indexBuffer,indexBufferMemory);
 }
 
 

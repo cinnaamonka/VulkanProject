@@ -4,6 +4,7 @@
 #include "Oval.h"
 #include "RoundedRect.h"
 #include "Structs.h"
+#include "IndexBuffer.h"
 
 constexpr float g_Pi = 3.14159265359f;
 
@@ -23,6 +24,7 @@ void Scene::AddMesh(Mesh& mesh, const VkPhysicalDevice& physicalDevice,const VkD
 	if (ovalMesh)
 	{
 		ovalMesh->InitializeOval(physicalDevice, device,graphicsGueue,commandPool);
+	
 		m_Meshes.push_back(*ovalMesh);
 	}
 
@@ -33,6 +35,7 @@ void Scene::AddMesh(Mesh& mesh, const VkPhysicalDevice& physicalDevice,const VkD
 		roundedRectMesh->InitializeRoundedRect(physicalDevice, device,graphicsGueue,commandPool);
 		m_Meshes.push_back(*roundedRectMesh);
 	}
+
 }
 
 void Scene::DrawMesh(const VkCommandBuffer& cmdBuffer) const

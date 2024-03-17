@@ -39,9 +39,9 @@ void VulkanBase::InitVulkan()
 	// week 02  
 	m_CommandPool.CreateCommandPool(device, FindQueueFamilies(physicalDevice));
 
-	m_Scene.AddMesh(m_RectMesh, physicalDevice, device,graphicsQueue,m_CommandPool);
+	m_Scene.AddMesh(m_RectMesh, physicalDevice, device, graphicsQueue, m_CommandPool);
 	m_Scene.AddMesh(m_OvalMesh, physicalDevice, device, graphicsQueue, m_CommandPool);
-	m_Scene.AddMesh(m_RoundedRectMesh, physicalDevice, device, graphicsQueue, m_CommandPool);
+	m_Scene.AddMesh(m_RoundedRectMesh, physicalDevice, device, graphicsQueue, m_CommandPool); 
 	m_CommandBuffer = m_CommandPool.CreateCommandBuffer(device);
 
 	// week 06
@@ -82,6 +82,7 @@ void VulkanBase::Cleanup()
 		DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
 	}
 	vkDestroySwapchainKHR(device, swapChain, nullptr);
+
 	m_Scene.DestroyMeshes(device);
 	vkDestroyDevice(device, nullptr);
 

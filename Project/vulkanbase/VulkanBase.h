@@ -29,6 +29,7 @@
 #include "../Engine/Scene.h"
 #include "../Engine/GraphicsPipeline.h"
 #include "../Engine/RenderPass.h"
+#include "../Engine/IndexBuffer.h"
 
 const std::vector<const char*> validationLayers =
 {
@@ -91,8 +92,8 @@ private:
 	// Graphics pipeline
 
 	RectMesh m_RectMesh{ {-0.25,-0.25},0.5,0.3 };
-	Oval m_OvalMesh{ { -0.25f,0.25f},0.2f,20 };
-	RoundedRect m_RoundedRectMesh{ {0.25,0.25},0.3,0.2,0.1,20 };
+	Oval m_OvalMesh{ { -0.25f,0.8f},0.2f,6 };
+	RoundedRect m_RoundedRectMesh{ {0.25,0.25},0.3,0.2,0.1,21 };
 
 	GraphicsPipeline m_GraphicsPipeline;
 	RenderPass m_RenderPass;
