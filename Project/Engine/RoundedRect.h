@@ -12,7 +12,13 @@ public:
 
 	void InitializeRoundedRect(const VkPhysicalDevice& physicalDevice, const VkDevice& device, const VkQueue& graphicsQueue,
 		const CommandPool& commandPool);
+
+	void GenerateRoundedRectVertices(std::vector<Vertex>& vertices, std::vector<uint16_t>& indices, const float radians);
+	void AddRectangles(std::vector<Vertex>& vertices, std::vector<uint16_t>& indices, const std::vector<glm::vec2>& cornerVertices);
+	void AddRect(std::vector<Vertex>& vertices, std::vector<uint16_t>& indices, const glm::vec2& topLeft, const glm::vec2& topRight, const glm::vec2& bottomRight, const glm::vec2& bottomLeft);
+
 private:
+
 	glm::vec2 m_LeftPos;
 	double m_Width;
 	double m_Height;
