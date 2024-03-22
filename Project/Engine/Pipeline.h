@@ -30,10 +30,12 @@ public:
    void DestroyPipeline(const VkDevice& device);
    void DestroyMeshes(const VkDevice device);
 
-   void RecordPipeline(const VkExtent2D& swapChainExtent,uint32_t imageIndex,
-       const VkSemaphore& semaphore,const VkSemaphore& finishedSemaphore,
-       const VkQueue& graphicsQueue,const VkFence& fence,const VkSwapchainKHR& swapChain,
-       const VkQueue& presentQueue);
+   void Record(const VkExtent2D& swapChainExtent, uint32_t imageIndex);
+
+   const VulkanCommandBuffer& GetCommandBuffer() const
+   {
+       return m_CommandBuffer;
+   }
 private:
     void DrawScene(const VkExtent2D& swapChainExtent, uint32_t imageIndex);
 private:

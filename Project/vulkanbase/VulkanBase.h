@@ -60,32 +60,14 @@ private:
 	void MainLoop();
 	void Cleanup();
 	
-
 	void CreateSurface();
-	
-	// Week 01: 
-	// Actual window
-	// simple fragment + vertex shader creation functions
-	// These 5 functions should be refactored into a separate C++ class
-	// with the correct internal state.
 
 	GLFWwindow* window;
 	void initWindow();
 
 	Pipeline m_DAEPipeline;
 
-	//GP2Shader m_GradientShader{ "shaders/shader.vert.spv", "shaders/shader.frag.spv" };
-
-	// Week 02
-	// Queue families
-	// CommandBuffer concept
-
 	QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device);
-
-	// Week 03
-	// Renderpass concept
-	// Graphics pipeline
-
 	// Week 04
 	// Swap chain and image view support
 

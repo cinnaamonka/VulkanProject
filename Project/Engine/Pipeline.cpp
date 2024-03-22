@@ -43,10 +43,7 @@ void Pipeline::DestroyMeshes(const VkDevice device)
 	m_Scene.DestroyMeshes(device);
 }
 
-void Pipeline::RecordPipeline(const VkExtent2D& swapChainExtent,uint32_t imageIndex,
-	const VkSemaphore& semaphore, const VkSemaphore& finishedSemaphore,
-	const VkQueue& graphicsQueue, const VkFence& fence, const VkSwapchainKHR& swapChain,
-	const VkQueue& presentQueue)
+void Pipeline::Record(const VkExtent2D& swapChainExtent,uint32_t imageIndex)
 {
 	m_CommandBuffer.ResetCommandBuffer();
 
@@ -55,40 +52,6 @@ void Pipeline::RecordPipeline(const VkExtent2D& swapChainExtent,uint32_t imageIn
 	DrawScene(swapChainExtent, imageIndex);
 
 	m_CommandBuffer.EndRecordCommandBuffer();
-
-	VkSubmitInfo submitInfo{};
-	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-
-	VkSemaphore waitSemaphores[] = { semaphore };
-	VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
-	submitInfo.waitSemaphoreCount = 1;
-	submitInfo.pWaitSemaphores = waitSemaphores;
-	submitInfo.pWaitDstStageMask = waitStages;
-
-	m_CommandBuffer.SubmitCommandBuffer(submitInfo);
-
-	VkSemaphore signalSemaphores[] = { finishedSemaphore };
-	submitInfo.signalSemaphoreCount = 1;
-	submitInfo.pSignalSemaphores = signalSemaphores;
-
-	if (vkQueueSubmit(graphicsQueue, 1, &submitInfo, fence) != VK_SUCCESS)
-	{
-		throw std::runtime_error("failed to submit draw command buffer!");
-	}
-
-	VkPresentInfoKHR presentInfo{};
-	presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-
-	presentInfo.waitSemaphoreCount = 1;
-	presentInfo.pWaitSemaphores = signalSemaphores;
-
-	VkSwapchainKHR swapChains[] = { swapChain };
-	presentInfo.swapchainCount = 1;
-	presentInfo.pSwapchains = swapChains;
-
-	presentInfo.pImageIndices = &imageIndex;
-
-	vkQueuePresentKHR(presentQueue, &presentInfo);
 }
 
 void Pipeline::DrawScene(const VkExtent2D& swapChainExtent, uint32_t imageIndex)
