@@ -30,19 +30,8 @@ void VulkanBase::InitVulkan()
 	createSwapChain();
 	createImageViews();
 
-	// week 03
-	m_GradientShader.Init(device);
-	m_RenderPass.CreateRenderPass(device, swapChainImageFormat);
-	m_GraphicsPipeline.CreateGraphicsPipeline(device, m_GradientShader, m_RenderPass);
-	m_GraphicsPipeline.CreateFrameBuffers(device, swapChainImageViews, swapChainExtent, m_RenderPass);
-
-	// week 02  
-	m_CommandPool.CreateCommandPool(device, FindQueueFamilies(physicalDevice));
-
-	m_Scene.AddMesh(m_RectMesh, physicalDevice, device, graphicsQueue, m_CommandPool);
-	m_Scene.AddMesh(m_OvalMesh, physicalDevice, device, graphicsQueue, m_CommandPool);
-	m_Scene.AddMesh(m_RoundedRectMesh, physicalDevice, device, graphicsQueue, m_CommandPool); 
-	m_CommandBuffer = m_CommandPool.CreateCommandBuffer(device);
+	m_DAEPipeline.Initialize(device, physicalDevice, swapChainImageFormat, swapChainImageViews,
+		swapChainExtent, FindQueueFamilies(physicalDevice), graphicsQueue);
 
 	// week 06
 	createSyncObjects();
@@ -65,12 +54,7 @@ void VulkanBase::Cleanup()
 	vkDestroySemaphore(device, imageAvailableSemaphore, nullptr);
 	vkDestroyFence(device, inFlightFence, nullptr);
 
-	m_CommandPool.DestroyCommandPool(device);
-
-	m_GraphicsPipeline.DestroySwapChainFramebuffers(device);
-	m_GraphicsPipeline.DestroyGraphicsPipeline(device);
-	m_GraphicsPipeline.DestroyPipelineLayout(device);
-	m_RenderPass.DestroyRenderPass(device);
+	m_DAEPipeline.DestroyPipeline(device);
 
 	for (auto imageView : swapChainImageViews)
 	{
@@ -83,7 +67,7 @@ void VulkanBase::Cleanup()
 	}
 	vkDestroySwapchainKHR(device, swapChain, nullptr);
 
-	m_Scene.DestroyMeshes(device);
+	m_DAEPipeline.DestroyMeshes(device);
 	vkDestroyDevice(device, nullptr);
 
 	vkDestroySurfaceKHR(instance, surface, nullptr);
@@ -111,41 +95,6 @@ void VulkanBase::initWindow()
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 	window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
 }
-void VulkanBase::DrawFrame(VkCommandBuffer commandBuffer, uint32_t imageIndex)
-{
-	VkRenderPassBeginInfo renderPassInfo{};
-	renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-	renderPassInfo.renderPass = m_RenderPass.GetRenderPass();
-	renderPassInfo.framebuffer = m_GraphicsPipeline.GetSwapChainBuffers()[imageIndex];
-	renderPassInfo.renderArea.offset = { 0, 0 };
-	renderPassInfo.renderArea.extent = swapChainExtent;
-
-	VkClearValue clearColor = { {{0.0f, 0.0f, 0.0f, 1.0f}} };
-	renderPassInfo.clearValueCount = 1;
-	renderPassInfo.pClearValues = &clearColor;
-
-	vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-
-	vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_GraphicsPipeline.GetGraphicsPipeline());
-
-	VkViewport viewport{};
-	viewport.x = 0.0f;
-	viewport.y = 0.0f;
-	viewport.width = (float)swapChainExtent.width;
-	viewport.height = (float)swapChainExtent.height;
-	viewport.minDepth = 0.0f;
-	viewport.maxDepth = 1.0f;
-	vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
-
-	VkRect2D scissor{};
-	scissor.offset = { 0, 0 };
-	scissor.extent = swapChainExtent;
-	vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
-
-	m_Scene.DrawMesh(commandBuffer);
-	vkCmdEndRenderPass(commandBuffer);
-}
-
 
 QueueFamilyIndices VulkanBase::FindQueueFamilies(VkPhysicalDevice device)
 {

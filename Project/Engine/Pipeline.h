@@ -2,12 +2,19 @@
 #include <vulkan/vulkan.h>
 #include "GP2Shader.h"
 #include "CommandBuffer.h"
+#include "GraphicsPipeline.h"
+#include "CommandPool.h"
+#include "RenderPass.h"
 #include "Mesh.h"
+#include "Scene.h"
+#include "Rect.h"
+#include "Oval.h"
+#include "RoundedRect.h"
 
 class Pipeline
 {
 public:
-    Pipeline() = default;
+    Pipeline();
     ~Pipeline() = default;
 
    Pipeline(const Pipeline& other) = delete;
@@ -15,13 +22,26 @@ public:
    Pipeline(Pipeline&& other) = delete;
    Pipeline& operator=(Pipeline&& other) = delete;
 
-   void Initialize();
-   void RecordPipeline();
+   void Initialize(const VkDevice& device, const VkPhysicalDevice& physicalDevice, const VkFormat& swapChainImageFormat,
+       std::vector<VkImageView>& swapChainImageViews,
+       const VkExtent2D& swapChainExtent,const QueueFamilyIndices& queueFamilyIndexes,
+       const VkQueue& graphicsQueue);
+
+   void DestroyPipeline(const VkDevice& device);
+   void DestroyMeshes(const VkDevice device);
+
+   void RecordPipeline(const VkExtent2D& swapChainExtent,uint32_t imageIndex,
+       const VkSemaphore& semaphore,const VkSemaphore& finishedSemaphore,
+       const VkQueue& graphicsQueue,const VkFence& fence,const VkSwapchainKHR& swapChain,
+       const VkQueue& presentQueue);
 private:
-    void DrawScene();
+    void DrawScene(const VkExtent2D& swapChainExtent, uint32_t imageIndex);
 private:
-    VkPipeline m_Pipeline;
+    GraphicsPipeline m_GraphicsPipeline;
     GP2Shader m_Shader; 
     VulkanCommandBuffer m_CommandBuffer;
+    RenderPass m_RenderPass;
+    CommandPool m_CommandPool;
     std::vector<Mesh> m_Meshes;
+    Scene m_Scene;
 };

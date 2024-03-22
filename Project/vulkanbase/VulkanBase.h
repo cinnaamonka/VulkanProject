@@ -30,6 +30,7 @@
 #include "../Engine/GraphicsPipeline.h"
 #include "../Engine/RenderPass.h"
 #include "../Engine/IndexBuffer.h"
+#include "../Engine/Pipeline.h"
 
 const std::vector<const char*> validationLayers =
 {
@@ -71,32 +72,19 @@ private:
 	GLFWwindow* window;
 	void initWindow();
 
-	GP2Shader m_GradientShader{ "shaders/shader.vert.spv", "shaders/shader.frag.spv" };
+	Pipeline m_DAEPipeline;
+
+	//GP2Shader m_GradientShader{ "shaders/shader.vert.spv", "shaders/shader.frag.spv" };
 
 	// Week 02
 	// Queue families
 	// CommandBuffer concept
 
-	CommandPool m_CommandPool;
-	VulkanCommandBuffer m_CommandBuffer;
-
 	QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device);
-
-	void DrawFrame(VkCommandBuffer commandBuffer, uint32_t imageIndex);
-
-	Mesh m_Mesh{};
-	Scene m_Scene{};
 
 	// Week 03
 	// Renderpass concept
 	// Graphics pipeline
-
-	RectMesh m_RectMesh{ {-0.25,-0.25},0.5,0.3 };
-	Oval m_OvalMesh{ { -0.25f,0.8f},0.2f,6 };
-	RoundedRect m_RoundedRectMesh{ {0.25,0.25},0.3,0.2,0.1,21 };
-
-	GraphicsPipeline m_GraphicsPipeline;
-	RenderPass m_RenderPass;
 
 	// Week 04
 	// Swap chain and image view support
