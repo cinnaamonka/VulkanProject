@@ -1,6 +1,6 @@
 #pragma once
 #include <vulkan/vulkan.h>
-#include "Mesh.h"
+#include "../Mesh.h"
 
 class CommandPool;
 

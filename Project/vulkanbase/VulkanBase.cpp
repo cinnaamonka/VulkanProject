@@ -1,5 +1,5 @@
 #include "VulkanBase.h"
-#include "../Engine/Rect.h"
+#include "../Engine/Meshes/Rect.h"
 
 #include <functional>
 
@@ -22,17 +22,11 @@ void VulkanBase::InitVulkan()
 	setupDebugMessenger();
 	CreateSurface();
 
-	// week 05
 	m_GPUObject.PickPhysicalDevice(instance, surface);
-//	pickPhysicalDevice();
 	m_GPUObject.CreateLogicalDevice(device,surface);
-	//createLogicalDevice();
 
-	// week 04 
 	m_SwapChain.CreateSwapChain(surface, window, FindQueueFamilies(m_GPUObject.GetPhysicalDevice(),surface),device, m_GPUObject.GetPhysicalDevice());
-	//createSwapChain();
 	m_SwapChain.CreateImageViews(device); 
-	//createImageViews();
 
 	m_DAEPipeline.Initialize(device, m_GPUObject.GetPhysicalDevice(), m_SwapChain.GetSwapChainImageFormat(), 
 		m_SwapChain.GetSwapChainImageViews(),
@@ -101,41 +95,3 @@ void VulkanBase::initWindow()
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 	window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
 }
-
-//QueueFamilyIndices VulkanBase::FindQueueFamilies(VkPhysicalDevice device)
-//{
-//	/*QueueFamilyIndices indices;
-//
-//	uint32_t queueFamilyCount = 0;
-//	vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
-//
-//	std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
-//	vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
-//
-//	int i = 0;
-//
-//	for (const auto& queueFamily : queueFamilies)
-//	{
-//		if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
-//		{
-//			indices.graphicsFamily = i;
-//		}
-//
-//		VkBool32 presentSupport = false;
-//		vkGetPhysicalDeviceSurfaceSupportKHR(device, i, surface, &presentSupport);
-//
-//		if (presentSupport)
-//		{
-//			indices.presentFamily = i;
-//		}
-//
-//		if (indices.isComplete())
-//		{
-//			break;
-//		}
-//
-//		i++;
-//	}
-//
-//	return indices;
-//}*/

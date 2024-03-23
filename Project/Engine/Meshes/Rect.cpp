@@ -1,6 +1,6 @@
 #pragma once
 #include "Rect.h"
-#include "CommandPool.h"
+#include "../CommandPool.h"
 
 RectMesh::RectMesh(glm::vec2 left, double width, double height) :
 	m_LeftPos(left),

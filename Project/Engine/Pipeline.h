@@ -7,9 +7,9 @@
 #include "RenderPass.h"
 #include "Mesh.h"
 #include "Scene.h"
-#include "Rect.h"
-#include "Oval.h"
-#include "RoundedRect.h"
+#include "../Engine/Meshes/Rect.h"
+#include "../Engine/Meshes/Oval.h"
+#include "../Engine/Meshes/RoundedRect.h"
 
 class Pipeline
 {
