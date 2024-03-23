@@ -33,16 +33,7 @@
 #include "../Engine/Pipeline.h"
 #include "../Engine/Utils/Structs.h"
 #include "../Engine/SwapChain.h"
-
-const std::vector<const char*> validationLayers =
-{
-	"VK_LAYER_KHRONOS_validation"
-};
-
-const std::vector<const char*> deviceExtensions =
-{
-	VK_KHR_SWAPCHAIN_EXTENSION_NAME
-};
+#include "../Engine/GPUObject.h"
 
 class VulkanBase
 {
@@ -61,22 +52,10 @@ private:
 	void initWindow();
 
 	Pipeline m_DAEPipeline;
-
-	QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device);
 	
 	SwapChain m_SwapChain;
 
-	// Week 05 
-	// Logical and physical device
-
-	VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
-	VkQueue graphicsQueue;
-	VkQueue presentQueue;
-
-	void pickPhysicalDevice();
-	bool isDeviceSuitable(VkPhysicalDevice device);
-	void createLogicalDevice();
-
+	GPUObject m_GPUObject;
 	// Week 06
 	// Main initialization
 
@@ -92,7 +71,7 @@ private:
 	void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
 	void setupDebugMessenger();
 	std::vector<const char*> getRequiredExtensions();
-	bool checkDeviceExtensionSupport(VkPhysicalDevice device);
+
 	void createInstance();
 
 	void createSyncObjects();

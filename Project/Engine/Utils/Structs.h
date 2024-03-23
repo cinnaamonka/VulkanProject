@@ -6,6 +6,14 @@
 #include <array>
 #include <Vector>
 
+const std::vector<const char*> deviceExtensions =
+{
+	VK_KHR_SWAPCHAIN_EXTENSION_NAME
+};
+const std::vector<const char*> validationLayers =
+{
+	"VK_LAYER_KHRONOS_validation"
+};
 struct QueueFamilyIndices 
 {
 	std::optional<uint32_t> graphicsFamily;
