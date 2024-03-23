@@ -70,11 +70,12 @@ void VulkanBase::Cleanup()
 	vkDestroySwapchainKHR(device, m_SwapChain.GetSwapChain(), nullptr);
 
 	m_DAEPipeline.DestroyMeshes(device);
+	
 	vkDestroyDevice(device, nullptr);
-
 	vkDestroySurfaceKHR(instance, surface, nullptr);
 	vkDestroyInstance(instance, nullptr);
 
+	
 	glfwDestroyWindow(window);
 	glfwTerminate();
 

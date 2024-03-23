@@ -29,6 +29,7 @@ public:
 
    void DestroyPipeline(const VkDevice& device);
    void DestroyMeshes(const VkDevice device);
+   void DestroyUniformBuffers(const VkDevice device);
 
    void Record(const VkExtent2D& swapChainExtent, uint32_t imageIndex);
 

@@ -23,6 +23,7 @@ public:
 	void DestroySwapChainFramebuffers(const VkDevice& device);
 	void DestroyGraphicsPipeline(const VkDevice& device);
 	void DestroyPipelineLayout(const VkDevice& device);
+	void DestroyDescriptorSetLayout(const VkDevice& device);
 
 	const  std::vector<VkFramebuffer>& GetSwapChainBuffers()
 	{
@@ -34,8 +35,15 @@ public:
 		return m_GraphicsPipeline;
 	}
 
+	static VkDescriptorSetLayout& GetDiscriptorSetLayout()
+	{
+		return m_DescriptorSetLayout;
+	}
+
+	void CreateDiscriptiveSetLayout(const VkDescriptorSetLayoutBinding& layoutBinding,const VkDevice& device);
 private:
 	VkPipelineLayout m_PipelineLayout;
+	static VkDescriptorSetLayout m_DescriptorSetLayout;
 	std::vector<VkFramebuffer> m_SwapChainFramebuffers;
 	VkPipeline m_GraphicsPipeline;
 };

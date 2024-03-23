@@ -5,6 +5,8 @@
 #include "RoundedRect.h"
 #include "utils/Structs.h"
 #include "IndexBuffer.h"
+#include "DescriptorSetManager.h"
+#include "GraphicsPipeline.h"
 
 constexpr float g_Pi = 3.14159265359f;
 
@@ -50,7 +52,15 @@ void Scene::DestroyMeshes(const VkDevice& device)
 {
 	for (auto& mesh : m_Meshes)
 	{
-		mesh.DestroyMesh(device);
+		mesh.DestroyMesh(device,GraphicsPipeline::GetDiscriptorSetLayout());
+	}
+}
+
+void Scene::DestroyUniformBuffer(const VkDevice& device)
+{
+	for (auto& mesh : m_Meshes)
+	{
+		mesh.DestroyUniformBuffers(device, GraphicsPipeline::GetDiscriptorSetLayout());
 	}
 }
 

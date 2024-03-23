@@ -23,6 +23,7 @@ public:
 
 	void DrawMesh(const VkCommandBuffer& cmdBuffer) const;
 	void DestroyMeshes(const VkDevice& device);
+	void DestroyUniformBuffer(const VkDevice& device);
 private:
 	std::vector<Mesh> m_Meshes;
 };

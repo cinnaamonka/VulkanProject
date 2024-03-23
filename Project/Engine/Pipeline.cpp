@@ -1,19 +1,21 @@
 #include "Pipeline.h"
 #include "GraphicsPipeline.h"
+#include "DescriptorSetManager.h"
 
 
-Pipeline::Pipeline():
+Pipeline::Pipeline() :
 	m_Shader{ "shaders/shader.vert.spv", "shaders/shader.frag.spv" }
 {
 
 }
 
-void Pipeline::Initialize(const VkDevice& device, const VkPhysicalDevice& physicalDevice,const VkFormat& swapChainImageFormat,
+void Pipeline::Initialize(const VkDevice& device, const VkPhysicalDevice& physicalDevice, const VkFormat& swapChainImageFormat,
 	std::vector<VkImageView>& swapChainImageViews, const VkExtent2D& swapChainExtent,
 	const QueueFamilyIndices& queueFamilyIndexes, const VkQueue& graphicsQueue)
 {
 	m_Shader.Init(device);
 	m_RenderPass.CreateRenderPass(device, swapChainImageFormat);
+	m_GraphicsPipeline.CreateDiscriptiveSetLayout(DescriptorSetManager::GetDescriptorSetLayoutBinging(), device);
 	m_GraphicsPipeline.CreateGraphicsPipeline(device, m_Shader, m_RenderPass);
 	m_GraphicsPipeline.CreateFrameBuffers(device, swapChainImageViews, swapChainExtent, m_RenderPass);
 	m_CommandPool.CreateCommandPool(device, queueFamilyIndexes);
@@ -33,6 +35,7 @@ void Pipeline::DestroyPipeline(const VkDevice& device)
 {
 	m_CommandPool.DestroyCommandPool(device);
 	m_GraphicsPipeline.DestroySwapChainFramebuffers(device);
+	m_GraphicsPipeline.DestroyDescriptorSetLayout(device);
 	m_GraphicsPipeline.DestroyGraphicsPipeline(device);
 	m_GraphicsPipeline.DestroyPipelineLayout(device);
 	m_RenderPass.DestroyRenderPass(device);
@@ -41,9 +44,15 @@ void Pipeline::DestroyPipeline(const VkDevice& device)
 void Pipeline::DestroyMeshes(const VkDevice device)
 {
 	m_Scene.DestroyMeshes(device);
+	DestroyUniformBuffers(device);
 }
 
-void Pipeline::Record(const VkExtent2D& swapChainExtent,uint32_t imageIndex)
+void Pipeline::DestroyUniformBuffers(const VkDevice device)
+{
+	m_Scene.DestroyUniformBuffer(device);
+}
+
+void Pipeline::Record(const VkExtent2D& swapChainExtent, uint32_t imageIndex)
 {
 	m_CommandBuffer.ResetCommandBuffer();
 

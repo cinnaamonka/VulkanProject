@@ -14,7 +14,7 @@ public:
 	Mesh();  
 	virtual ~Mesh() {};
 
-	void DestroyMesh(const VkDevice& device);
+	void DestroyMesh(const VkDevice& device, const VkDescriptorSetLayout& layout);
 
 	void Draw(const VkCommandBuffer& buffer) const;
 
@@ -22,6 +22,11 @@ public:
 
 	void Initialize(const VkPhysicalDevice& physicalDevice, const VkDevice& device,const std::vector<Vertex> vertexes,
 		const VkQueue& graphicsQueue,const CommandPool& commandPool, std::vector<uint16_t> indices);
+
+	void CreateUniformBuffers(const VkDevice& device, const VkPhysicalDevice& physcialDevice);
+	void DestroyUniformBuffers(const VkDevice& device,const VkDescriptorSetLayout& descriptiveSetLayout);
+
+	void UpdateUniformBuffer(uint32_t currentImage, UniformBufferObject& buffer, const VkExtent2D& swapChainExtent);
 	 
 private:
 	
@@ -32,6 +37,12 @@ private:
 
 	VkBuffer indexBuffer;
 	VkDeviceMemory indexBufferMemory;
+
+	std::vector<VkBuffer> uniformBuffers;
+	std::vector<VkDeviceMemory> uniformBuffersMemory;
+	std::vector<void*> uniformBuffersMapped;
+
+	const uint32_t m_MaxFramesInFlight;
 
 protected:
 	std::vector<Vertex>m_Vertices;

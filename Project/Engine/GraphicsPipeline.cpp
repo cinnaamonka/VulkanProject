@@ -2,6 +2,8 @@
 
 #include <stdexcept>
 
+VkDescriptorSetLayout GraphicsPipeline::m_DescriptorSetLayout = nullptr;
+
 void GraphicsPipeline::CreateGraphicsPipeline(const VkDevice& device, GP2Shader& shader, const RenderPass& renderPass)
 {
 	VkPipelineViewportStateCreateInfo viewportState{};
@@ -51,8 +53,8 @@ void GraphicsPipeline::CreateGraphicsPipeline(const VkDevice& device, GP2Shader&
 
 	VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
 	pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-	pipelineLayoutInfo.setLayoutCount = 0; // Set to the number of descriptor set layouts if applicable
-	pipelineLayoutInfo.pSetLayouts = nullptr; // Set to the array of descriptor set layouts if applicable
+	pipelineLayoutInfo.setLayoutCount = 1; // Set to the number of descriptor set layouts if applicable
+	pipelineLayoutInfo.pSetLayouts = &m_DescriptorSetLayout; // Set to the array of descriptor set layouts if applicable
 	pipelineLayoutInfo.pushConstantRangeCount = 0;
 	pipelineLayoutInfo.pPushConstantRanges = nullptr;
 
@@ -131,3 +133,23 @@ void GraphicsPipeline::DestroyPipelineLayout(const VkDevice& device)
 {
 	vkDestroyPipelineLayout(device, m_PipelineLayout, nullptr);
 }
+
+void GraphicsPipeline::DestroyDescriptorSetLayout(const VkDevice& device)
+{
+	vkDestroyDescriptorSetLayout(device, m_DescriptorSetLayout, nullptr);
+}
+
+void GraphicsPipeline::CreateDiscriptiveSetLayout(const VkDescriptorSetLayoutBinding& layoutBinding,
+	const VkDevice& device)
+{
+	VkDescriptorSetLayoutCreateInfo layoutInfo{};
+	layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+	layoutInfo.bindingCount = 1;
+	layoutInfo.pBindings = &layoutBinding;
+
+	if (vkCreateDescriptorSetLayout(device, &layoutInfo, nullptr, &m_DescriptorSetLayout) != VK_SUCCESS) {
+		throw std::runtime_error("failed to create descriptor set layout!");
+	}
+}
+
+
