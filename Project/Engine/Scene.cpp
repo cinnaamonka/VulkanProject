@@ -3,7 +3,7 @@
 #include "Rect.h"
 #include "Oval.h"
 #include "RoundedRect.h"
-#include "Structs.h"
+#include "utils/Structs.h"
 #include "IndexBuffer.h"
 
 constexpr float g_Pi = 3.14159265359f;

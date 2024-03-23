@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-#include "Structs.h"
+#include "Utils/Structs.h"
 
 class GP2Shader final 
 {

@@ -1,7 +1,7 @@
 #pragma once
 #include <stdexcept>
 #include <vulkan/vulkan.h>
-#include "Structs.h"
+#include "Utils/Structs.h"
 
 class VulkanCommandBuffer;
 

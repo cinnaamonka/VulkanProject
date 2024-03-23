@@ -29,13 +29,13 @@ set(SOURCES
     "vulkanbase/VulkanBase.h" 
     "vulkanbase/VulkanUtil.h"
     # Add other source files here
-    "labwork/Week04.cpp" 
+     
     "labwork/Week05.cpp"
     "labwork/Week06.cpp"
  "Engine/GP2Shader.h" "Engine/GP2Shader.cpp")
 
 # Create the executable
-add_executable(${PROJECT_NAME} ${SOURCES} ${GLSL_SOURCE_FILES}  "vulkanbase/VulkanUtil.cpp"  "Engine/CommandPool.h" "Engine/CommandPool.cpp" "Engine/Structs.h" "Engine/CommandBuffer.h" "Engine/CommandBuffer.cpp" "vulkanbase/VulkanBase.cpp"   "Engine/Mesh.cpp" "Engine/Rect.h" "Engine/Rect.cpp" "Engine/Oval.h" "Engine/Oval.cpp" "Engine/RoundedRect.h" "Engine/RoundedRect.cpp" "Engine/Scene.h" "Engine/Scene.cpp" "Engine/GraphicsPipeline.h" "Engine/GraphicsPipeline.cpp" "Engine/RenderPass.h" "Engine/RenderPass.cpp" "Engine/BaseBuffer.cpp" "Engine/VertexBuffer.h" "Engine/VertexBuffer.cpp" "Engine/IndexBuffer.h" "Engine/IndexBuffer.cpp" "Engine/Pipeline.h" "Engine/Pipeline.cpp")
+add_executable(${PROJECT_NAME} ${SOURCES} ${GLSL_SOURCE_FILES}  "vulkanbase/VulkanUtil.cpp"  "Engine/CommandPool.h" "Engine/CommandPool.cpp" "Engine/Utils/Structs.h" "Engine/CommandBuffer.h" "Engine/CommandBuffer.cpp" "vulkanbase/VulkanBase.cpp"   "Engine/Mesh.cpp" "Engine/Rect.h" "Engine/Rect.cpp" "Engine/Oval.h" "Engine/Oval.cpp" "Engine/RoundedRect.h" "Engine/RoundedRect.cpp" "Engine/Scene.h" "Engine/Scene.cpp" "Engine/GraphicsPipeline.h" "Engine/GraphicsPipeline.cpp" "Engine/RenderPass.h" "Engine/RenderPass.cpp" "Engine/BaseBuffer.cpp" "Engine/VertexBuffer.h" "Engine/VertexBuffer.cpp" "Engine/IndexBuffer.h" "Engine/IndexBuffer.cpp" "Engine/Pipeline.h" "Engine/Pipeline.cpp" "Engine/SwapChain.h" "Engine/SwapChain.cpp")
 add_dependencies(${PROJECT_NAME} Shaders)
 # Link libraries
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

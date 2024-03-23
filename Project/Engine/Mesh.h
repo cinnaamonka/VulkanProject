@@ -2,7 +2,7 @@
 #include <vulkan/vulkan.h>
 #include <vector>
 
-#include "Structs.h"
+#include "utils/Structs.h"
 #include "CommandPool.h"
 #include "IndexBuffer.h"
 

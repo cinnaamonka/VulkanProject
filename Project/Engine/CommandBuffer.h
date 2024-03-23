@@ -3,7 +3,7 @@
 #include <vulkan/vulkan.h>
 #include <functional>
 
-#include "Structs.h"
+#include "Utils/Structs.h"
 #include "Mesh.h"
 
 class CommandPool;

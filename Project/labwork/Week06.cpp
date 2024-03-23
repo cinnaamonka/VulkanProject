@@ -44,10 +44,10 @@ void VulkanBase::DrawFrame()
 
 	// get next image to draw
 	uint32_t imageIndex;
-	vkAcquireNextImageKHR(device, swapChain, UINT64_MAX, imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
+	vkAcquireNextImageKHR(device, m_SwapChain.GetSwapChain(), UINT64_MAX, imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
 
 	//Record command buffer
-	m_DAEPipeline.Record(swapChainExtent, imageIndex);
+	m_DAEPipeline.Record(m_SwapChain.GetSwapChainExtent(), imageIndex);
 
 	//submit command buffer to command queue
 	VkSubmitInfo submitInfo{};
@@ -77,7 +77,7 @@ void VulkanBase::DrawFrame()
 	presentInfo.waitSemaphoreCount = 1;
 	presentInfo.pWaitSemaphores = signalSemaphores;
 
-	VkSwapchainKHR swapChains[] = { swapChain };
+	VkSwapchainKHR swapChains[] = { m_SwapChain.GetSwapChain()};
 	presentInfo.swapchainCount = 1;
 	presentInfo.pSwapchains = swapChains;
 

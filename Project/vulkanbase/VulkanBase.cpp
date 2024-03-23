@@ -27,11 +27,13 @@ void VulkanBase::InitVulkan()
 	createLogicalDevice();
 
 	// week 04 
-	createSwapChain();
-	createImageViews();
+	m_SwapChain.CreateSwapChain(surface, window, FindQueueFamilies(physicalDevice),device,physicalDevice); 
+	//createSwapChain();
+	m_SwapChain.CreateImageViews(device); 
+	//createImageViews();
 
-	m_DAEPipeline.Initialize(device, physicalDevice, swapChainImageFormat, swapChainImageViews,
-		swapChainExtent, FindQueueFamilies(physicalDevice), graphicsQueue);
+	m_DAEPipeline.Initialize(device, physicalDevice, m_SwapChain.GetSwapChainImageFormat(), m_SwapChain.GetSwapChainImageViews(),
+		m_SwapChain.GetSwapChainExtent(), FindQueueFamilies(physicalDevice), graphicsQueue);
 
 	// week 06
 	createSyncObjects();
@@ -56,7 +58,7 @@ void VulkanBase::Cleanup()
 
 	m_DAEPipeline.DestroyPipeline(device);
 
-	for (auto imageView : swapChainImageViews)
+	for (auto imageView : m_SwapChain.GetSwapChainImageViews())
 	{
 		vkDestroyImageView(device, imageView, nullptr);
 	}
@@ -65,7 +67,7 @@ void VulkanBase::Cleanup()
 	{
 		DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
 	}
-	vkDestroySwapchainKHR(device, swapChain, nullptr);
+	vkDestroySwapchainKHR(device, m_SwapChain.GetSwapChain(), nullptr);
 
 	m_DAEPipeline.DestroyMeshes(device);
 	vkDestroyDevice(device, nullptr);

@@ -2112,14 +2112,6 @@ build Project\CMakeFiles\VulkanLab01.dir\Engine\main.cpp.obj: CXX_COMPILER__Vulk
   TARGET_COMPILE_PDB = Project\CMakeFiles\VulkanLab01.dir\
   TARGET_PDB = Project\VulkanLab01.pdb
 
-build Project\CMakeFiles\VulkanLab01.dir\labwork\Week04.cpp.obj: CXX_COMPILER__VulkanLab01_unscanned_Debug C$:\Users\parni\Desktop\2023-2024\4$ semester\GraphicsProgramming2\VulkanProject\Project\labwork\Week04.cpp || cmake_object_order_depends_target_VulkanLab01
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++17
-  INCLUDES = -IC:\VulkanSDK\1.3.261.1\Include -I"C:\Users\parni\Desktop\2023-2024\4 semester\GraphicsProgramming2\VulkanProject\Project" -I"C:\Users\parni\Desktop\2023-2024\4 semester\GraphicsProgramming2\VulkanProject\out\build\x64-Debug\_deps\glfw-src\include"
-  OBJECT_DIR = Project\CMakeFiles\VulkanLab01.dir
-  OBJECT_FILE_DIR = Project\CMakeFiles\VulkanLab01.dir\labwork
-  TARGET_COMPILE_PDB = Project\CMakeFiles\VulkanLab01.dir\
-  TARGET_PDB = Project\VulkanLab01.pdb
-
 build Project\CMakeFiles\VulkanLab01.dir\labwork\Week05.cpp.obj: CXX_COMPILER__VulkanLab01_unscanned_Debug C$:\Users\parni\Desktop\2023-2024\4$ semester\GraphicsProgramming2\VulkanProject\Project\labwork\Week05.cpp || cmake_object_order_depends_target_VulkanLab01
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++17
   INCLUDES = -IC:\VulkanSDK\1.3.261.1\Include -I"C:\Users\parni\Desktop\2023-2024\4 semester\GraphicsProgramming2\VulkanProject\Project" -I"C:\Users\parni\Desktop\2023-2024\4 semester\GraphicsProgramming2\VulkanProject\out\build\x64-Debug\_deps\glfw-src\include"
@@ -2264,6 +2256,14 @@ build Project\CMakeFiles\VulkanLab01.dir\Engine\Pipeline.cpp.obj: CXX_COMPILER__
   TARGET_COMPILE_PDB = Project\CMakeFiles\VulkanLab01.dir\
   TARGET_PDB = Project\VulkanLab01.pdb
 
+build Project\CMakeFiles\VulkanLab01.dir\Engine\SwapChain.cpp.obj: CXX_COMPILER__VulkanLab01_unscanned_Debug C$:\Users\parni\Desktop\2023-2024\4$ semester\GraphicsProgramming2\VulkanProject\Project\Engine\SwapChain.cpp || cmake_object_order_depends_target_VulkanLab01
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++17
+  INCLUDES = -IC:\VulkanSDK\1.3.261.1\Include -I"C:\Users\parni\Desktop\2023-2024\4 semester\GraphicsProgramming2\VulkanProject\Project" -I"C:\Users\parni\Desktop\2023-2024\4 semester\GraphicsProgramming2\VulkanProject\out\build\x64-Debug\_deps\glfw-src\include"
+  OBJECT_DIR = Project\CMakeFiles\VulkanLab01.dir
+  OBJECT_FILE_DIR = Project\CMakeFiles\VulkanLab01.dir\Engine
+  TARGET_COMPILE_PDB = Project\CMakeFiles\VulkanLab01.dir\
+  TARGET_PDB = Project\VulkanLab01.pdb
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target VulkanLab01
@@ -2272,7 +2272,7 @@ build Project\CMakeFiles\VulkanLab01.dir\Engine\Pipeline.cpp.obj: CXX_COMPILER__
 #############################################
 # Link the executable Project\VulkanLab01.exe
 
-build Project\VulkanLab01.exe: CXX_EXECUTABLE_LINKER__VulkanLab01_Debug Project\CMakeFiles\VulkanLab01.dir\Engine\main.cpp.obj Project\CMakeFiles\VulkanLab01.dir\labwork\Week04.cpp.obj Project\CMakeFiles\VulkanLab01.dir\labwork\Week05.cpp.obj Project\CMakeFiles\VulkanLab01.dir\labwork\Week06.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\GP2Shader.cpp.obj Project\CMakeFiles\VulkanLab01.dir\vulkanbase\VulkanUtil.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\CommandPool.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\CommandBuffer.cpp.obj Project\CMakeFiles\VulkanLab01.dir\vulkanbase\VulkanBase.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\Mesh.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\Rect.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\Oval.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\RoundedRect.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\Scene.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\GraphicsPipeline.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\RenderPass.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\BaseBuffer.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\VertexBuffer.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\IndexBuffer.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\Pipeline.cpp.obj | C$:\VulkanSDK\1.3.261.1\Lib\vulkan-1.lib _deps\glfw-build\src\glfw3.lib || Project\Shaders _deps\glfw-build\src\glfw3.lib
+build Project\VulkanLab01.exe: CXX_EXECUTABLE_LINKER__VulkanLab01_Debug Project\CMakeFiles\VulkanLab01.dir\Engine\main.cpp.obj Project\CMakeFiles\VulkanLab01.dir\labwork\Week05.cpp.obj Project\CMakeFiles\VulkanLab01.dir\labwork\Week06.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\GP2Shader.cpp.obj Project\CMakeFiles\VulkanLab01.dir\vulkanbase\VulkanUtil.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\CommandPool.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\CommandBuffer.cpp.obj Project\CMakeFiles\VulkanLab01.dir\vulkanbase\VulkanBase.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\Mesh.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\Rect.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\Oval.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\RoundedRect.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\Scene.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\GraphicsPipeline.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\RenderPass.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\BaseBuffer.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\VertexBuffer.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\IndexBuffer.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\Pipeline.cpp.obj Project\CMakeFiles\VulkanLab01.dir\Engine\SwapChain.cpp.obj | C$:\VulkanSDK\1.3.261.1\Lib\vulkan-1.lib _deps\glfw-build\src\glfw3.lib || Project\Shaders _deps\glfw-build\src\glfw3.lib
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
   LINK_LIBRARIES = C:\VulkanSDK\1.3.261.1\Lib\vulkan-1.lib  _deps\glfw-build\src\glfw3.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib

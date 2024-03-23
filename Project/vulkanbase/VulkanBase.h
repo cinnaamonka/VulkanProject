@@ -31,6 +31,8 @@
 #include "../Engine/RenderPass.h"
 #include "../Engine/IndexBuffer.h"
 #include "../Engine/Pipeline.h"
+#include "../Engine/Utils/Structs.h"
+#include "../Engine/SwapChain.h"
 
 const std::vector<const char*> validationLayers =
 {
@@ -40,13 +42,6 @@ const std::vector<const char*> validationLayers =
 const std::vector<const char*> deviceExtensions =
 {
 	VK_KHR_SWAPCHAIN_EXTENSION_NAME
-};
-
-struct SwapChainSupportDetails
-{
-	VkSurfaceCapabilitiesKHR capabilities;
-	std::vector<VkSurfaceFormatKHR> formats;
-	std::vector<VkPresentModeKHR> presentModes;
 };
 
 class VulkanBase
@@ -68,22 +63,8 @@ private:
 	Pipeline m_DAEPipeline;
 
 	QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device);
-	// Week 04
-	// Swap chain and image view support
-
-	VkSwapchainKHR swapChain;
-	std::vector<VkImage> swapChainImages;
-	VkFormat swapChainImageFormat;
-	VkExtent2D swapChainExtent;
-
-	std::vector<VkImageView> swapChainImageViews;
-
-	SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
-	VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
-	VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
-	VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
-	void createSwapChain();
-	void createImageViews();
+	
+	SwapChain m_SwapChain;
 
 	// Week 05 
 	// Logical and physical device

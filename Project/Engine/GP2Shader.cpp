@@ -1,6 +1,6 @@
 #include "GP2Shader.h"
 #include "vulkanbase/VulkanUtil.h"
-#include "Structs.h"
+#include "Utils/Structs.h"
 #include <iostream>
 
 void GP2Shader::Init(const VkDevice& device)
