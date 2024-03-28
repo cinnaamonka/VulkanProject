@@ -1,5 +1,5 @@
 #include "VulkanUtil.h"
-#include "../Engine/Utils/Structs.h"
+#include "../Engine/Structs.h"
 #include <set>
 #include <string>
 

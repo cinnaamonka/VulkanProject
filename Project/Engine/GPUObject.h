@@ -1,42 +1,46 @@
-#pragma once
-#include "vulkan/vulkan.h"
-#include "../vulkanbase/VulkanUtil.h"
-
-
-class GPUObject
-{
-public:
-	GPUObject() = default;
-	~GPUObject() = default;
-
-	GPUObject(const GPUObject& other) = delete;
-	GPUObject& operator=(const GPUObject& other) = delete;
-	GPUObject(GPUObject&& other) = delete;
-	GPUObject& operator=(GPUObject&& other) = delete;
-
-	void PickPhysicalDevice(const VkInstance& instance, const VkSurfaceKHR& surface);
-	bool IsDeviceSuitable(const VkPhysicalDevice& physicalDevice,const VkSurfaceKHR& surface);
-	void CreateLogicalDevice(VkDevice& device, const VkSurfaceKHR& surface);
-
-	const VkQueue& GetGraphicsQueue()
-	{
-		return m_GraphicsQueue;
-	}
-
-	const VkQueue& GetPresentQueue()
-	{
-		return m_PresentQueue;
-	}
-
-	const VkPhysicalDevice& GetPhysicalDevice()
-	{
-		return m_PhysicalDevice;
-	}
-
-private:
-
-	VkPhysicalDevice m_PhysicalDevice = VK_NULL_HANDLE;
-	VkQueue m_GraphicsQueue;
-	VkQueue m_PresentQueue;
-
-};
+//#pragma once
+//
+//#include "vulkanbase/VulkanUtil.h"
+//#include "DAEDataBuffer.h"
+//
+//template <class UBO>
+//class UniformBufferObject
+//{
+//public:
+//	void Initialize(const VulkanContext& context);
+//	void Upload();
+//	void SetData(const UBO& ubo) 
+//	{
+//		m_UBOSrc = ubo;
+//	}
+//
+//	VkBuffer& GetVkBuffer() 
+//	{
+//		return m_UBOBuffer->getVkBuffer();
+//	}
+//private:
+//	std::unique_ptr<DAEDataBuffer> m_UBOBuffer;
+//	UBO m_UBOSrc;
+//};
+//
+//template<class UBO>
+//inline void UniformBufferObject<UBO>::Initialize(const VulkanContext& context)
+//{
+//	m_UBOBuffer = std::make_unique<DAEDataBuffer>(
+//		context,
+//		VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+//		VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+//		sizeof(UBO)
+//	);
+//}
+//
+//template<class UBO>
+//inline void UniformBufferObject<UBO>::Upload()
+//{
+//	m_UBOBuffer->Upload(sizeof(UBO), &m_UBOSrc);
+//}
+//
+//template<class UBO>
+//using DAEUniformBufferObjectPtr = std::unique_ptr<DAEUniformBufferObject<UBO>>;
+//
+//

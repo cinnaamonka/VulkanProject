@@ -19,10 +19,10 @@
 #include <algorithm>
 
 
-#include "../Engine/GP2Shader.h"
+#include "../Engine/2D/GP2Shader2D.h"
 #include "../Engine/CommandPool.h"
 #include "../Engine/CommandBuffer.h"
-#include "../Engine/Mesh.h"
+#include "../Engine/2D/Mesh2D.h"
 #include "../Engine/Meshes/Rect.h"
 #include "../Engine/Meshes/Oval.h"
 #include "../Engine/Meshes/RoundedRect.h"
@@ -30,10 +30,11 @@
 #include "../Engine/GraphicsPipeline.h"
 #include "../Engine/RenderPass.h"
 #include "../Engine/IndexBuffer.h"
-#include "../Engine/Pipeline.h"
-#include "../Engine/Utils/Structs.h"
+#include "../Engine/2D/Pipeline2D.h"
+#include "../Engine/Structs.h"
 #include "../Engine/SwapChain.h"
 #include "../Engine/GPUObject.h"
+#include "../Engine/DeviceManager.h"
 
 class VulkanBase
 {
@@ -55,7 +56,7 @@ private:
 	
 	SwapChain m_SwapChain;
 
-	GPUObject m_GPUObject;
+	DeviceManager m_DeviceManager;
 	// Week 06
 	// Main initialization
 

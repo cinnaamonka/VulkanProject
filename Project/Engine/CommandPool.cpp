@@ -1,6 +1,6 @@
 #include "vulkanbase/VulkanUtil.h"
 #include "CommandPool.h"
-#include "Utils/Structs.h"
+#include "Structs.h"
 #include "CommandBuffer.h"
 
 #include <vulkan/vulkan.h>

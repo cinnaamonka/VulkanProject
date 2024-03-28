@@ -1,0 +1,47 @@
+//#pragma once
+//#include <vulkan/vulkan_core.h>
+//#include <vector>
+//#include <string>
+//
+//#include "./Engine/Structs.h"
+//
+//class GP2Shader3D final
+//{
+//public:
+//	GP2Shader3D(const std::string& vertexShaderFile, const std::string& fragmentShaderFile) :
+//		m_VertexShaderFile{ vertexShaderFile },
+//		m_FragmentShaderFile{ fragmentShaderFile },
+//		m_VecShadersStageInfos{  },
+//		m_InputBinding{ Vertex::GetBindingDescription() },
+//		m_AttributeDescriptions{ Vertex::GetAttributeDescriptions() }
+//	{}
+//
+//	~GP2Shader3D() = default;
+//
+//	GP2Shader3D(const GP2Shader3D& other) = delete;
+//	GP2Shader3D(GP2Shader3D&& other) noexcept = delete;
+//	GP2Shader3D& operator=(const GP2Shader3D& other) = delete;
+//	GP2Shader3D& operator=(GP2Shader3D&& other) noexcept = delete;
+//
+//	void Init(const VkDevice& device);
+//
+//	const std::vector<VkPipelineShaderStageCreateInfo>& GetShaderStageInfos() { return m_VecShadersStageInfos; }
+//	void DestroyShaderModules(const VkDevice& device);
+//
+//	VkPipelineVertexInputStateCreateInfo createVertexInputStateInfo();
+//	VkPipelineInputAssemblyStateCreateInfo createInputAssemblyStateInfo();
+//
+//private:
+//
+//	std::vector<VkPipelineShaderStageCreateInfo> m_VecShadersStageInfos;
+//
+//	std::string m_VertexShaderFile;
+//	std::string m_FragmentShaderFile;
+//
+//	std::array<VkVertexInputAttributeDescription, 2> m_AttributeDescriptions;
+//	VkVertexInputBindingDescription m_InputBinding;
+//	VkPipelineShaderStageCreateInfo createFragmentShaderInfo(const VkDevice& device);
+//	VkPipelineShaderStageCreateInfo createVertexShaderInfo(const VkDevice& device);
+//
+//	VkShaderModule createShaderModule(const VkDevice& device, const std::vector<char>& code);
+//};

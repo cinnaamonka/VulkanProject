@@ -1,14 +1,15 @@
 #include "DaeDataBuffer.h"
 
-DAEDataBuffer::DAEDataBuffer(VkPhysicalDevice physicalDevice, VkDevice device, VkBufferUsageFlags usage, 
-	VkMemoryPropertyFlags properties, VkDeviceSize size)
+DAEDataBuffer::DAEDataBuffer(const VkPhysicalDevice& physicalDevice,const VkDevice& device,
+	const VkBufferUsageFlags& usage, 
+	const VkMemoryPropertyFlags& properties, const VkDeviceSize& size)
 	:m_VkDevice(device), m_Size(size)
 {
 	CreateBuffer(size,usage, properties, m_VkBuffer, m_VkBufferMemory,device,physicalDevice);
 }
 
 
-void DAEDataBuffer::Upload(VkDeviceSize size, void* data)
+void DAEDataBuffer::Upload(const VkDeviceSize& size, void* data)
 {
 	if (size > m_Size)
 	{
@@ -20,7 +21,7 @@ void DAEDataBuffer::Upload(VkDeviceSize size, void* data)
 	memcpy(mappedData, data, static_cast<size_t>(size));
 }
 
-void DAEDataBuffer::Map(VkDeviceSize size, void* data)
+void DAEDataBuffer::Map(const VkDeviceSize& size, void* data)
 {
 	if (size > m_Size)
 	{
@@ -45,7 +46,7 @@ void DAEDataBuffer::Destroy()
 	}
 }
 
-void DAEDataBuffer::BindAsVertexBuffer(VkCommandBuffer commandBuffer)
+void DAEDataBuffer::BindAsVertexBuffer(const VkCommandBuffer& commandBuffer)
 {
 	VkBuffer vertexBuffers[] = { m_VkBuffer };
 	VkDeviceSize offsets[] = { 0 };
@@ -53,17 +54,17 @@ void DAEDataBuffer::BindAsVertexBuffer(VkCommandBuffer commandBuffer)
 }
 
 
-void DAEDataBuffer::BindAsIndexBuffer(VkCommandBuffer commandBuffer)
+void DAEDataBuffer::BindAsIndexBuffer(const VkCommandBuffer& commandBuffer)
 {
 	vkCmdBindIndexBuffer(commandBuffer, m_VkBuffer, 0, VK_INDEX_TYPE_UINT16);
 }
 
-VkBuffer DAEDataBuffer::GetVkBuffer()
+VkBuffer& DAEDataBuffer::GetVkBuffer()
 {
 	return m_VkBuffer;
 }
 
-VkDeviceSize DAEDataBuffer::GetSizeInBytes()
+const VkDeviceSize& DAEDataBuffer::GetSizeInBytes()
 {
 	return m_Size;
 }

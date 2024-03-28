@@ -8,11 +8,11 @@ class DAEDataBuffer : public BaseBuffer
 {
 public:
 	DAEDataBuffer(
-		VkPhysicalDevice physicalDevice,
-		VkDevice device,
-		VkBufferUsageFlags usage,
-		VkMemoryPropertyFlags properties,
-		VkDeviceSize size
+		const VkPhysicalDevice& physicalDevice,
+		const VkDevice& device,
+		const VkBufferUsageFlags& usage,
+		const VkMemoryPropertyFlags& properties,
+		const VkDeviceSize& size
 	);
 
 	~DAEDataBuffer() 
@@ -20,13 +20,19 @@ public:
 		Destroy();
 	}
 
-	void Upload(VkDeviceSize size, void* data);
-	void Map(VkDeviceSize size, void* data);
+	void Upload(const VkDeviceSize& size, void* data);
+	void Map(const VkDeviceSize& size, void* data);
 	void Destroy();
-	void BindAsVertexBuffer(VkCommandBuffer commandBuffer);
-	void BindAsIndexBuffer(VkCommandBuffer commandBuffer);
-	VkBuffer GetVkBuffer();
-	VkDeviceSize GetSizeInBytes();
+	void BindAsVertexBuffer(const VkCommandBuffer& commandBuffer);
+	void BindAsIndexBuffer(const VkCommandBuffer& commandBuffer);
+	VkBuffer& GetVkBuffer();
+	const VkDeviceSize& GetSizeInBytes();
+
+	VkDeviceMemory& GetDeviceMemory()
+	{
+		return m_VkBufferMemory;
+	}
+
 private:
 
 	VkDevice m_VkDevice;

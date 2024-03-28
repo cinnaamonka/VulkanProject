@@ -1,10 +1,10 @@
 #pragma once
 #include <vulkan/vulkan.h>
-#include "../Mesh.h"
+#include "../2D/Mesh2D.h"
 
 class CommandPool;
 
-class Oval : public Mesh
+class Oval : public Mesh2D
 {
 public:
 	Oval(glm::vec2 center,float radius, int numVertexes);

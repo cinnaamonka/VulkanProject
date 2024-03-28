@@ -3,8 +3,8 @@
 #include <vulkan/vulkan.h>
 #include <functional>
 
-#include "Utils/Structs.h"
-#include "Mesh.h"
+#include "Structs.h"
+#include "./2D/Mesh2D.h"
 
 class CommandPool;
 class Renderer;

@@ -2,7 +2,7 @@
 #include <vulkan/vulkan.h>
 #include <vector>
 
-#include "GP2Shader.h"
+#include "../Engine/2D/GP2Shader2D.h"
 #include "RenderPass.h"
 
 class GraphicsPipeline

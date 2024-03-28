@@ -1,16 +1,16 @@
 #include "Scene.h"
-#include "Mesh.h"
+#include "./2D/Mesh2D.h"
 #include "../Engine/Meshes/Rect.h"
 #include "../Engine/Meshes/Oval.h"
 #include "../Engine/Meshes/RoundedRect.h"
-#include "utils/Structs.h"
+#include "Structs.h"
 #include "IndexBuffer.h"
 #include "DescriptorSetManager.h"
 #include "GraphicsPipeline.h"
 
 constexpr float g_Pi = 3.14159265359f;
 
-void Scene::AddMesh(Mesh& mesh, const VkPhysicalDevice& physicalDevice,const VkDevice& device, const VkQueue& graphicsGueue, 
+void Scene::AddMesh(Mesh2D& mesh, const VkPhysicalDevice& physicalDevice,const VkDevice& device, const VkQueue& graphicsGueue, 
 	const CommandPool& commandPool)
 {
 	RectMesh* rectMesh = dynamic_cast<RectMesh*>(&mesh);
@@ -56,11 +56,11 @@ void Scene::DestroyMeshes(const VkDevice& device)
 	}
 }
 
-void Scene::DestroyUniformBuffer(const VkDevice& device)
-{
-	for (auto& mesh : m_Meshes)
-	{
-		mesh.DestroyUniformBuffers(device, GraphicsPipeline::GetDiscriptorSetLayout());
-	}
-}
+//void Scene::DestroyUniformBuffer(const VkDevice& device)
+//{
+//	for (auto& mesh : m_Meshes)
+//	{
+//		mesh.DestroyUniformBuffers(device, GraphicsPipeline::GetDiscriptorSetLayout());
+//	}
+//}
 

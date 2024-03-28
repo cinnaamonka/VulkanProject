@@ -2,11 +2,11 @@
 #include <vulkan/vulkan.h>
 #include <glm/glm.hpp>
 
-#include "../Mesh.h"  
+#include "../2D/Mesh2D.h"  
 
 class CommandPool;
 
-class RoundedRect : public Mesh
+class RoundedRect : public Mesh2D
 {
 public: 
 	RoundedRect(glm::vec2 leftPos, double width, double height, double radius, int numOfSegments);

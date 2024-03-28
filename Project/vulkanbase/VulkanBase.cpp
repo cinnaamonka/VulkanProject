@@ -22,15 +22,15 @@ void VulkanBase::InitVulkan()
 	setupDebugMessenger();
 	CreateSurface();
 
-	m_GPUObject.PickPhysicalDevice(instance, surface);
-	m_GPUObject.CreateLogicalDevice(device,surface);
+	m_DeviceManager.PickPhysicalDevice(instance, surface);
+	m_DeviceManager.CreateLogicalDevice(device,surface);
 
-	m_SwapChain.CreateSwapChain(surface, window, FindQueueFamilies(m_GPUObject.GetPhysicalDevice(),surface),device, m_GPUObject.GetPhysicalDevice());
+	m_SwapChain.CreateSwapChain(surface, window, FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(),surface),device, m_DeviceManager.GetPhysicalDevice());
 	m_SwapChain.CreateImageViews(device); 
 
-	m_DAEPipeline.Initialize(device, m_GPUObject.GetPhysicalDevice(), m_SwapChain.GetSwapChainImageFormat(), 
+	m_DAEPipeline.Initialize(device, m_DeviceManager.GetPhysicalDevice(), m_SwapChain.GetSwapChainImageFormat(),
 		m_SwapChain.GetSwapChainImageViews(),
-		m_SwapChain.GetSwapChainExtent(), FindQueueFamilies(m_GPUObject.GetPhysicalDevice(),surface), m_GPUObject.GetGraphicsQueue());
+		m_SwapChain.GetSwapChainExtent(), FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(),surface), m_DeviceManager.GetGraphicsQueue());
 
 	// week 06
 	createSyncObjects();

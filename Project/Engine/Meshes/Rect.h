@@ -1,10 +1,10 @@
 #pragma once
 #include <vulkan/vulkan.h>
-#include "../Mesh.h"  
+#include "../2D/Mesh2D.h"  
 
 class CommandPool;
 
-class RectMesh : public Mesh
+class RectMesh : public Mesh2D
 {
     
 public:
