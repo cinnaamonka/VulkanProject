@@ -1,9 +1,10 @@
 #pragma once
 #include <vulkan/vulkan.h>
 #include "./2D/Mesh2D.h"
-
+#include "./3D/Mesh3D.h"
 
 class Mesh2D;
+class Mesh3D;
 class CommandPool;
 class IndexBuffer;
 
@@ -21,9 +22,12 @@ public:
 	void AddMesh(Mesh2D& mesh, const VkPhysicalDevice& physicalDevice,const VkDevice& device,
 		const VkQueue& graphicsGueue,const CommandPool& commandPool);
 
-	void DrawMesh(const VkCommandBuffer& cmdBuffer) const;
+	void AddMesh(const Mesh3D& mesh);
+
+	void DrawMesh(const VkPipelineLayout& pipelineLayout, const VkCommandBuffer& cmdBuffer);
 	void DestroyMeshes(const VkDevice& device);
 	//void DestroyUniformBuffer(const VkDevice& device);
 private:
 	std::vector<Mesh2D> m_Meshes;
+	std::vector<Mesh3D> m_3DMeshes;
 };

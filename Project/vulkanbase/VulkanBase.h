@@ -31,6 +31,7 @@
 #include "../Engine/RenderPass.h"
 #include "../Engine/IndexBuffer.h"
 #include "../Engine/2D/Pipeline2D.h"
+#include "../Engine/3D/Pipeline3D.h"
 #include "../Engine/Structs.h"
 #include "../Engine/SwapChain.h"
 #include "../Engine/GPUObject.h"
@@ -53,6 +54,7 @@ private:
 	void initWindow();
 
 	Pipeline m_DAEPipeline;
+	Pipeline3D m_DAEPipeline3D;
 	
 	SwapChain m_SwapChain;
 

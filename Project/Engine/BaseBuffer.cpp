@@ -2,7 +2,8 @@
 #include <stdexcept>
 #include "../Engine/CommandPool.h"
 
-void BaseBuffer::CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties,VkBuffer& buffer,
+void BaseBuffer::CreateBuffer(const VkDeviceSize& size,const  VkBufferUsageFlags& usage,
+    const VkMemoryPropertyFlags& properties,VkBuffer& buffer,
     VkDeviceMemory& bufferMemory, const VkDevice& device, const VkPhysicalDevice& physicalDevice)
 {
     VkBufferCreateInfo bufferInfo{};

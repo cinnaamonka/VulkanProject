@@ -94,6 +94,6 @@ void Pipeline::DrawScene(const VkExtent2D& swapChainExtent, uint32_t imageIndex)
 	scissor.extent = swapChainExtent;
 	vkCmdSetScissor(m_CommandBuffer.GetVkCommandBuffer(), 0, 1, &scissor);
 
-	m_Scene.DrawMesh(m_CommandBuffer.GetVkCommandBuffer());
+	m_Scene.DrawMesh(nullptr,m_CommandBuffer.GetVkCommandBuffer());
 	vkCmdEndRenderPass(m_CommandBuffer.GetVkCommandBuffer());
 }

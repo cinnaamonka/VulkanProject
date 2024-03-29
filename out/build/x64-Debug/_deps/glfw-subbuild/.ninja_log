@@ -1,37 +1,37 @@
 # ninja log v5
 1	48	7332803302032719	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-mkdir	1acfce6962c35b93
-8	116	0	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-update	9f9c990fbe5f8cc
-117	163	7333612542444302	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-patch	da22017286dd69d7
+8	131	0	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-update	9f9c990fbe5f8cc
+131	179	7334368595847834	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-patch	da22017286dd69d7
 1	48	7332803302032719	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-mkdir	1acfce6962c35b93
 2	5649	7332803550260664	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-download	e95f487b74d3d8e0
-117	163	7333612542444302	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-patch	da22017286dd69d7
+131	179	7334368595847834	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-patch	da22017286dd69d7
 2	5649	7332803550260664	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-download	e95f487b74d3d8e0
-8	116	0	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-update	9f9c990fbe5f8cc
-163	203	7333612542850465	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-configure	3e47ac8d01d5c22
-336	412	7333612544930038	CMakeFiles/glfw-populate-complete	e49166181f61aa64
-163	203	7333612542850465	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-configure	3e47ac8d01d5c22
-203	248	7333612543296813	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-build	296c415b3b1e2517
-203	248	7333612543296813	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-build	296c415b3b1e2517
-248	294	7333612543758998	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-install	82a3a1f53f6f9bfa
-248	294	7333612543758998	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-install	82a3a1f53f6f9bfa
-294	336	7333612544180133	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-test	1534ef2592648d0b
-294	336	7333612544180133	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-test	1534ef2592648d0b
-336	412	7333612544930038	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-done	e49166181f61aa64
-336	412	7333612544930038	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/CMakeFiles/glfw-populate-complete	e49166181f61aa64
-336	412	7333612544930038	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-done	e49166181f61aa64
-6	142	0	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-update	9f9c990fbe5f8cc
-6	142	0	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-update	9f9c990fbe5f8cc
-142	196	7333634389860564	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-patch	da22017286dd69d7
-142	196	7333634389860564	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-patch	da22017286dd69d7
-196	241	7333634390312173	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-configure	3e47ac8d01d5c22
-196	241	7333634390312173	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-configure	3e47ac8d01d5c22
-241	284	7333634390756286	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-build	296c415b3b1e2517
-241	284	7333634390756286	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-build	296c415b3b1e2517
-285	329	7333634391202948	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-install	82a3a1f53f6f9bfa
-285	329	7333634391202948	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-install	82a3a1f53f6f9bfa
-329	374	7333634391643285	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-test	1534ef2592648d0b
-329	374	7333634391643285	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-test	1534ef2592648d0b
-374	434	7333634392246469	CMakeFiles/glfw-populate-complete	e49166181f61aa64
-374	434	7333634392246469	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-done	e49166181f61aa64
-374	434	7333634392246469	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/CMakeFiles/glfw-populate-complete	e49166181f61aa64
-374	434	7333634392246469	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-done	e49166181f61aa64
+8	131	0	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-update	9f9c990fbe5f8cc
+179	230	7334368596369829	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-configure	3e47ac8d01d5c22
+360	419	7334368598260744	CMakeFiles/glfw-populate-complete	e49166181f61aa64
+179	230	7334368596369829	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-configure	3e47ac8d01d5c22
+231	277	7334368596835193	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-build	296c415b3b1e2517
+231	277	7334368596835193	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-build	296c415b3b1e2517
+277	319	7334368597261487	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-install	82a3a1f53f6f9bfa
+277	319	7334368597261487	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-install	82a3a1f53f6f9bfa
+319	360	7334368597666444	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-test	1534ef2592648d0b
+319	360	7334368597666444	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-test	1534ef2592648d0b
+360	419	7334368598260744	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-done	e49166181f61aa64
+360	419	7334368598260744	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/CMakeFiles/glfw-populate-complete	e49166181f61aa64
+360	419	7334368598260744	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-done	e49166181f61aa64
+9	147	0	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-update	9f9c990fbe5f8cc
+9	147	0	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-update	9f9c990fbe5f8cc
+147	206	7334368880691534	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-patch	da22017286dd69d7
+147	206	7334368880691534	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-patch	da22017286dd69d7
+206	276	7334368881364250	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-configure	3e47ac8d01d5c22
+206	276	7334368881364250	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-configure	3e47ac8d01d5c22
+276	333	7334368881956060	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-build	296c415b3b1e2517
+276	333	7334368881956060	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-build	296c415b3b1e2517
+333	387	7334368882509949	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-install	82a3a1f53f6f9bfa
+333	387	7334368882509949	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-install	82a3a1f53f6f9bfa
+387	426	7334368882907722	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-test	1534ef2592648d0b
+387	426	7334368882907722	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-test	1534ef2592648d0b
+426	482	7334368883466261	CMakeFiles/glfw-populate-complete	e49166181f61aa64
+426	482	7334368883466261	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-done	e49166181f61aa64
+426	482	7334368883466261	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/CMakeFiles/glfw-populate-complete	e49166181f61aa64
+426	482	7334368883466261	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-done	e49166181f61aa64

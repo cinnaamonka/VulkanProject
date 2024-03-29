@@ -1,5 +1,6 @@
 #include "Scene.h"
 #include "./2D/Mesh2D.h"
+#include "./3D/Mesh3D.h"
 #include "../Engine/Meshes/Rect.h"
 #include "../Engine/Meshes/Oval.h"
 #include "../Engine/Meshes/RoundedRect.h"
@@ -40,11 +41,21 @@ void Scene::AddMesh(Mesh2D& mesh, const VkPhysicalDevice& physicalDevice,const V
 
 }
 
-void Scene::DrawMesh(const VkCommandBuffer& cmdBuffer) const
+void Scene::AddMesh(const Mesh3D& mesh) 
+{
+	m_3DMeshes.push_back(mesh);
+} 
+
+void Scene::DrawMesh(const VkPipelineLayout& pipelineLayout,const VkCommandBuffer& cmdBuffer)
 {
 	for (const auto& mesh : m_Meshes)
 	{
 		mesh.Draw(cmdBuffer);
+	}
+
+	for (auto& mesh : m_3DMeshes)
+	{
+		mesh.Draw(pipelineLayout, cmdBuffer);
 	}
 }
 

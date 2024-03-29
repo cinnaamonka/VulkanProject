@@ -14,7 +14,7 @@ public:
     BaseBuffer& operator=(const BaseBuffer& other) = delete;
     BaseBuffer& operator=(BaseBuffer&& other) noexcept = delete;
 
-    static void CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties,
+    static void CreateBuffer(const VkDeviceSize& size, const VkBufferUsageFlags& usage,const VkMemoryPropertyFlags& properties,
                        VkBuffer& buffer,VkDeviceMemory& bufferMemory,
                       const VkDevice& device, const VkPhysicalDevice& physicalDevice);
 

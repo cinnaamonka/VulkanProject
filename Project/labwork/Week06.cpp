@@ -48,6 +48,7 @@ void VulkanBase::DrawFrame()
 
 	//Record command buffer
 	m_DAEPipeline.Record(m_SwapChain.GetSwapChainExtent(), imageIndex);
+	m_DAEPipeline3D.Record(m_SwapChain.GetSwapChainExtent(), imageIndex);
 
 	//submit command buffer to command queue
 	VkSubmitInfo submitInfo{};
@@ -60,6 +61,7 @@ void VulkanBase::DrawFrame()
 	submitInfo.pWaitDstStageMask = waitStages;
 
 	m_DAEPipeline.GetCommandBuffer().SubmitCommandBuffer(submitInfo);
+	m_DAEPipeline3D.GetCommandBuffer().SubmitCommandBuffer(submitInfo);
 
 	VkSemaphore signalSemaphores[] = { renderFinishedSemaphore };
 	submitInfo.signalSemaphoreCount = 1;

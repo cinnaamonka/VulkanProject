@@ -1,6 +1,6 @@
 #include "Camera.h"
 
-void Camera::UpdateUniformBuffer(UniformBufferObjectStruct& buffer, VkExtent2D extent)
+void Camera::UpdateUniformBuffer(VertexUBO& buffer, VkExtent2D extent)
 {
 	// If the camera transform has changed, update matrix
 	if (m_HasChanged)

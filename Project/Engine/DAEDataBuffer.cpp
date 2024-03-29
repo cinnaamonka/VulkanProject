@@ -1,11 +1,14 @@
 #include "DaeDataBuffer.h"
+VkDeviceSize DAEDataBuffer::m_Size = {};
 
-DAEDataBuffer::DAEDataBuffer(const VkPhysicalDevice& physicalDevice,const VkDevice& device,
-	const VkBufferUsageFlags& usage, 
+DAEDataBuffer::DAEDataBuffer(const VkPhysicalDevice& physicalDevice, const VkDevice& device,
+	const VkBufferUsageFlags& usage,
 	const VkMemoryPropertyFlags& properties, const VkDeviceSize& size)
-	:m_VkDevice(device), m_Size(size)
+
+	:m_VkDevice(device)
 {
-	CreateBuffer(size,usage, properties, m_VkBuffer, m_VkBufferMemory,device,physicalDevice);
+	CreateBuffer(size, usage, properties, m_VkBuffer, m_VkBufferMemory, device, physicalDevice);
+	m_Size = size;
 }
 
 
@@ -33,17 +36,11 @@ void DAEDataBuffer::Map(const VkDeviceSize& size, void* data)
 
 void DAEDataBuffer::Destroy()
 {
-	if (m_VkBuffer != VK_NULL_HANDLE)
-	{
-		vkDestroyBuffer(m_VkDevice, m_VkBuffer, nullptr);
-		m_VkBuffer = VK_NULL_HANDLE;
-	}
 
-	if (m_VkBufferMemory != VK_NULL_HANDLE)
-	{
-		vkFreeMemory(m_VkDevice, m_VkBufferMemory, nullptr);
-		m_VkBufferMemory = VK_NULL_HANDLE;
-	}
+	/*vkDestroyBuffer(m_VkDevice, m_VkBuffer, nullptr);
+
+
+	vkFreeMemory(m_VkDevice, m_VkBufferMemory, nullptr);*/
 }
 
 void DAEDataBuffer::BindAsVertexBuffer(const VkCommandBuffer& commandBuffer)

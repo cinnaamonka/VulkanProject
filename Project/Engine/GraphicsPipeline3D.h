@@ -18,14 +18,17 @@ public:
 	GraphicsPipeline3D(GraphicsPipeline3D&& other) = delete;
 	GraphicsPipeline3D& operator=(GraphicsPipeline3D&& other) = delete;
 
-	void CreateGraphicsPipeline(const VkDevice& device, GP2Shader3D& shader, const RenderPass& renderPass,const VulkanContext& context);
+	void CreateGraphicsPipeline(const VkDevice& device, const VkPhysicalDevice& physicalDevice, GP2Shader3D& shader,
+		const RenderPass& renderPass, const VulkanContext& context, const VkBufferUsageFlags& usageFlags,
+		const VkMemoryPropertyFlags& memoryPropertyFlags, const VkDeviceSize& deviceSize, 
+		VkDescriptorSetLayout& descriptorSetLayout, const VkExtent2D& swapChainExtent);
 	void CreateFrameBuffers(const VkDevice& device, std::vector<VkImageView>& swapChainImageViews,
-		const VkExtent2D& swapChainExtent, const RenderPass& renderPass);
-
+		const VkExtent2D& swapChainExtent, const RenderPass& renderPass); 
+	 
 	void DestroySwapChainFramebuffers(const VkDevice& device);
 	void DestroyGraphicsPipeline(const VkDevice& device);
 	void DestroyPipelineLayout(const VkDevice& device);
-	void DestroyDescriptorSetLayout(const VkDevice& device);
+	void DestroyDescriptorSetLayout(const VkDevice& device, VkDescriptorSetLayout& descriptorSetLayout);
 
 	const  std::vector<VkFramebuffer>& GetSwapChainBuffers()
 	{
@@ -37,18 +40,20 @@ public:
 		return m_GraphicsPipeline;
 	}
 
-	static VkDescriptorSetLayout& GetDiscriptorSetLayout()
-	{
-		return m_DescriptorSetLayout;
-	}
 	void SetUBO(ViewProjection ubo, size_t uboIndex);
 
-	void CreateDiscriptiveSetLayout(const VkDescriptorSetLayoutBinding& layoutBinding, const VkDevice& device);
 	VkPushConstantRange CreatePushConstantRange();
+
+	void BindPoolDescriptorSet(const VkCommandBuffer& commandBuffer);
+
+	const VkPipelineLayout& GetPipelineLayout()
+	{
+		return m_PipelineLayout;
+	}
+
 private:
 	VkPipelineLayout m_PipelineLayout;
-	static VkDescriptorSetLayout m_DescriptorSetLayout;
 	std::vector<VkFramebuffer> m_SwapChainFramebuffers;
-	VkPipeline m_GraphicsPipeline;
+	VkPipeline m_GraphicsPipeline{};
 	std::unique_ptr<DAEDescriptorPool<ViewProjection>> m_UBOPool;
 };

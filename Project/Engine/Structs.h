@@ -24,7 +24,7 @@ struct QueueFamilyIndices
 		return graphicsFamily.has_value() && presentFamily.has_value();
 	}
 };
-struct UniformBufferObjectStruct
+struct VertexUBO
 {
 	glm::mat4 model;
 	glm::mat4 view;
@@ -39,7 +39,44 @@ struct SwapChainSupportDetails
 struct Vertex3D
 {
 	glm::vec3 position;
+	glm::vec3 normal;
 	glm::vec3 color;
+
+	static VkVertexInputBindingDescription GetBindingDescription()
+	{
+		VkVertexInputBindingDescription bindingDescription{};
+
+		bindingDescription.binding = 0;
+		bindingDescription.stride = sizeof(Vertex3D);
+		bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+		return bindingDescription;
+	}
+
+	static std::array<VkVertexInputAttributeDescription, 3> GetAttributeDescriptions()
+	{
+		std::array<VkVertexInputAttributeDescription, 3> attributeDescriptions{};
+
+		// Attribute 0: Position
+		attributeDescriptions[0].binding = 0;
+		attributeDescriptions[0].location = 0;
+		attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT; 
+		attributeDescriptions[0].offset = offsetof(Vertex3D, position);
+
+		// Attribute 1: Normal
+		attributeDescriptions[1].binding = 0;
+		attributeDescriptions[1].location = 1;
+		attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT; 
+		attributeDescriptions[1].offset = offsetof(Vertex3D, normal);
+
+		// Attribute 2: Color
+		attributeDescriptions[2].binding = 0;
+		attributeDescriptions[2].location = 2;
+		attributeDescriptions[2].format = VK_FORMAT_R32G32B32_SFLOAT;
+		attributeDescriptions[2].offset = offsetof(Vertex3D, color);
+
+		return attributeDescriptions;
+	}
 };
 struct ViewProjection 
 {

@@ -37,7 +37,7 @@ public:
 	const glm::vec3& GetRotation() const { return m_Rotation; }
 	const glm::vec3& GetScale() const { return m_Scale; }
 
-	void UpdateUniformBuffer(UniformBufferObjectStruct& buffer, VkExtent2D extent);
+	void UpdateUniformBuffer(VertexUBO& buffer, VkExtent2D extent);
 
 private:
 	bool m_HasChanged{ true };
