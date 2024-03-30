@@ -34,6 +34,11 @@ public:
 	    {
 	        return m_CommandBuffer;
 	    }
+
+		GraphicsPipeline3D& GetGraphicsPipeline()
+		{
+			return m_GraphicsPipeline;
+		}
 	private:
 	    void DrawScene(const VkExtent2D& swapChainExtent, uint32_t imageIndex);
 	private:
@@ -42,7 +47,6 @@ public:
 	    VulkanCommandBuffer m_CommandBuffer;
 	    RenderPass m_RenderPass;
 	    CommandPool m_CommandPool;
-	    std::vector<Mesh2D> m_Meshes;
 	    Scene m_Scene;
 		VulkanContext m_VulkanContext;
 };

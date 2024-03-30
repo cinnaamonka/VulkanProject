@@ -67,11 +67,3 @@ void Scene::DestroyMeshes(const VkDevice& device)
 	}
 }
 
-//void Scene::DestroyUniformBuffer(const VkDevice& device)
-//{
-//	for (auto& mesh : m_Meshes)
-//	{
-//		mesh.DestroyUniformBuffers(device, GraphicsPipeline::GetDiscriptorSetLayout());
-//	}
-//}
-

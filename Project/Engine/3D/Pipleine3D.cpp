@@ -25,14 +25,14 @@ void Pipeline3D::Initialize(const VkDevice& device, const VkPhysicalDevice& phys
 	Mesh3D cubeMesh;
 	
 	glm::vec3 vertices[] = {
-		glm::vec3(-0.5f, -0.5f, -0.5f),
-		glm::vec3(-0.5f, -0.5f, 0.5f), 
-		glm::vec3(-0.5f, 0.5f, -0.5f), 
-		glm::vec3(-0.5f, 0.5f, 0.5f),  
-		glm::vec3(0.5f, -0.5f, -0.5f), 
-		glm::vec3(0.5f, -0.5f, 0.5f),  
-		glm::vec3(0.5f, 0.5f, -0.5f),  
-		glm::vec3(0.5f, 0.5f, 0.5f)    
+		glm::vec3(-0.2f, -0.2f, -0.2f),
+		glm::vec3(-0.2f, -0.2f, 0.2f), 
+		glm::vec3(-0.2f, 0.2f, -0.2f), 
+		glm::vec3(-0.2f, 0.2f, 0.2f),  
+		glm::vec3(0.2f, -0.2f, -0.2f), 
+		glm::vec3(0.2f, -0.2f, 0.5f),  
+		glm::vec3(0.2f, 0.2f, -0.2f),  
+		glm::vec3(0.2f, 0.2f, 0.2f)    
 	};
 
 	for (int i = 0; i < 8; ++i) {
@@ -60,13 +60,6 @@ void Pipeline3D::Initialize(const VkDevice& device, const VkPhysicalDevice& phys
 	cubeMesh.Initialize(physicalDevice, device, graphicsQueue, m_CommandPool);
 
 	m_Scene.AddMesh(cubeMesh);
-	/*RectMesh m_RectMesh{ {-0.25,-0.25},0.5,0.3 };
-	Oval m_OvalMesh{ { -0.25f,0.8f},0.2f,6 };
-	RoundedRect m_RoundedRectMesh{ {0.25,0.25},0.3,0.2,0.1,21 };*/
-
-	/*m_Scene.AddMesh(m_RectMesh, physicalDevice, device, graphicsQueue, m_CommandPool);
-	m_Scene.AddMesh(m_OvalMesh, physicalDevice, device, graphicsQueue, m_CommandPool);
-	m_Scene.AddMesh(m_RoundedRectMesh, physicalDevice, device, graphicsQueue, m_CommandPool);*/
 
 	m_CommandBuffer = m_CommandPool.CreateCommandBuffer(device);
 }

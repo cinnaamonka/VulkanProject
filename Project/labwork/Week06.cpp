@@ -1,4 +1,9 @@
 #include "vulkanbase/VulkanBase.h"
+#define GLM_FORCE_RADIANS
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include "../Engine/GraphicsPipeline3D.h"
 
 void VulkanBase::populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo) {
 	createInfo = {};
@@ -38,6 +43,7 @@ void VulkanBase::createSyncObjects() {
 
 void VulkanBase::DrawFrame() 
 {
+
 	//Synchronization - fences
 	vkWaitForFences(device, 1, &inFlightFence, VK_TRUE, UINT64_MAX);
 	vkResetFences(device, 1, &inFlightFence);
@@ -47,8 +53,36 @@ void VulkanBase::DrawFrame()
 	vkAcquireNextImageKHR(device, m_SwapChain.GetSwapChain(), UINT64_MAX, imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
 
 	//Record command buffer
-	m_DAEPipeline.Record(m_SwapChain.GetSwapChainExtent(), imageIndex);
+	//m_DAEPipeline.Record(m_SwapChain.GetSwapChainExtent(), imageIndex);
 	m_DAEPipeline3D.Record(m_SwapChain.GetSwapChainExtent(), imageIndex);
+
+	ViewProjection vp{};
+	glm::vec3 scaleFactors(1 / 400.0f, 1 / 300.0f, 1.0f);
+
+	glm::vec3 cameraPos = glm::vec3(10 * cosf(1), -6, 10 * sinf(1));
+	glm::vec3 targetPos = glm::vec3(0, 0, 0);
+	glm::vec3 upVector = glm::vec3(0, 1, 0);
+
+	float windowWidth = 800.0f;
+	float windowHeight = 600.0f;
+	float aspectRatio = windowWidth / windowHeight;
+
+	// Field of View
+	float fov = 45.0f; // In degrees
+
+	// Near and Far planes
+	float nearPlane = 0.1f;
+	float farPlane = 100.0f;
+
+	// View matrix
+	vp.view = glm::lookAt(cameraPos, targetPos, upVector);
+
+	// Projection matrix
+	vp.proj = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
+
+	vp.view = glm::scale(glm::mat4(1.0f), scaleFactors);
+	vp.view = glm::translate(vp.view, glm::vec3(-1, -1, 0));
+	m_DAEPipeline3D.GetGraphicsPipeline().SetUBO(vp, 0);
 
 	//submit command buffer to command queue
 	VkSubmitInfo submitInfo{};
@@ -60,7 +94,7 @@ void VulkanBase::DrawFrame()
 	submitInfo.pWaitSemaphores = waitSemaphores;
 	submitInfo.pWaitDstStageMask = waitStages;
 
-	m_DAEPipeline.GetCommandBuffer().SubmitCommandBuffer(submitInfo);
+	//m_DAEPipeline.GetCommandBuffer().SubmitCommandBuffer(submitInfo);
 	m_DAEPipeline3D.GetCommandBuffer().SubmitCommandBuffer(submitInfo);
 
 	VkSemaphore signalSemaphores[] = { renderFinishedSemaphore };
