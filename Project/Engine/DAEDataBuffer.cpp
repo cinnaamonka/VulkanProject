@@ -22,6 +22,7 @@ void DAEDataBuffer::Upload(const VkDeviceSize& size, void* data)
 	void* mappedData;
 	vkMapMemory(m_VkDevice, m_VkBufferMemory, 0, size, 0, &mappedData);
 	memcpy(mappedData, data, static_cast<size_t>(size));
+	vkUnmapMemory(m_VkDevice, m_VkBufferMemory);
 }
 
 void DAEDataBuffer::Map(const VkDeviceSize& size, void* data)

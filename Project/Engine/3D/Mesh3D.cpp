@@ -10,7 +10,7 @@
 
 #include <chrono>
 
-Mesh3D::Mesh3D():
+Mesh3D::Mesh3D() :
 	m_Vertices{},
 	m_Indices{},
 	m_VertexConstant{},
@@ -42,8 +42,8 @@ void Mesh3D::Initialize(const VkPhysicalDevice& physicalDevice, const VkDevice& 
 	memcpy(data, m_Vertices.data(), (size_t)bufferSize);
 	vkUnmapMemory(device, stagingBufferMemory);
 
-	VertexBuffer::CreateVertexBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, 
-		VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,m_VertexBuffer->GetVkBuffer(), m_VertexBuffer->GetDeviceMemory(), device, physicalDevice);
+	VertexBuffer::CreateVertexBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+		VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_VertexBuffer->GetVkBuffer(), m_VertexBuffer->GetDeviceMemory(), device, physicalDevice);
 
 	BaseBuffer::CopyBuffer(stagingBuffer, m_VertexBuffer->GetVkBuffer(), bufferSize, device, commandPool, graphicsQueue);
 
@@ -53,7 +53,7 @@ void Mesh3D::Initialize(const VkPhysicalDevice& physicalDevice, const VkDevice& 
 	IndexBuffer::CreateIndexBuffer(m_Indices, device, commandPool, graphicsQueue, physicalDevice,
 		m_IndexBuffer->GetVkBuffer(), m_IndexBuffer->GetDeviceMemory());
 
-	CreateUniformBuffers(device, physicalDevice); 
+	CreateUniformBuffers(device, physicalDevice);
 }
 
 void Mesh3D::DestroyMesh(const VkDevice& device)
@@ -64,17 +64,17 @@ void Mesh3D::DestroyMesh(const VkDevice& device)
 
 void Mesh3D::AddVertex(glm::vec3 pos, glm::vec3 color)
 {
-	m_Vertices.push_back({ pos,color });
+	m_Vertices.push_back({ pos,glm::vec3{1.f},color });
 }
 
 void Mesh3D::AddTriangle(uint16_t i1, uint16_t i2, uint16_t i3, uint16_t offset)
-{ 
-	m_Indices.push_back(i1 + offset); 
-	m_Indices.push_back(i2 + offset); 
+{
+	m_Indices.push_back(i1 + offset);
+	m_Indices.push_back(i2 + offset);
 	m_Indices.push_back(i3 + offset);
 }
 
-void Mesh3D::Draw(const VkPipelineLayout& pipelineLayout,const VkCommandBuffer& commandBuffer)
+void Mesh3D::Draw(const VkPipelineLayout& pipelineLayout, const VkCommandBuffer& commandBuffer)
 {
 	m_VertexBuffer->BindAsVertexBuffer(commandBuffer);
 	m_IndexBuffer->BindAsIndexBuffer(commandBuffer);

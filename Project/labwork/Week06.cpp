@@ -54,7 +54,7 @@ void VulkanBase::DrawFrame()
 
 	//Record command buffer
 	//m_DAEPipeline.Record(m_SwapChain.GetSwapChainExtent(), imageIndex);
-	m_DAEPipeline3D.Record(m_SwapChain.GetSwapChainExtent(), imageIndex);
+	
 
 	ViewProjection vp{};
 	glm::vec3 scaleFactors(1 / 400.0f, 1 / 300.0f, 1.0f);
@@ -83,6 +83,7 @@ void VulkanBase::DrawFrame()
 	vp.view = glm::scale(glm::mat4(1.0f), scaleFactors);
 	vp.view = glm::translate(vp.view, glm::vec3(-1, -1, 0));
 	m_DAEPipeline3D.GetGraphicsPipeline().SetUBO(vp, 0);
+	m_DAEPipeline3D.Record(m_SwapChain.GetSwapChainExtent(), imageIndex);
 
 	//submit command buffer to command queue
 	VkSubmitInfo submitInfo{};
