@@ -28,9 +28,9 @@ void VulkanBase::InitVulkan()
 	m_SwapChain.CreateSwapChain(surface, window, FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(),surface),device, m_DeviceManager.GetPhysicalDevice());
 	m_SwapChain.CreateImageViews(device); 
 
-	//m_DAEPipeline.Initialize(device, m_DeviceManager.GetPhysicalDevice(), m_SwapChain.GetSwapChainImageFormat(),
-	//	m_SwapChain.GetSwapChainImageViews(),
-	//	m_SwapChain.GetSwapChainExtent(), FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(),surface), m_DeviceManager.GetGraphicsQueue());
+	/*m_DAEPipeline.Initialize(device, m_DeviceManager.GetPhysicalDevice(), m_SwapChain.GetSwapChainImageFormat(),
+		m_SwapChain.GetSwapChainImageViews(),
+		m_SwapChain.GetSwapChainExtent(), FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(),surface), m_DeviceManager.GetGraphicsQueue());*/
 
 	m_DAEPipeline3D.Initialize(device, m_DeviceManager.GetPhysicalDevice(), m_SwapChain.GetSwapChainImageFormat(),
 		m_SwapChain.GetSwapChainImageViews(),m_SwapChain.GetSwapChainExtent(),

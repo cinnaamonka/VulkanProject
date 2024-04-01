@@ -41,7 +41,7 @@ void VulkanBase::createSyncObjects() {
 
 }
 
-void VulkanBase::DrawFrame() 
+void VulkanBase::DrawFrame()
 {
 
 	//Synchronization - fences
@@ -123,7 +123,9 @@ void VulkanBase::DrawFrame()
 }
 
 
-bool checkValidationLayerSupport() 
+
+
+bool checkValidationLayerSupport()
 {
 	uint32_t layerCount;
 	vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
@@ -135,7 +137,7 @@ bool checkValidationLayerSupport()
 	{
 		bool layerFound = false;
 
-		for (const auto& layerProperties : availableLayers) 
+		for (const auto& layerProperties : availableLayers)
 		{
 			if (strcmp(layerName, layerProperties.layerName) == 0)
 			{
@@ -144,7 +146,7 @@ bool checkValidationLayerSupport()
 			}
 		}
 
-		if (!layerFound) 
+		if (!layerFound)
 		{
 			return false;
 		}
@@ -169,7 +171,7 @@ std::vector<const char*> VulkanBase::getRequiredExtensions()
 }
 
 
-void VulkanBase::createInstance() 
+void VulkanBase::createInstance()
 {
 	if (enableValidationLayers && !checkValidationLayerSupport())
 	{
@@ -201,14 +203,14 @@ void VulkanBase::createInstance()
 		populateDebugMessengerCreateInfo(debugCreateInfo);
 		createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*)&debugCreateInfo;
 	}
-	else 
+	else
 	{
 		createInfo.enabledLayerCount = 0;
 
 		createInfo.pNext = nullptr;
 	}
 
-	if (vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS) 
+	if (vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS)
 	{
 		throw std::runtime_error("failed to create instance!");
 	}

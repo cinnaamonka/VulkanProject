@@ -15,11 +15,15 @@ void Pipeline3D::Initialize(const VkDevice& device, const VkPhysicalDevice& phys
 	const QueueFamilyIndices& queueFamilyIndexes, const VkQueue& graphicsQueue) 
 {
 	m_RenderPass.CreateRenderPass(device, swapChainImageFormat);
+
 	m_Shader.Init(device, physicalDevice,m_RenderPass,swapChainExtent);
-	m_GraphicsPipeline.CreateGraphicsPipeline(device, physicalDevice, m_Shader, m_RenderPass, m_VulkanContext, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
-		VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,DAEDataBuffer::GetDeviceSize(),
-		m_Shader.GetDescriptorSetLayout(),swapChainExtent); 
+
+	m_GraphicsPipeline.CreateGraphicsPipeline(device, physicalDevice, m_Shader, m_RenderPass, m_VulkanContext,
+		VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,\
+		DAEDataBuffer::GetDeviceSize(), m_Shader.GetDescriptorSetLayout(),swapChainExtent); 
+
 	m_GraphicsPipeline.CreateFrameBuffers(device, swapChainImageViews, swapChainExtent, m_RenderPass);
+
 	m_CommandPool.CreateCommandPool(device, queueFamilyIndexes);
 
 	Mesh3D cubeMesh;
@@ -30,7 +34,7 @@ void Pipeline3D::Initialize(const VkDevice& device, const VkPhysicalDevice& phys
 		glm::vec3(-0.2f, 0.2f, -0.2f), 
 		glm::vec3(-0.2f, 0.2f, 0.2f),  
 		glm::vec3(0.2f, -0.2f, -0.2f), 
-		glm::vec3(0.2f, -0.2f, 0.5f),  
+		glm::vec3(0.2f, -0.2f, 0.2f),  
 		glm::vec3(0.2f, 0.2f, -0.2f),  
 		glm::vec3(0.2f, 0.2f, 0.2f)    
 	};
