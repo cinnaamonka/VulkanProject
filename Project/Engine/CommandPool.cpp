@@ -38,6 +38,7 @@ VulkanCommandBuffer CommandPool::CreateCommandBuffer(const VkDevice& device) con
 
 	VkCommandBuffer buffer{};
 
+
 	if (vkAllocateCommandBuffers(device, &allocInfo, &buffer) != VK_SUCCESS)
 	{
 		throw std::runtime_error("failed to allocate command buffers!");
@@ -46,6 +47,5 @@ VulkanCommandBuffer CommandPool::CreateCommandBuffer(const VkDevice& device) con
 	VulkanCommandBuffer commandBuffer{};
 	commandBuffer.SetVKCommandBuffer(buffer);
 	return commandBuffer;
-
 }
 

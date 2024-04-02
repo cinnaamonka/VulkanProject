@@ -29,10 +29,9 @@ public:
 	void DestroyCommandPool(const VkDevice& device);
 
 	VulkanCommandBuffer CreateCommandBuffer(const VkDevice& device) const;  
-	 
+
 private:
 
     VkCommandPool m_CommandPool;
-	
     
 };

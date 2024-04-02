@@ -25,9 +25,9 @@ public:
    void Initialize(const VkDevice& device, const VkPhysicalDevice& physicalDevice, const VkFormat& swapChainImageFormat,
        std::vector<VkImageView>& swapChainImageViews,
        const VkExtent2D& swapChainExtent,const QueueFamilyIndices& queueFamilyIndexes,
-       const VkQueue& graphicsQueue);
+       const VkQueue& graphicsQueue, CommandPool& commandPool);
 
-   void DestroyPipeline(const VkDevice& device);
+   void DestroyPipeline(const VkDevice& device, CommandPool& commandPool);
    void DestroyMeshes(const VkDevice device);
    void DestroyUniformBuffers(const VkDevice device);
 
@@ -41,6 +41,10 @@ public:
    {
        return m_GraphicsPipeline;
    }
+   VkSemaphore& GetRenderFinishedSemaphore()
+   {
+       return renderFinishedSemaphore;
+   }
 private:
     void DrawScene(const VkExtent2D& swapChainExtent, uint32_t imageIndex);
 private:
@@ -48,8 +52,10 @@ private:
     GP2Shader m_Shader; 
     VulkanCommandBuffer m_CommandBuffer;
     RenderPass m_RenderPass;
-    CommandPool m_CommandPool;
+  /*  CommandPool m_CommandPool;*/
     std::vector<Mesh2D> m_Meshes;
     Scene m_Scene;
     VulkanContext m_VulkanContext;
+
+    VkSemaphore renderFinishedSemaphore;
 };

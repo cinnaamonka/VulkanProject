@@ -7,13 +7,21 @@
 Pipeline3D::Pipeline3D() :
 	m_Shader{ "shaders/3DShader.vert.spv", "shaders/3DShader.frag.spv" }
 {
-
+	
 }
 
 void Pipeline3D::Initialize(const VkDevice& device, const VkPhysicalDevice& physicalDevice, const VkFormat& swapChainImageFormat,
 	std::vector<VkImageView>& swapChainImageViews, const VkExtent2D& swapChainExtent,
-	const QueueFamilyIndices& queueFamilyIndexes, const VkQueue& graphicsQueue) 
+	const QueueFamilyIndices& queueFamilyIndexes, const VkQueue& graphicsQueue, CommandPool& commandPool)
 {
+	VkSemaphoreCreateInfo semaphoreInfo{}; 
+	semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO; 
+
+	if (vkCreateSemaphore(device, &semaphoreInfo, nullptr, &renderFinishedSemaphore) != VK_SUCCESS) 
+	{
+		throw std::runtime_error("failed to create render finished semaphore!"); 
+	}
+
 	m_RenderPass.CreateRenderPass(device, swapChainImageFormat);
 
 	m_Shader.Init(device, physicalDevice,m_RenderPass,swapChainExtent);
@@ -23,8 +31,6 @@ void Pipeline3D::Initialize(const VkDevice& device, const VkPhysicalDevice& phys
 		DAEDataBuffer::GetDeviceSize(), m_Shader.GetDescriptorSetLayout(),swapChainExtent); 
 
 	m_GraphicsPipeline.CreateFrameBuffers(device, swapChainImageViews, swapChainExtent, m_RenderPass);
-
-	m_CommandPool.CreateCommandPool(device, queueFamilyIndexes);
 
 	Mesh3D cubeMesh;
 	
@@ -61,16 +67,16 @@ void Pipeline3D::Initialize(const VkDevice& device, const VkPhysicalDevice& phys
 	cubeMesh.AddTriangle(2, 3, 6); 
 	cubeMesh.AddTriangle(3, 7, 6);
 
-	cubeMesh.Initialize(physicalDevice, device, graphicsQueue, m_CommandPool);
+	cubeMesh.Initialize(physicalDevice, device, graphicsQueue, commandPool);
 
 	m_Scene.AddMesh(cubeMesh);
 
-	m_CommandBuffer = m_CommandPool.CreateCommandBuffer(device);
+	m_CommandBuffer = commandPool.CreateCommandBuffer(device);
 }
 
-void Pipeline3D::DestroyPipeline(const VkDevice& device)
+void Pipeline3D::DestroyPipeline(const VkDevice& device, CommandPool& commandPool)
 {
-	m_CommandPool.DestroyCommandPool(device);
+	commandPool.DestroyCommandPool(device);
 	m_GraphicsPipeline.DestroySwapChainFramebuffers(device);
 	m_GraphicsPipeline.DestroyDescriptorSetLayout(device, m_Shader.GetDescriptorSetLayout());
 	m_GraphicsPipeline.DestroyGraphicsPipeline(device);

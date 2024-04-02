@@ -25,7 +25,8 @@ void VulkanBase::setupDebugMessenger() {
 	}
 }
 
-void VulkanBase::createSyncObjects() {
+void VulkanBase::createSyncObjects() 
+{
 	VkSemaphoreCreateInfo semaphoreInfo{};
 	semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
 
@@ -99,7 +100,7 @@ void VulkanBase::DrawFrame()
 	submitInfo2.pWaitSemaphores = waitSemaphores2;
 	submitInfo2.pWaitDstStageMask = waitStages2;
 
-	m_DAEPipeline3D.GetCommandBuffer().SubmitCommandBuffer(submitInfo2); 
+	m_DAEPipeline3D.GetCommandBuffer().SubmitCommandBuffer(submitInfo2);
 
 	VkSemaphore signalSemaphores[] = { renderFinishedSemaphore };
 	submitInfo1.signalSemaphoreCount = 1;
@@ -135,6 +136,7 @@ void VulkanBase::DrawFrame()
 	vkQueuePresentKHR(m_DeviceManager.GetPresentQueue(), &presentInfo);
 
 }
+
 bool checkValidationLayerSupport()
 {
 	uint32_t layerCount;
