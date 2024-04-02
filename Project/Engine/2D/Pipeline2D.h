@@ -33,9 +33,13 @@ public:
 
    void Record(const VkExtent2D& swapChainExtent, uint32_t imageIndex);
 
-   const VulkanCommandBuffer& GetCommandBuffer() const
+   VulkanCommandBuffer& GetCommandBuffer()
    {
        return m_CommandBuffer;
+   }
+   GraphicsPipeline& GetGraphicsPipeline()
+   {
+       return m_GraphicsPipeline;
    }
 private:
     void DrawScene(const VkExtent2D& swapChainExtent, uint32_t imageIndex);
@@ -47,4 +51,5 @@ private:
     CommandPool m_CommandPool;
     std::vector<Mesh2D> m_Meshes;
     Scene m_Scene;
+    VulkanContext m_VulkanContext;
 };

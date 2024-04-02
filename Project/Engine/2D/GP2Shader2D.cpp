@@ -2,11 +2,31 @@
 #include "vulkanbase/VulkanUtil.h"
 #include "../Structs.h"
 #include <iostream>
+#include <memory>
 
-void GP2Shader::Init(const VkDevice& device)
+
+void GP2Shader::Init(const VkDevice& device, const VkPhysicalDevice& physicalDevice, const RenderPass& renderPass,
+	const VkExtent2D& swapChainExtent)
 {
 	m_VecShadersStageInfos.push_back(createFragmentShaderInfo(device));
 	m_VecShadersStageInfos.push_back(createVertexShaderInfo(device));
+
+	m_DescriptorPool = std::make_unique<DAEDescriptorPool<ViewProjection>>(device, 1);
+
+	m_DescriptorPool->initialize(VulkanContext{ device,physicalDevice,renderPass.GetRenderPass(), swapChainExtent}, physicalDevice, device, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+		VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+		VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, sizeof(VertexUBO));
+
+	m_DescriptorPool->CreateDescriptorSetLayout(VulkanContext{ device,physicalDevice,renderPass.GetRenderPass(), swapChainExtent });
+
+	m_UBOBuffer = std::make_unique<DAEDataBuffer>(
+		physicalDevice,
+		device,
+		VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+		VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+		VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+		sizeof(VertexUBO)
+	);
 }
 void GP2Shader::DestroyShaderModules(const VkDevice& device)
 {

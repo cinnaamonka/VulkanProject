@@ -48,9 +48,9 @@ void Scene::AddMesh(const Mesh3D& mesh)
 
 void Scene::DrawMesh(const VkPipelineLayout& pipelineLayout,const VkCommandBuffer& cmdBuffer)
 {
-	for (const auto& mesh : m_Meshes)
+	for (auto& mesh : m_Meshes)
 	{
-		mesh.Draw(cmdBuffer);
+		mesh.Draw(pipelineLayout,cmdBuffer);
 	}
 
 	for (auto& mesh : m_3DMeshes)
@@ -63,7 +63,7 @@ void Scene::DestroyMeshes(const VkDevice& device)
 {
 	for (auto& mesh : m_Meshes)
 	{
-		mesh.DestroyMesh(device,GraphicsPipeline::GetDiscriptorSetLayout());
+		mesh.DestroyMesh(device);
 	}
 }
 

@@ -28,9 +28,10 @@ void VulkanBase::InitVulkan()
 	m_SwapChain.CreateSwapChain(surface, window, FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(),surface),device, m_DeviceManager.GetPhysicalDevice());
 	m_SwapChain.CreateImageViews(device); 
 
-	/*m_DAEPipeline.Initialize(device, m_DeviceManager.GetPhysicalDevice(), m_SwapChain.GetSwapChainImageFormat(),
+	m_DAEPipeline.Initialize(device, m_DeviceManager.GetPhysicalDevice(), m_SwapChain.GetSwapChainImageFormat(),
 		m_SwapChain.GetSwapChainImageViews(),
-		m_SwapChain.GetSwapChainExtent(), FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(),surface), m_DeviceManager.GetGraphicsQueue());*/
+		m_SwapChain.GetSwapChainExtent(), FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(),surface),
+		m_DeviceManager.GetGraphicsQueue());
 
 	m_DAEPipeline3D.Initialize(device, m_DeviceManager.GetPhysicalDevice(), m_SwapChain.GetSwapChainImageFormat(),
 		m_SwapChain.GetSwapChainImageViews(),m_SwapChain.GetSwapChainExtent(),
@@ -47,6 +48,7 @@ void VulkanBase::MainLoop()
 		glfwPollEvents();
 		// week 06
 		DrawFrame();
+		
 	}
 	vkDeviceWaitIdle(device);
 }
@@ -57,7 +59,7 @@ void VulkanBase::Cleanup()
 	vkDestroySemaphore(device, imageAvailableSemaphore, nullptr);
 	vkDestroyFence(device, inFlightFence, nullptr);
 
-	//m_DAEPipeline.DestroyPipeline(device);
+	m_DAEPipeline.DestroyPipeline(device);
 	m_DAEPipeline3D.DestroyPipeline(device);
 
 	for (auto imageView : m_SwapChain.GetSwapChainImageViews())
@@ -71,7 +73,7 @@ void VulkanBase::Cleanup()
 	}
 	vkDestroySwapchainKHR(device, m_SwapChain.GetSwapChain(), nullptr);
 
-	//m_DAEPipeline.DestroyMeshes(device);
+	m_DAEPipeline.DestroyMeshes(device);
 	m_DAEPipeline3D.DestroyMeshes(device);
 	
 	vkDestroyDevice(device, nullptr);

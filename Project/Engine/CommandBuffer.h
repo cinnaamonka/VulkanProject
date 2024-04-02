@@ -30,7 +30,10 @@ public:
 		m_CommandBuffer = vkCommandBuffer;
 	}
 
-	VkCommandBuffer GetVkCommandBuffer()const { return m_CommandBuffer; }
+	VkCommandBuffer GetVkCommandBuffer()
+	{
+		return m_CommandBuffer;
+	}
 
 private:
 

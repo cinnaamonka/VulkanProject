@@ -57,7 +57,6 @@ private:
 	Pipeline3D m_DAEPipeline3D;
 	
 	SwapChain m_SwapChain;
-
 	DeviceManager m_DeviceManager;
 	// Week 06
 	// Main initialization

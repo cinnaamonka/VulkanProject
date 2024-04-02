@@ -30,7 +30,7 @@ public:
 	
 	    void Record(const VkExtent2D& swapChainExtent, uint32_t imageIndex);
 	
-	    const VulkanCommandBuffer& GetCommandBuffer() const
+	    VulkanCommandBuffer& GetCommandBuffer()
 	    {
 	        return m_CommandBuffer;
 	    }

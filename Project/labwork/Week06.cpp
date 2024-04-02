@@ -43,7 +43,6 @@ void VulkanBase::createSyncObjects() {
 
 void VulkanBase::DrawFrame()
 {
-
 	//Synchronization - fences
 	vkWaitForFences(device, 1, &inFlightFence, VK_TRUE, UINT64_MAX);
 	vkResetFences(device, 1, &inFlightFence);
@@ -51,9 +50,6 @@ void VulkanBase::DrawFrame()
 	// get next image to draw
 	uint32_t imageIndex;
 	vkAcquireNextImageKHR(device, m_SwapChain.GetSwapChain(), UINT64_MAX, imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
-
-	//Record command buffer
-	//m_DAEPipeline.Record(m_SwapChain.GetSwapChainExtent(), imageIndex);
 
 	ViewProjection vp{};
 	glm::vec3 scaleFactors(1 / 400.0f, 1 / 300.0f, 1.0f);
@@ -78,26 +74,47 @@ void VulkanBase::DrawFrame()
 	vp.proj = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
 
 	m_DAEPipeline3D.GetGraphicsPipeline().SetUBO(vp, 0);
+	m_DAEPipeline.GetGraphicsPipeline().SetUBO(vp, 0);
+	m_DAEPipeline.Record(m_SwapChain.GetSwapChainExtent(), imageIndex);
 	m_DAEPipeline3D.Record(m_SwapChain.GetSwapChainExtent(), imageIndex);
 
-	//submit command buffer to command queue
-	VkSubmitInfo submitInfo{};
-	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	VkSubmitInfo submitInfo1{};
+	submitInfo1.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
-	VkSemaphore waitSemaphores[] = { imageAvailableSemaphore };
-	VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
-	submitInfo.waitSemaphoreCount = 1;
-	submitInfo.pWaitSemaphores = waitSemaphores;
-	submitInfo.pWaitDstStageMask = waitStages;
+	VkSemaphore waitSemaphores1[] = { imageAvailableSemaphore };
+	VkPipelineStageFlags waitStages1[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
+	submitInfo1.waitSemaphoreCount = 1;
+	submitInfo1.pWaitSemaphores = waitSemaphores1;
+	submitInfo1.pWaitDstStageMask = waitStages1;
 
-	//m_DAEPipeline.GetCommandBuffer().SubmitCommandBuffer(submitInfo);
-	m_DAEPipeline3D.GetCommandBuffer().SubmitCommandBuffer(submitInfo);
+	m_DAEPipeline.GetCommandBuffer().SubmitCommandBuffer(submitInfo1);
+
+	// Submit command buffer for the second pipeline
+	VkSubmitInfo submitInfo2{};
+	submitInfo2.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+
+	VkSemaphore waitSemaphores2[] = { imageAvailableSemaphore };
+	VkPipelineStageFlags waitStages2[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
+	submitInfo2.waitSemaphoreCount = 1;
+	submitInfo2.pWaitSemaphores = waitSemaphores2;
+	submitInfo2.pWaitDstStageMask = waitStages2;
+
+	m_DAEPipeline3D.GetCommandBuffer().SubmitCommandBuffer(submitInfo2); 
 
 	VkSemaphore signalSemaphores[] = { renderFinishedSemaphore };
-	submitInfo.signalSemaphoreCount = 1;
-	submitInfo.pSignalSemaphores = signalSemaphores;
+	submitInfo1.signalSemaphoreCount = 1;
+	submitInfo1.pSignalSemaphores = signalSemaphores;
 
-	if (vkQueueSubmit(m_DeviceManager.GetGraphicsQueue(), 1, &submitInfo, inFlightFence) != VK_SUCCESS)
+	if (vkQueueSubmit(m_DeviceManager.GetGraphicsQueue(), 1, &submitInfo1, inFlightFence) != VK_SUCCESS)
+	{
+		throw std::runtime_error("failed to submit draw command buffer!");
+	}
+
+	VkSemaphore signalSemaphores2[] = { renderFinishedSemaphore };
+	submitInfo2.signalSemaphoreCount = 1;
+	submitInfo2.pSignalSemaphores = signalSemaphores2;
+
+	if (vkQueueSubmit(m_DeviceManager.GetGraphicsQueue(), 1, &submitInfo2, inFlightFence) != VK_SUCCESS)
 	{
 		throw std::runtime_error("failed to submit draw command buffer!");
 	}
@@ -107,7 +124,7 @@ void VulkanBase::DrawFrame()
 	presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 
 	presentInfo.waitSemaphoreCount = 1;
-	presentInfo.pWaitSemaphores = signalSemaphores;
+	presentInfo.pWaitSemaphores = signalSemaphores2;
 
 	VkSwapchainKHR swapChains[] = { m_SwapChain.GetSwapChain() };
 	presentInfo.swapchainCount = 1;
@@ -116,11 +133,8 @@ void VulkanBase::DrawFrame()
 	presentInfo.pImageIndices = &imageIndex;
 
 	vkQueuePresentKHR(m_DeviceManager.GetPresentQueue(), &presentInfo);
+
 }
-
-
-
-
 bool checkValidationLayerSupport()
 {
 	uint32_t layerCount;

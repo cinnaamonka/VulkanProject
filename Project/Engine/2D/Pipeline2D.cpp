@@ -13,11 +13,16 @@ void Pipeline::Initialize(const VkDevice& device, const VkPhysicalDevice& physic
 	std::vector<VkImageView>& swapChainImageViews, const VkExtent2D& swapChainExtent,
 	const QueueFamilyIndices& queueFamilyIndexes, const VkQueue& graphicsQueue)
 {
-	m_Shader.Init(device);
 	m_RenderPass.CreateRenderPass(device, swapChainImageFormat);
-	m_GraphicsPipeline.CreateDiscriptiveSetLayout(DescriptorSetManager::GetDescriptorSetLayoutBinging(), device);
-	m_GraphicsPipeline.CreateGraphicsPipeline(device, m_Shader, m_RenderPass);
+
+	m_Shader.Init(device, physicalDevice, m_RenderPass, swapChainExtent);
+
+	m_GraphicsPipeline.CreateGraphicsPipeline(device, physicalDevice, m_Shader, m_RenderPass, m_VulkanContext,
+		VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+		DAEDataBuffer::GetDeviceSize(), m_Shader.GetDescriptorSetLayout(), swapChainExtent);
+
 	m_GraphicsPipeline.CreateFrameBuffers(device, swapChainImageViews, swapChainExtent, m_RenderPass);
+
 	m_CommandPool.CreateCommandPool(device, queueFamilyIndexes);
 
 	RectMesh m_RectMesh{ {-0.25,-0.25},0.5,0.3 };
@@ -35,7 +40,7 @@ void Pipeline::DestroyPipeline(const VkDevice& device)
 {
 	m_CommandPool.DestroyCommandPool(device);
 	m_GraphicsPipeline.DestroySwapChainFramebuffers(device);
-	m_GraphicsPipeline.DestroyDescriptorSetLayout(device);
+	m_GraphicsPipeline.DestroyDescriptorSetLayout(device, m_Shader.GetDescriptorSetLayout());
 	m_GraphicsPipeline.DestroyGraphicsPipeline(device);
 	m_GraphicsPipeline.DestroyPipelineLayout(device);
 	m_RenderPass.DestroyRenderPass(device);
@@ -94,6 +99,8 @@ void Pipeline::DrawScene(const VkExtent2D& swapChainExtent, uint32_t imageIndex)
 	scissor.extent = swapChainExtent;
 	vkCmdSetScissor(m_CommandBuffer.GetVkCommandBuffer(), 0, 1, &scissor);
 
-	m_Scene.DrawMesh(nullptr,m_CommandBuffer.GetVkCommandBuffer());
+	m_GraphicsPipeline.BindPoolDescriptorSet(m_CommandBuffer.GetVkCommandBuffer());
+
+	m_Scene.DrawMesh(m_GraphicsPipeline.GetPipelineLayout(), m_CommandBuffer.GetVkCommandBuffer());
 	vkCmdEndRenderPass(m_CommandBuffer.GetVkCommandBuffer());
 }

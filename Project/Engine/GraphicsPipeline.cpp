@@ -1,10 +1,11 @@
 #include "GraphicsPipeline.h"
-
+#include "../Engine/2D/GP2Shader2D.h"
 #include <stdexcept>
 
-VkDescriptorSetLayout GraphicsPipeline::m_DescriptorSetLayout = nullptr;
-
-void GraphicsPipeline::CreateGraphicsPipeline(const VkDevice& device, GP2Shader& shader, const RenderPass& renderPass)
+void GraphicsPipeline::CreateGraphicsPipeline(const VkDevice& device, const VkPhysicalDevice& physicalDevice, GP2Shader& shader,
+	const RenderPass& renderPass, const VulkanContext& context, const VkBufferUsageFlags& usageFlags,
+	const VkMemoryPropertyFlags& memoryPropertyFlags, const VkDeviceSize& deviceSize, VkDescriptorSetLayout& descriptorSetLayout,
+	const VkExtent2D& swapChainExtent)
 {
 	VkPipelineViewportStateCreateInfo viewportState{};
 	viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
@@ -27,7 +28,8 @@ void GraphicsPipeline::CreateGraphicsPipeline(const VkDevice& device, GP2Shader&
 	multisampling.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
 
 	VkPipelineColorBlendAttachmentState colorBlendAttachment{};
-	colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+	colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT |
+		VK_COLOR_COMPONENT_A_BIT;
 	colorBlendAttachment.blendEnable = VK_FALSE;
 
 	VkPipelineColorBlendStateCreateInfo colorBlending{};
@@ -46,6 +48,7 @@ void GraphicsPipeline::CreateGraphicsPipeline(const VkDevice& device, GP2Shader&
 		VK_DYNAMIC_STATE_VIEWPORT,
 		VK_DYNAMIC_STATE_SCISSOR
 	};
+
 	VkPipelineDynamicStateCreateInfo dynamicState{};
 	dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
 	dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStates.size());
@@ -53,12 +56,14 @@ void GraphicsPipeline::CreateGraphicsPipeline(const VkDevice& device, GP2Shader&
 
 	VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
 	pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-	pipelineLayoutInfo.setLayoutCount = 1; // Set to the number of descriptor set layouts if applicable
-	pipelineLayoutInfo.pSetLayouts = &m_DescriptorSetLayout; // Set to the array of descriptor set layouts if applicable
-	pipelineLayoutInfo.pushConstantRangeCount = 0;
-	pipelineLayoutInfo.pPushConstantRanges = nullptr;
+	pipelineLayoutInfo.setLayoutCount = 1;
+	pipelineLayoutInfo.pSetLayouts = &descriptorSetLayout;
+	VkPushConstantRange pushConstantRange = CreatePushConstantRange();
+	pipelineLayoutInfo.pushConstantRangeCount = 1;
+	pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
 
-	if (vkCreatePipelineLayout(device, &pipelineLayoutInfo, nullptr, &m_PipelineLayout) != VK_SUCCESS) {
+	if (vkCreatePipelineLayout(device, &pipelineLayoutInfo, nullptr, &m_PipelineLayout) != VK_SUCCESS)
+	{
 		throw std::runtime_error("failed to create pipeline layout!");
 	}
 
@@ -88,9 +93,12 @@ void GraphicsPipeline::CreateGraphicsPipeline(const VkDevice& device, GP2Shader&
 		throw std::runtime_error("failed to create graphics pipeline!");
 	}
 	shader.DestroyShaderModules(device);
+
+	m_UBOPool = std::make_unique<DAEDescriptorPool<ViewProjection>>(device, 1);
+	m_UBOPool->initialize(VulkanContext{ device,physicalDevice, renderPass.GetRenderPass(),swapChainExtent }, physicalDevice, device, usageFlags, memoryPropertyFlags, deviceSize);
 }
 
-void GraphicsPipeline::CreateFrameBuffers(const VkDevice& device, std::vector<VkImageView>& swapChainImageViews, 
+void GraphicsPipeline::CreateFrameBuffers(const VkDevice& device, std::vector<VkImageView>& swapChainImageViews,
 	const VkExtent2D& swapChainExtent, const RenderPass& renderPass)
 {
 	m_SwapChainFramebuffers.resize(swapChainImageViews.size());
@@ -134,22 +142,29 @@ void GraphicsPipeline::DestroyPipelineLayout(const VkDevice& device)
 	vkDestroyPipelineLayout(device, m_PipelineLayout, nullptr);
 }
 
-void GraphicsPipeline::DestroyDescriptorSetLayout(const VkDevice& device)
+void GraphicsPipeline::DestroyDescriptorSetLayout(const VkDevice& device, VkDescriptorSetLayout& descriptorSetLayout)
 {
-	vkDestroyDescriptorSetLayout(device, m_DescriptorSetLayout, nullptr);
+	vkDestroyDescriptorSetLayout(device, descriptorSetLayout, nullptr);
 }
 
-void GraphicsPipeline::CreateDiscriptiveSetLayout(const VkDescriptorSetLayoutBinding& layoutBinding,
-	const VkDevice& device)
+void GraphicsPipeline::BindPoolDescriptorSet(const VkCommandBuffer& commandBuffer)
 {
-	VkDescriptorSetLayoutCreateInfo layoutInfo{};
-	layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-	layoutInfo.bindingCount = 1;
-	layoutInfo.pBindings = &layoutBinding;
+	m_UBOPool->bindDescriptorSet(commandBuffer, m_PipelineLayout, 0);
 
-	if (vkCreateDescriptorSetLayout(device, &layoutInfo, nullptr, &m_DescriptorSetLayout) != VK_SUCCESS) {
-		throw std::runtime_error("failed to create descriptor set layout!");
-	}
 }
+void GraphicsPipeline::SetUBO(ViewProjection ubo, size_t uboIndex)
+{
+	m_UBOPool->setUBO(ubo, uboIndex);
+}
+VkPushConstantRange GraphicsPipeline::CreatePushConstantRange()
+{
+	VkPushConstantRange pushConstantRange = {};
+	pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT; // Stag the push constant is accessible from
+	pushConstantRange.offset = 0;
+	pushConstantRange.size = sizeof(MeshData); // Size of push constant block
+	return pushConstantRange;
+}
+
+
 
 
