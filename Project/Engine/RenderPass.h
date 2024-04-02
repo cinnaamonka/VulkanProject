@@ -16,7 +16,7 @@ public:
     {
         return renderPass;
     }
-    void CreateRenderPass(const VkDevice& device, const VkFormat& swapChainImageFormat);
+    void CreateRenderPass(const VkDevice& device, const VkFormat& swapChainImageFormat, bool shouldClear);
     void DestroyRenderPass(const VkDevice& device);
 
 private:

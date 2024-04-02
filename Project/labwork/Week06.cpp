@@ -27,6 +27,7 @@ void VulkanBase::setupDebugMessenger() {
 
 void VulkanBase::createSyncObjects() 
 {
+
 	VkSemaphoreCreateInfo semaphoreInfo{};
 	semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
 
@@ -36,6 +37,7 @@ void VulkanBase::createSyncObjects()
 
 	if (vkCreateSemaphore(device, &semaphoreInfo, nullptr, &imageAvailableSemaphore) != VK_SUCCESS ||
 		vkCreateSemaphore(device, &semaphoreInfo, nullptr, &renderFinishedSemaphore) != VK_SUCCESS ||
+		vkCreateSemaphore(device, &semaphoreInfo, nullptr, &renderFinishedSemaphore2) != VK_SUCCESS || 
 		vkCreateFence(device, &fenceInfo, nullptr, &inFlightFence) != VK_SUCCESS) {
 		throw std::runtime_error("failed to create synchronization objects for a frame!");
 	}
@@ -94,10 +96,9 @@ void VulkanBase::DrawFrame()
 	VkSubmitInfo submitInfo2{};
 	submitInfo2.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
-	VkSemaphore waitSemaphores2[] = { imageAvailableSemaphore };
 	VkPipelineStageFlags waitStages2[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
-	submitInfo2.waitSemaphoreCount = 1;
-	submitInfo2.pWaitSemaphores = waitSemaphores2;
+	submitInfo2.waitSemaphoreCount = 0;
+	submitInfo2.pWaitSemaphores = nullptr;
 	submitInfo2.pWaitDstStageMask = waitStages2;
 
 	m_DAEPipeline3D.GetCommandBuffer().SubmitCommandBuffer(submitInfo2);
@@ -106,26 +107,23 @@ void VulkanBase::DrawFrame()
 	submitInfo1.signalSemaphoreCount = 1;
 	submitInfo1.pSignalSemaphores = signalSemaphores;
 
-	if (vkQueueSubmit(m_DeviceManager.GetGraphicsQueue(), 1, &submitInfo1, inFlightFence) != VK_SUCCESS)
-	{
-		throw std::runtime_error("failed to submit draw command buffer!");
-	}
-
-	VkSemaphore signalSemaphores2[] = { renderFinishedSemaphore };
+	VkSemaphore signalSemaphores2[] = { renderFinishedSemaphore2 };
 	submitInfo2.signalSemaphoreCount = 1;
 	submitInfo2.pSignalSemaphores = signalSemaphores2;
+	std::array<VkSubmitInfo, 2> submitInfos{ submitInfo1, submitInfo2 };
 
-	if (vkQueueSubmit(m_DeviceManager.GetGraphicsQueue(), 1, &submitInfo2, inFlightFence) != VK_SUCCESS)
+	if (vkQueueSubmit(m_DeviceManager.GetGraphicsQueue(), submitInfos.size(), submitInfos.data(), inFlightFence) != VK_SUCCESS)
 	{
 		throw std::runtime_error("failed to submit draw command buffer!");
 	}
 
+	std::array<VkSemaphore, 2> presentWaitSemaphores{ renderFinishedSemaphore, renderFinishedSemaphore2 };
 	//wait and present
 	VkPresentInfoKHR presentInfo{};
 	presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 
-	presentInfo.waitSemaphoreCount = 1;
-	presentInfo.pWaitSemaphores = signalSemaphores2;
+	presentInfo.waitSemaphoreCount = presentWaitSemaphores.size();
+	presentInfo.pWaitSemaphores = presentWaitSemaphores.data();
 
 	VkSwapchainKHR swapChains[] = { m_SwapChain.GetSwapChain() };
 	presentInfo.swapchainCount = 1;

@@ -22,7 +22,7 @@ void Pipeline3D::Initialize(const VkDevice& device, const VkPhysicalDevice& phys
 		throw std::runtime_error("failed to create render finished semaphore!"); 
 	}
 
-	m_RenderPass.CreateRenderPass(device, swapChainImageFormat);
+	m_RenderPass.CreateRenderPass(device, swapChainImageFormat,false);
 
 	m_Shader.Init(device, physicalDevice,m_RenderPass,swapChainExtent);
 

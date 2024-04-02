@@ -21,7 +21,7 @@ void Pipeline::Initialize(const VkDevice& device, const VkPhysicalDevice& physic
 		throw std::runtime_error("failed to create render finished semaphore!");
 	}
 
-	m_RenderPass.CreateRenderPass(device, swapChainImageFormat);
+	m_RenderPass.CreateRenderPass(device, swapChainImageFormat,true);
 
 	m_Shader.Init(device, physicalDevice, m_RenderPass, swapChainExtent);
 
