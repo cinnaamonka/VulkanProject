@@ -39,10 +39,6 @@ public:
 			return m_GraphicsPipeline;
 		}
 
-		VkSemaphore& GetRenderFinishedSemaphore()
-		{
-			return renderFinishedSemaphore;
-		}
 		void DestroyUniformBuffers(const VkDevice& device);
 
 	private:
@@ -53,6 +49,4 @@ public:
 	    VulkanCommandBuffer m_CommandBuffer;
 	    RenderPass m_RenderPass;
 	    Scene m_Scene;
-
-		VkSemaphore renderFinishedSemaphore;
 };

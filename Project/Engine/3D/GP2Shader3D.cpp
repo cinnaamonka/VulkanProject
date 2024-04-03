@@ -82,6 +82,11 @@ VkPipelineInputAssemblyStateCreateInfo GP2Shader3D::createInputAssemblyStateInfo
 	return inputAssembly;
 }
 
+void GP2Shader3D::DestroyDataBuffer()
+{
+	m_UBOBuffer->Destroy();
+}
+
 VkShaderModule GP2Shader3D::CreateShaderModule(const VkDevice& device, const std::vector<char>& code)
 {
 	VkShaderModuleCreateInfo createInfo{};

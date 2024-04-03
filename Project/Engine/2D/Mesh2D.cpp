@@ -94,8 +94,6 @@ void Mesh2D::CreateUniformBuffers(const VkDevice& device, const VkPhysicalDevice
     m_UniformBuffersMemory.resize(m_MaxFramesInFlight);
     m_UniformBuffersMapped.resize(m_MaxFramesInFlight);
 
-    std::cout << "SHould be done 3 times" << std::endl;
-
     for (size_t i = 0; i < m_MaxFramesInFlight; i++)
     {
         BaseBuffer::CreateBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,

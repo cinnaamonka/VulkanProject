@@ -150,6 +150,7 @@ void GraphicsPipeline3D::DestroyPipelineLayout(const VkDevice& device)
 void GraphicsPipeline3D::DestroyDescriptorSetLayout(const VkDevice& device)
 {
 	vkDestroyDescriptorSetLayout(device, m_UBOPool->getDescriptorSetLayout(), nullptr);
+	m_UBOPool->DestroyDescriptorPool();
 }
 
 void GraphicsPipeline3D::BindPoolDescriptorSet(const VkCommandBuffer& commandBuffer)

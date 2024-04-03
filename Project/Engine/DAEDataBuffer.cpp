@@ -10,7 +10,6 @@ DAEDataBuffer::DAEDataBuffer(const VkPhysicalDevice& physicalDevice, const VkDev
 	:m_VkDevice(device)
 {
 	CreateBuffer(size, usage, properties, m_VkBuffer, m_VkBufferMemory, device, physicalDevice);
-	std::cout << "Data buffer created" << std::endl;
 	m_Size = size;
 }
 

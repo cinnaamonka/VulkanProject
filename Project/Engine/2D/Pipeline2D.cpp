@@ -16,11 +16,6 @@ void Pipeline::Initialize(const VkDevice& device, const VkPhysicalDevice& physic
 	VkSemaphoreCreateInfo semaphoreInfo{};
 	semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
 
-	if (vkCreateSemaphore(device, &semaphoreInfo, nullptr, &renderFinishedSemaphore) != VK_SUCCESS)
-	{
-		throw std::runtime_error("failed to create render finished semaphore!");
-	}
-
 	m_RenderPass.CreateRenderPass(device, swapChainImageFormat, true);
 
 	m_Shader.Init(device, physicalDevice, m_RenderPass, swapChainExtent);

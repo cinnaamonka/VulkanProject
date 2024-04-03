@@ -76,18 +76,18 @@ void VulkanBase::DrawFrame()
 	vp.view = glm::lookAt(cameraPos, targetPos, upVector);
 	vp.proj = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
 
-	//m_DAEPipeline3D.GetGraphicsPipeline().SetUBO(vp, 0);
+	m_DAEPipeline3D.GetGraphicsPipeline().SetUBO(vp, 0);
 	m_DAEPipeline.GetGraphicsPipeline().SetUBO(vp, 0);
 	m_DAEPipeline.Record(m_SwapChain.GetSwapChainExtent(), imageIndex);
-	//m_DAEPipeline3D.Record(m_SwapChain.GetSwapChainExtent(), imageIndex);
+	m_DAEPipeline3D.Record(m_SwapChain.GetSwapChainExtent(), imageIndex);
 
 	VkSubmitInfo submitInfo1{};
 	submitInfo1.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
-	VkSemaphore waitSemaphores1[] = { imageAvailableSemaphore };
+	VkSemaphore waitSemaphores[] = { imageAvailableSemaphore };
 	VkPipelineStageFlags waitStages1[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
 	submitInfo1.waitSemaphoreCount = 1;
-	submitInfo1.pWaitSemaphores = waitSemaphores1;
+	submitInfo1.pWaitSemaphores = waitSemaphores;
 	submitInfo1.pWaitDstStageMask = waitStages1;
 
 	m_DAEPipeline.GetCommandBuffer().SubmitCommandBuffer(submitInfo1);
@@ -101,7 +101,7 @@ void VulkanBase::DrawFrame()
 	submitInfo2.pWaitSemaphores = nullptr;
 	submitInfo2.pWaitDstStageMask = waitStages2;
 
-	//m_DAEPipeline3D.GetCommandBuffer().SubmitCommandBuffer(submitInfo2);
+	m_DAEPipeline3D.GetCommandBuffer().SubmitCommandBuffer(submitInfo2);
 
 	VkSemaphore signalSemaphores[] = { renderFinishedSemaphore };
 	submitInfo1.signalSemaphoreCount = 1;
@@ -132,7 +132,6 @@ void VulkanBase::DrawFrame()
 	presentInfo.pImageIndices = &imageIndex;
 
 	vkQueuePresentKHR(m_DeviceManager.GetPresentQueue(), &presentInfo);
-
 }
 
 bool checkValidationLayerSupport()

@@ -14,14 +14,6 @@ void Pipeline3D::Initialize(const VkDevice& device, const VkPhysicalDevice& phys
 	std::vector<VkImageView>& swapChainImageViews, const VkExtent2D& swapChainExtent,
 	const QueueFamilyIndices& queueFamilyIndexes, const VkQueue& graphicsQueue, CommandPool& commandPool)
 {
-	VkSemaphoreCreateInfo semaphoreInfo{}; 
-	semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO; 
-
-	if (vkCreateSemaphore(device, &semaphoreInfo, nullptr, &renderFinishedSemaphore) != VK_SUCCESS) 
-	{
-		throw std::runtime_error("failed to create render finished semaphore!"); 
-	}
-
 	m_RenderPass.CreateRenderPass(device, swapChainImageFormat,false);
 
 	m_Shader.Init(device, physicalDevice,m_RenderPass,swapChainExtent);
@@ -82,6 +74,7 @@ void Pipeline3D::DestroyPipeline(const VkDevice& device, CommandPool& commandPoo
 	m_GraphicsPipeline.DestroyGraphicsPipeline(device);
 	m_GraphicsPipeline.DestroyPipelineLayout(device);
 	m_RenderPass.DestroyRenderPass(device);
+	m_Shader.DestroyDataBuffer();
 }  
 
 void Pipeline3D::DestroyMeshes(const VkDevice& device)

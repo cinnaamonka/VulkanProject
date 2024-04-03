@@ -35,6 +35,7 @@ public:
 	VkPipelineVertexInputStateCreateInfo CreateVertexInputStateInfo();
 	VkPipelineInputAssemblyStateCreateInfo createInputAssemblyStateInfo();
 
+	void DestroyDataBuffer();
 private:
 
 	std::vector<VkPipelineShaderStageCreateInfo> m_VecShadersStageInfos;

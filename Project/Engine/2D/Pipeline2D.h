@@ -41,10 +41,6 @@ public:
    {
        return m_GraphicsPipeline;
    }
-   VkSemaphore& GetRenderFinishedSemaphore()
-   {
-       return renderFinishedSemaphore;
-   }
 private:
     void DrawScene(const VkExtent2D& swapChainExtent, uint32_t imageIndex);
 private:
@@ -55,6 +51,4 @@ private:
  
     std::vector<Mesh2D> m_Meshes;
     Scene m_Scene;
-
-    VkSemaphore renderFinishedSemaphore;
 };
