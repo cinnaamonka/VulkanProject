@@ -26,9 +26,9 @@ void Pipeline3D::Initialize(const VkDevice& device, const VkPhysicalDevice& phys
 
 	m_Shader.Init(device, physicalDevice,m_RenderPass,swapChainExtent);
 
-	m_GraphicsPipeline.CreateGraphicsPipeline(device, physicalDevice, m_Shader, m_RenderPass, m_VulkanContext,
+	m_GraphicsPipeline.CreateGraphicsPipeline(device, physicalDevice, m_Shader, m_RenderPass,
 		VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,\
-		DAEDataBuffer::GetDeviceSize(), m_Shader.GetDescriptorSetLayout(),swapChainExtent); 
+		DAEDataBuffer::GetDeviceSize(),swapChainExtent); 
 
 	m_GraphicsPipeline.CreateFrameBuffers(device, swapChainImageViews, swapChainExtent, m_RenderPass);
 
@@ -78,21 +78,20 @@ void Pipeline3D::DestroyPipeline(const VkDevice& device, CommandPool& commandPoo
 {
 	commandPool.DestroyCommandPool(device);
 	m_GraphicsPipeline.DestroySwapChainFramebuffers(device);
-	m_GraphicsPipeline.DestroyDescriptorSetLayout(device, m_Shader.GetDescriptorSetLayout());
+	m_GraphicsPipeline.DestroyDescriptorSetLayout(device);
 	m_GraphicsPipeline.DestroyGraphicsPipeline(device);
 	m_GraphicsPipeline.DestroyPipelineLayout(device);
 	m_RenderPass.DestroyRenderPass(device);
 }  
 
-void Pipeline3D::DestroyMeshes(const VkDevice device)
+void Pipeline3D::DestroyMeshes(const VkDevice& device)
 {
 	m_Scene.DestroyMeshes(device);
 	DestroyUniformBuffers(device);
 }
-
-void Pipeline3D::DestroyUniformBuffers(const VkDevice device)
+void Pipeline3D::DestroyUniformBuffers(const VkDevice& device)
 {
-	//m_Scene.DestroyUniformBuffer(device);
+	m_Scene.DestroyUniformBuffers(device);
 }
 
 void Pipeline3D::Record(const VkExtent2D& swapChainExtent, uint32_t imageIndex)

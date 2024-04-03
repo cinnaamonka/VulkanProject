@@ -55,6 +55,8 @@ void Mesh2D::Initialize(const VkPhysicalDevice& physicalDevice, const VkDevice& 
     memcpy(data, vertexes.data(), (size_t)bufferSize);
     vkUnmapMemory(device, stagingBufferMemory);
 
+    m_VertexBuffer->Destroy();
+    m_IndexBuffer->Destroy();
     VertexBuffer::CreateVertexBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_VertexBuffer->GetVkBuffer(), m_VertexBuffer->GetDeviceMemory(), device, physicalDevice);
 
@@ -92,6 +94,8 @@ void Mesh2D::CreateUniformBuffers(const VkDevice& device, const VkPhysicalDevice
     m_UniformBuffersMemory.resize(m_MaxFramesInFlight);
     m_UniformBuffersMapped.resize(m_MaxFramesInFlight);
 
+    std::cout << "SHould be done 3 times" << std::endl;
+
     for (size_t i = 0; i < m_MaxFramesInFlight; i++)
     {
         BaseBuffer::CreateBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
@@ -102,7 +106,7 @@ void Mesh2D::CreateUniformBuffers(const VkDevice& device, const VkPhysicalDevice
     }
 }
 
-void Mesh2D::DestroyUniformBuffers(const VkDevice& device, const VkDescriptorSetLayout& descriptiveSetLayout)
+void Mesh2D::DestroyUniformBuffers(const VkDevice& device)
 {
     for (size_t i = 0; i < m_MaxFramesInFlight; i++)
     {

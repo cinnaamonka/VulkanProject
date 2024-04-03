@@ -3,10 +3,13 @@
 #include <stdexcept>
 
 void GraphicsPipeline::CreateGraphicsPipeline(const VkDevice& device, const VkPhysicalDevice& physicalDevice, GP2Shader& shader,
-	const RenderPass& renderPass, const VulkanContext& context, const VkBufferUsageFlags& usageFlags,
-	const VkMemoryPropertyFlags& memoryPropertyFlags, const VkDeviceSize& deviceSize, VkDescriptorSetLayout& descriptorSetLayout,
+	const RenderPass& renderPass,const VkBufferUsageFlags& usageFlags,
+	const VkMemoryPropertyFlags& memoryPropertyFlags, const VkDeviceSize& deviceSize,
 	const VkExtent2D& swapChainExtent)
 {
+	m_UBOPool = std::make_unique<DAEDescriptorPool<ViewProjection>>(device, 1);
+	m_UBOPool->initialize(physicalDevice, device, usageFlags, memoryPropertyFlags, deviceSize);
+
 	VkPipelineViewportStateCreateInfo viewportState{};
 	viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
 	viewportState.viewportCount = 1;
@@ -57,7 +60,7 @@ void GraphicsPipeline::CreateGraphicsPipeline(const VkDevice& device, const VkPh
 	VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
 	pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
 	pipelineLayoutInfo.setLayoutCount = 1;
-	pipelineLayoutInfo.pSetLayouts = &descriptorSetLayout;
+	pipelineLayoutInfo.pSetLayouts = &m_UBOPool->getDescriptorSetLayout();
 	VkPushConstantRange pushConstantRange = CreatePushConstantRange();
 	pipelineLayoutInfo.pushConstantRangeCount = 1;
 	pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
@@ -86,16 +89,12 @@ void GraphicsPipeline::CreateGraphicsPipeline(const VkDevice& device, const VkPh
 	pipelineInfo.subpass = 0;
 	pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
-
 #pragma endregion
 	if (vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_GraphicsPipeline) != VK_SUCCESS)
 	{
 		throw std::runtime_error("failed to create graphics pipeline!");
 	}
 	shader.DestroyShaderModules(device);
-
-	m_UBOPool = std::make_unique<DAEDescriptorPool<ViewProjection>>(device, 1);
-	m_UBOPool->initialize(VulkanContext{ device,physicalDevice, renderPass.GetRenderPass(),swapChainExtent }, physicalDevice, device, usageFlags, memoryPropertyFlags, deviceSize);
 }
 
 void GraphicsPipeline::CreateFrameBuffers(const VkDevice& device, std::vector<VkImageView>& swapChainImageViews,
@@ -142,9 +141,10 @@ void GraphicsPipeline::DestroyPipelineLayout(const VkDevice& device)
 	vkDestroyPipelineLayout(device, m_PipelineLayout, nullptr);
 }
 
-void GraphicsPipeline::DestroyDescriptorSetLayout(const VkDevice& device, VkDescriptorSetLayout& descriptorSetLayout)
+void GraphicsPipeline::DestroyDescriptorSetLayout(const VkDevice& device)
 {
-	vkDestroyDescriptorSetLayout(device, descriptorSetLayout, nullptr);
+	vkDestroyDescriptorSetLayout(device, m_UBOPool->getDescriptorSetLayout(), nullptr);
+	m_UBOPool->DestroyDescriptorPool();
 }
 
 void GraphicsPipeline::BindPoolDescriptorSet(const VkCommandBuffer& commandBuffer)

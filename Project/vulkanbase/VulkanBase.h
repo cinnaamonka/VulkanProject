@@ -60,7 +60,7 @@ private:
 	DeviceManager m_DeviceManager;
 
 	CommandPool m_CommandPool;
-	
+
 	// Week 06
 	// Main initialization
 

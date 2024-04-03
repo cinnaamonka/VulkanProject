@@ -26,6 +26,7 @@ public:
 
 	void DrawMesh(const VkPipelineLayout& pipelineLayout, const VkCommandBuffer& cmdBuffer);
 	void DestroyMeshes(const VkDevice& device);
+	void DestroyUniformBuffers(const VkDevice& device);
 private:
 	std::vector<Mesh2D> m_Meshes;
 	std::vector<Mesh3D> m_3DMeshes;

@@ -21,13 +21,13 @@ void Pipeline::Initialize(const VkDevice& device, const VkPhysicalDevice& physic
 		throw std::runtime_error("failed to create render finished semaphore!");
 	}
 
-	m_RenderPass.CreateRenderPass(device, swapChainImageFormat,true);
+	m_RenderPass.CreateRenderPass(device, swapChainImageFormat, true);
 
 	m_Shader.Init(device, physicalDevice, m_RenderPass, swapChainExtent);
 
-	m_GraphicsPipeline.CreateGraphicsPipeline(device, physicalDevice, m_Shader, m_RenderPass, m_VulkanContext,
+	m_GraphicsPipeline.CreateGraphicsPipeline(device, physicalDevice, m_Shader, m_RenderPass,
 		VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-		DAEDataBuffer::GetDeviceSize(), m_Shader.GetDescriptorSetLayout(), swapChainExtent);
+		DAEDataBuffer::GetDeviceSize(), swapChainExtent);
 
 	m_GraphicsPipeline.CreateFrameBuffers(device, swapChainImageViews, swapChainExtent, m_RenderPass);
 
@@ -46,10 +46,11 @@ void Pipeline::DestroyPipeline(const VkDevice& device, CommandPool& commandPool)
 {
 	commandPool.DestroyCommandPool(device);
 	m_GraphicsPipeline.DestroySwapChainFramebuffers(device);
-	m_GraphicsPipeline.DestroyDescriptorSetLayout(device, m_Shader.GetDescriptorSetLayout());
+	m_GraphicsPipeline.DestroyDescriptorSetLayout(device);
 	m_GraphicsPipeline.DestroyGraphicsPipeline(device);
 	m_GraphicsPipeline.DestroyPipelineLayout(device);
 	m_RenderPass.DestroyRenderPass(device);
+	m_Shader.DestroyDataBuffer();
 }
 
 void Pipeline::DestroyMeshes(const VkDevice device)
@@ -58,9 +59,9 @@ void Pipeline::DestroyMeshes(const VkDevice device)
 	DestroyUniformBuffers(device);
 }
 
-void Pipeline::DestroyUniformBuffers(const VkDevice device)
+void Pipeline::DestroyUniformBuffers(const VkDevice& device)
 {
-	//m_Scene.DestroyUniformBuffer(device);
+	m_Scene.DestroyUniformBuffers(device);
 }
 
 void Pipeline::Record(const VkExtent2D& swapChainExtent, uint32_t imageIndex)
@@ -79,7 +80,9 @@ void Pipeline::DrawScene(const VkExtent2D& swapChainExtent, uint32_t imageIndex)
 	VkRenderPassBeginInfo renderPassInfo{};
 	renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 	renderPassInfo.renderPass = m_RenderPass.GetRenderPass();
+
 	renderPassInfo.framebuffer = m_GraphicsPipeline.GetSwapChainBuffers()[imageIndex];
+
 	renderPassInfo.renderArea.offset = { 0, 0 };
 	renderPassInfo.renderArea.extent = swapChainExtent;
 

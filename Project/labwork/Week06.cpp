@@ -76,10 +76,10 @@ void VulkanBase::DrawFrame()
 	vp.view = glm::lookAt(cameraPos, targetPos, upVector);
 	vp.proj = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
 
-	m_DAEPipeline3D.GetGraphicsPipeline().SetUBO(vp, 0);
+	//m_DAEPipeline3D.GetGraphicsPipeline().SetUBO(vp, 0);
 	m_DAEPipeline.GetGraphicsPipeline().SetUBO(vp, 0);
 	m_DAEPipeline.Record(m_SwapChain.GetSwapChainExtent(), imageIndex);
-	m_DAEPipeline3D.Record(m_SwapChain.GetSwapChainExtent(), imageIndex);
+	//m_DAEPipeline3D.Record(m_SwapChain.GetSwapChainExtent(), imageIndex);
 
 	VkSubmitInfo submitInfo1{};
 	submitInfo1.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -101,7 +101,7 @@ void VulkanBase::DrawFrame()
 	submitInfo2.pWaitSemaphores = nullptr;
 	submitInfo2.pWaitDstStageMask = waitStages2;
 
-	m_DAEPipeline3D.GetCommandBuffer().SubmitCommandBuffer(submitInfo2);
+	//m_DAEPipeline3D.GetCommandBuffer().SubmitCommandBuffer(submitInfo2);
 
 	VkSemaphore signalSemaphores[] = { renderFinishedSemaphore };
 	submitInfo1.signalSemaphoreCount = 1;
@@ -114,7 +114,7 @@ void VulkanBase::DrawFrame()
 
 	if (vkQueueSubmit(m_DeviceManager.GetGraphicsQueue(), submitInfos.size(), submitInfos.data(), inFlightFence) != VK_SUCCESS)
 	{
-		throw std::runtime_error("failed to submit draw command buffer!");
+		std::cerr << "failed to submit draw command buffer!" << std::endl; return;
 	}
 
 	std::array<VkSemaphore, 2> presentWaitSemaphores{ renderFinishedSemaphore, renderFinishedSemaphore2 };

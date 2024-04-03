@@ -23,6 +23,7 @@ public:
 	{
 		m_VertexBuffer = std::make_unique<DAEDataBuffer>(*other.m_VertexBuffer);
 		m_IndexBuffer = std::make_unique<DAEDataBuffer>(*other.m_IndexBuffer);
+
 		m_UniformBuffers = other.m_UniformBuffers;
 		m_UniformBuffersMemory = other.m_UniformBuffersMemory;
 		m_UniformBuffersMapped = other.m_UniformBuffersMapped;
@@ -38,7 +39,7 @@ public:
 	void Draw(const VkPipelineLayout& pipelineLayout, const VkCommandBuffer& commandBuffer);
 
 	void CreateUniformBuffers(const VkDevice& device, const VkPhysicalDevice& physcialDevice);
-	void DestroyUniformBuffers(const VkDevice& device, const VkDescriptorSetLayout& descriptiveSetLayout);
+	void DestroyUniformBuffers(const VkDevice& device);
 	 
 private:
 

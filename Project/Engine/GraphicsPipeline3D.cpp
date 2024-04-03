@@ -6,10 +6,13 @@
 #include <memory>
 
 void GraphicsPipeline3D::CreateGraphicsPipeline(const VkDevice& device, const VkPhysicalDevice& physicalDevice, GP2Shader3D& shader,
-	const RenderPass& renderPass, const VulkanContext& context,const VkBufferUsageFlags& usageFlags,
-	const VkMemoryPropertyFlags& memoryPropertyFlags,const VkDeviceSize& deviceSize,VkDescriptorSetLayout& descriptorSetLayout,
+	const RenderPass& renderPass,const VkBufferUsageFlags& usageFlags,
+	const VkMemoryPropertyFlags& memoryPropertyFlags,const VkDeviceSize& deviceSize,
 	const VkExtent2D& swapChainExtent)
 {
+	m_UBOPool = std::make_unique<DAEDescriptorPool<ViewProjection>>(device, 1);
+	m_UBOPool->initialize(physicalDevice, device, usageFlags, memoryPropertyFlags, deviceSize);
+
 	VkPipelineViewportStateCreateInfo viewportState{};
 	viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
 	viewportState.viewportCount = 1;
@@ -60,7 +63,7 @@ void GraphicsPipeline3D::CreateGraphicsPipeline(const VkDevice& device, const Vk
 	VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
 	pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
 	pipelineLayoutInfo.setLayoutCount = 1;
-	pipelineLayoutInfo.pSetLayouts = &descriptorSetLayout;
+	pipelineLayoutInfo.pSetLayouts = &m_UBOPool->getDescriptorSetLayout();
 	VkPushConstantRange pushConstantRange = CreatePushConstantRange();
 	pipelineLayoutInfo.pushConstantRangeCount = 1;
 	pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
@@ -97,8 +100,7 @@ void GraphicsPipeline3D::CreateGraphicsPipeline(const VkDevice& device, const Vk
 	}
 	shader.DestroyShaderModules(device);
 
-	m_UBOPool = std::make_unique<DAEDescriptorPool<ViewProjection>>(device, 1);
-	m_UBOPool->initialize(VulkanContext{ device,physicalDevice, renderPass.GetRenderPass(),swapChainExtent }, physicalDevice, device, usageFlags, memoryPropertyFlags, deviceSize);
+	
 }
 
 void GraphicsPipeline3D::CreateFrameBuffers(const VkDevice& device, std::vector<VkImageView>& swapChainImageViews,
@@ -145,9 +147,9 @@ void GraphicsPipeline3D::DestroyPipelineLayout(const VkDevice& device)
 	vkDestroyPipelineLayout(device, m_PipelineLayout, nullptr);
 }
 
-void GraphicsPipeline3D::DestroyDescriptorSetLayout(const VkDevice& device, VkDescriptorSetLayout& descriptorSetLayout)
+void GraphicsPipeline3D::DestroyDescriptorSetLayout(const VkDevice& device)
 {
-	vkDestroyDescriptorSetLayout(device, descriptorSetLayout, nullptr);
+	vkDestroyDescriptorSetLayout(device, m_UBOPool->getDescriptorSetLayout(), nullptr);
 }
 
 void GraphicsPipeline3D::BindPoolDescriptorSet(const VkCommandBuffer& commandBuffer)

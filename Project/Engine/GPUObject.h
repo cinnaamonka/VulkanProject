@@ -5,7 +5,7 @@ template <class UBO>
 class DAEUniformBufferObject
 {
 public:
-	void initialize(const VulkanContext& context, const VkPhysicalDevice& physicalDevice,const VkDevice& device,
+	void initialize(const VkPhysicalDevice& physicalDevice,const VkDevice& device,
 		const VkBufferUsageFlags& usage,
 		const VkMemoryPropertyFlags& properties,
 		const VkDeviceSize& size)
@@ -29,6 +29,10 @@ public:
 	void reset()
 	{
 		m_UBOBuffer.reset();
+	}
+	void DestroyGPUObject()
+	{
+		m_UBOBuffer->Destroy();
 	}
 private:
 	std::unique_ptr<DAEDataBuffer> m_UBOBuffer;

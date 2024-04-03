@@ -65,5 +65,23 @@ void Scene::DestroyMeshes(const VkDevice& device)
 	{
 		mesh.DestroyMesh(device);
 	}
+
+	for (auto& mesh : m_3DMeshes)
+	{
+		mesh.DestroyMesh(device);
+	}
+}
+
+void Scene::DestroyUniformBuffers(const VkDevice& device)
+{
+	for (auto& mesh : m_Meshes)
+	{
+		mesh.DestroyUniformBuffers(device);
+	}
+
+	for (auto& mesh : m_3DMeshes)
+	{
+		mesh.DestroyUniformBuffers(device);
+	}
 }
 

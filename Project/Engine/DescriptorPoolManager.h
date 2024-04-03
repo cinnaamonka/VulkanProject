@@ -12,7 +12,7 @@ public:
 	DAEDescriptorPool(const VkDevice& device, size_t count);
 	~DAEDescriptorPool();
 
-	void initialize(const VulkanContext& context, const VkPhysicalDevice& physicalDevice,
+	void initialize( const VkPhysicalDevice& physicalDevice,
 		const VkDevice& device,
 		const VkBufferUsageFlags& usage,
 		const VkMemoryPropertyFlags& properties,
@@ -29,15 +29,28 @@ public:
 
 	void bindDescriptorSet(VkCommandBuffer buffer, VkPipelineLayout layout, size_t index);
 
-	void CreateDescriptorSetLayout(const VulkanContext& context);
+	void CreateDescriptorSetLayout(const VkDevice& device);
 
+	void DestroyDescriptorPool()
+	{
+		vkDestroyDescriptorPool(m_Device, m_DescriptorPool, nullptr);
+		DestroyUBOs();  
+	}
+
+	void DestroyUBOs()
+	{
+		for (DAEUniformBufferObject<UBO>& ubo : m_UBOs)
+		{
+			ubo.DestroyGPUObject();   
+		}
+	}
 private:
 	VkDevice m_Device;
 	VkDeviceSize m_Size;
 	VkDescriptorSetLayout m_DescriptorSetLayout;
 
 	
-	void createUBOs(const VulkanContext& context, const VkPhysicalDevice& physicalDevice,
+	void createUBOs(const VkPhysicalDevice& physicalDevice,
 		const VkDevice& device,
 		const VkBufferUsageFlags& usage,
 		const VkMemoryPropertyFlags& properties,
@@ -56,22 +69,9 @@ DAEDescriptorPool<UBO>::DAEDescriptorPool(const VkDevice& device, size_t count)
 	:m_Device{ device },
 	m_Size{ sizeof(UBO) },
 	m_Count(count),
-	m_DescriptorPool{ nullptr },
 	m_DescriptorSetLayout{ nullptr }
 {
-	VkDescriptorPoolSize poolSize{};
-	poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-	poolSize.descriptorCount = static_cast<uint32_t>(count);
-
-	VkDescriptorPoolCreateInfo poolInfo{};
-	poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-	poolInfo.poolSizeCount = 1;
-	poolInfo.pPoolSizes = &poolSize;
-	poolInfo.maxSets = static_cast<uint32_t>(count);
-
-	if (vkCreateDescriptorPool(device, &poolInfo, nullptr, &m_DescriptorPool) != VK_SUCCESS) {
-		throw std::runtime_error("failed to create descriptor pool!");
-	}
+	
 }
 
 template <class UBO>
@@ -81,19 +81,31 @@ DAEDescriptorPool<UBO>::~DAEDescriptorPool()
 	{
 		buffer.reset();
 	}
-	//vkDestroyDescriptorSetLayout(m_Device, m_DescriptorSetLayout, nullptr);
-	//vkDestroyDescriptorPool(m_Device, m_DescriptorPool, nullptr);
 }
 
 template<class UBO>
-inline void DAEDescriptorPool<UBO>::initialize(const VulkanContext& context, const VkPhysicalDevice& physicalDevice,
+inline void DAEDescriptorPool<UBO>::initialize(const VkPhysicalDevice& physicalDevice,
 	const VkDevice& device,
 	const VkBufferUsageFlags& usage,
 	const VkMemoryPropertyFlags& properties,
 	const VkDeviceSize& size)
 {
-	CreateDescriptorSetLayout(context);
-	createUBOs(context,physicalDevice,device,usage,properties,size);
+	VkDescriptorPoolSize poolSize{};
+	poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+	poolSize.descriptorCount = static_cast<uint32_t>(m_Count);
+
+	VkDescriptorPoolCreateInfo poolInfo{};
+	poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+	poolInfo.poolSizeCount = 1;
+	poolInfo.pPoolSizes = &poolSize;
+	poolInfo.maxSets = static_cast<uint32_t>(m_Count);
+
+	if (vkCreateDescriptorPool(device, &poolInfo, nullptr, &m_DescriptorPool) != VK_SUCCESS) {
+		throw std::runtime_error("failed to create descriptor pool!");
+	}
+
+	CreateDescriptorSetLayout(device);
+	createUBOs(physicalDevice,device,usage,properties,size);
 	createDescriptorSets();
 }
 
@@ -144,7 +156,7 @@ void DAEDescriptorPool<UBO>::bindDescriptorSet(VkCommandBuffer commandBuffer, Vk
 }
 
 template<class UBO>
-inline void DAEDescriptorPool<UBO>::CreateDescriptorSetLayout(const VulkanContext& context)
+inline void DAEDescriptorPool<UBO>::CreateDescriptorSetLayout(const VkDevice& device)
 {
 	VkDescriptorSetLayoutBinding uboLayoutBinding{};
 	uboLayoutBinding.binding = 0;
@@ -159,14 +171,15 @@ inline void DAEDescriptorPool<UBO>::CreateDescriptorSetLayout(const VulkanContex
 	layoutInfo.bindingCount = 1;
 	layoutInfo.pBindings = &uboLayoutBinding;
 
-	if (vkCreateDescriptorSetLayout(context.device, &layoutInfo, nullptr, &m_DescriptorSetLayout) != VK_SUCCESS)
+	if (vkCreateDescriptorSetLayout(device, &layoutInfo, nullptr, &m_DescriptorSetLayout) != VK_SUCCESS)
  {
 		throw std::runtime_error("failed to create descriptor set layout!");
 	}
 }
 
+
 template<class UBO>
-inline void DAEDescriptorPool<UBO>::createUBOs(const VulkanContext& context, const VkPhysicalDevice& physicalDevice,
+inline void DAEDescriptorPool<UBO>::createUBOs(const VkPhysicalDevice& physicalDevice,
 	const VkDevice& device,
 	const VkBufferUsageFlags& usage,
 	const VkMemoryPropertyFlags& properties,
@@ -175,7 +188,7 @@ inline void DAEDescriptorPool<UBO>::createUBOs(const VulkanContext& context, con
 	for (int uboIndex = 0; uboIndex < m_Count; ++uboIndex)
 	{
 		auto buffer = DAEUniformBufferObject<UBO>{};
-		buffer.initialize(context,physicalDevice,device,usage,properties,size);
+		buffer.initialize(physicalDevice,device,usage,properties,size);
 		m_UBOs.emplace_back(std::move(buffer));
 	}
 }

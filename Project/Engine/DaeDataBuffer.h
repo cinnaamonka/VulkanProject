@@ -15,10 +15,8 @@ public:
 		const VkDeviceSize& size
 	);
 
-	~DAEDataBuffer() 
-	{
-		Destroy();
-	}
+	~DAEDataBuffer() {};
+	
 	DAEDataBuffer(const DAEDataBuffer& other) 
 	{
 		m_VkDevice = other.m_VkDevice;
@@ -45,7 +43,6 @@ public:
 	}
 
 private:
-
 	VkDevice m_VkDevice;
 	static VkDeviceSize m_Size;
 	VkBuffer m_VkBuffer;

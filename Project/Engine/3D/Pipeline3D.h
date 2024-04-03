@@ -25,8 +25,7 @@ public:
 		const VkQueue& graphicsQueue,CommandPool& commandPool);
 	
 	    void DestroyPipeline(const VkDevice& device, CommandPool& commandPool);
-	    void DestroyMeshes(const VkDevice device);
-	    void DestroyUniformBuffers(const VkDevice device);
+	    void DestroyMeshes(const VkDevice& device);
 	
 	    void Record(const VkExtent2D& swapChainExtent, uint32_t imageIndex);
 	
@@ -44,6 +43,8 @@ public:
 		{
 			return renderFinishedSemaphore;
 		}
+		void DestroyUniformBuffers(const VkDevice& device);
+
 	private:
 	    void DrawScene(const VkExtent2D& swapChainExtent, uint32_t imageIndex);
 	private:
@@ -51,9 +52,7 @@ public:
 	    GP2Shader3D m_Shader;
 	    VulkanCommandBuffer m_CommandBuffer;
 	    RenderPass m_RenderPass;
-	   /* CommandPool m_CommandPool;*/
 	    Scene m_Scene;
-		VulkanContext m_VulkanContext;
 
 		VkSemaphore renderFinishedSemaphore;
 };

@@ -29,7 +29,7 @@ public:
 
    void DestroyPipeline(const VkDevice& device, CommandPool& commandPool);
    void DestroyMeshes(const VkDevice device);
-   void DestroyUniformBuffers(const VkDevice device);
+   void DestroyUniformBuffers(const VkDevice& device);
 
    void Record(const VkExtent2D& swapChainExtent, uint32_t imageIndex);
 
@@ -52,10 +52,9 @@ private:
     GP2Shader m_Shader; 
     VulkanCommandBuffer m_CommandBuffer;
     RenderPass m_RenderPass;
-  /*  CommandPool m_CommandPool;*/
+ 
     std::vector<Mesh2D> m_Meshes;
     Scene m_Scene;
-    VulkanContext m_VulkanContext;
 
     VkSemaphore renderFinishedSemaphore;
 };

@@ -32,11 +32,3 @@ QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device, const VkSurfaceKHR
 
 bool CheckDeviceExtensionSupport(const VkPhysicalDevice& device);
 
-struct VulkanContext 
-{
-	VkDevice device;
-	VkPhysicalDevice physicalDevice;
-	VkRenderPass renderPass;
-	VkExtent2D swapChainExtent;
-};
-

@@ -35,7 +35,7 @@ public:
 	void Draw(const VkPipelineLayout& pipelineLayout,const VkCommandBuffer& commandBuffer);
 
 	void CreateUniformBuffers(const VkDevice& device, const VkPhysicalDevice& physcialDevice);
-	void DestroyUniformBuffers(const VkDevice& device, const VkDescriptorSetLayout& descriptiveSetLayout);
+	void DestroyUniformBuffers(const VkDevice& device);
 
 private:
 	std::vector<Vertex3D> m_Vertices;

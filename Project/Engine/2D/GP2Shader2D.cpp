@@ -11,14 +11,6 @@ void GP2Shader::Init(const VkDevice& device, const VkPhysicalDevice& physicalDev
 	m_VecShadersStageInfos.push_back(createFragmentShaderInfo(device));
 	m_VecShadersStageInfos.push_back(createVertexShaderInfo(device));
 
-	m_DescriptorPool = std::make_unique<DAEDescriptorPool<ViewProjection>>(device, 1);
-
-	m_DescriptorPool->initialize(VulkanContext{ device,physicalDevice,renderPass.GetRenderPass(), swapChainExtent}, physicalDevice, device, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
-		VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-		VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, sizeof(VertexUBO));
-
-	m_DescriptorPool->CreateDescriptorSetLayout(VulkanContext{ device,physicalDevice,renderPass.GetRenderPass(), swapChainExtent });
-
 	m_UBOBuffer = std::make_unique<DAEDataBuffer>(
 		physicalDevice,
 		device,
@@ -82,6 +74,11 @@ VkPipelineInputAssemblyStateCreateInfo GP2Shader::createInputAssemblyStateInfo()
 	inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
 	inputAssembly.primitiveRestartEnable = VK_FALSE;
 	return inputAssembly;
+}
+
+void GP2Shader::DestroyDataBuffer()
+{
+	m_UBOBuffer->Destroy();
 }
 
 VkShaderModule GP2Shader::createShaderModule(const VkDevice& device, const std::vector<char>& code)

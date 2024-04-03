@@ -35,16 +35,6 @@ public:
 	VkPipelineVertexInputStateCreateInfo CreateVertexInputStateInfo();
 	VkPipelineInputAssemblyStateCreateInfo createInputAssemblyStateInfo();
 
-	void CreateDescriptorSetLayout(const VkDevice& vkDevice, const VkPhysicalDevice& physicalDevice, 
-		const RenderPass& renderPass, const VkExtent2D& swapChainExtent);
-
-	void BindDescriptorSet(const VkCommandBuffer& commandBuffer,const VkPipelineLayout& pipelineLayout, size_t index);
-
-	VkDescriptorSetLayout& GetDescriptorSetLayout()
-	{
-		return m_DescriptorPool->getDescriptorSetLayout();
-	}
-
 private:
 
 	std::vector<VkPipelineShaderStageCreateInfo> m_VecShadersStageInfos;
@@ -54,7 +44,6 @@ private:
 
 	std::unique_ptr<DAEDataBuffer> m_UBOBuffer;
 	VertexUBO m_UBOSrc;
-	std::unique_ptr<DAEDescriptorPool<ViewProjection>> m_DescriptorPool;
 
 	std::array<VkVertexInputAttributeDescription, 3> m_AttributeDescriptions;
 	VkVertexInputBindingDescription m_InputBinding;

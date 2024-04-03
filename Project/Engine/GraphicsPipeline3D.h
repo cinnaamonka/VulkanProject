@@ -19,16 +19,16 @@ public:
 	GraphicsPipeline3D& operator=(GraphicsPipeline3D&& other) = delete;
 
 	void CreateGraphicsPipeline(const VkDevice& device, const VkPhysicalDevice& physicalDevice, GP2Shader3D& shader,
-		const RenderPass& renderPass, const VulkanContext& context, const VkBufferUsageFlags& usageFlags,
+		const RenderPass& renderPass, const VkBufferUsageFlags& usageFlags,
 		const VkMemoryPropertyFlags& memoryPropertyFlags, const VkDeviceSize& deviceSize, 
-		VkDescriptorSetLayout& descriptorSetLayout, const VkExtent2D& swapChainExtent);
+	    const VkExtent2D& swapChainExtent);
 	void CreateFrameBuffers(const VkDevice& device, std::vector<VkImageView>& swapChainImageViews,
 		const VkExtent2D& swapChainExtent, const RenderPass& renderPass); 
 	 
 	void DestroySwapChainFramebuffers(const VkDevice& device);
 	void DestroyGraphicsPipeline(const VkDevice& device);
 	void DestroyPipelineLayout(const VkDevice& device);
-	void DestroyDescriptorSetLayout(const VkDevice& device, VkDescriptorSetLayout& descriptorSetLayout);
+	void DestroyDescriptorSetLayout(const VkDevice& device);
 
 	const  std::vector<VkFramebuffer>& GetSwapChainBuffers()
 	{

@@ -7,21 +7,13 @@
 #include <stdexcept>
 #include "../DeviceManager.h"
 
- 
+
 
 void GP2Shader3D::Init(const VkDevice& device, const VkPhysicalDevice& physicalDevice, const RenderPass& renderPass,
 	const VkExtent2D& swapChainExtent)
 {
 	m_VecShadersStageInfos.push_back(createFragmentShaderInfo(device));
 	m_VecShadersStageInfos.push_back(createVertexShaderInfo(device));
-
-	m_DescriptorPool = std::make_unique<DAEDescriptorPool<ViewProjection>>(device,1);
-
-	m_DescriptorPool->initialize(VulkanContext{ device,physicalDevice,renderPass.GetRenderPass(), swapChainExtent}, physicalDevice, device, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
-		VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-		VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, sizeof(VertexUBO));
-
-	m_DescriptorPool->CreateDescriptorSetLayout(VulkanContext{ device,physicalDevice,renderPass.GetRenderPass(), swapChainExtent });
 
 	m_UBOBuffer = std::make_unique<DAEDataBuffer>(
 		physicalDevice,
@@ -39,6 +31,8 @@ void GP2Shader3D::DestroyShaderModules(const VkDevice& device)
 		vkDestroyShaderModule(device, stageInfo.module, nullptr);
 	}
 	m_VecShadersStageInfos.clear();
+
+	
 }
 VkPipelineShaderStageCreateInfo GP2Shader3D::createFragmentShaderInfo(const VkDevice& device)
 {
@@ -86,17 +80,6 @@ VkPipelineInputAssemblyStateCreateInfo GP2Shader3D::createInputAssemblyStateInfo
 	inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
 	inputAssembly.primitiveRestartEnable = VK_FALSE;
 	return inputAssembly;
-}
-
-void GP2Shader3D::CreateDescriptorSetLayout(const VkDevice& vkDevice, const VkPhysicalDevice& physicalDevice, 
-	const RenderPass& renderPass, const VkExtent2D& swapChainExtent)
-{
-	m_DescriptorPool->CreateDescriptorSetLayout(VulkanContext{ vkDevice,physicalDevice,renderPass.GetRenderPass(),swapChainExtent });
-}
-
-void GP2Shader3D::BindDescriptorSet(const VkCommandBuffer& commandBuffer, const VkPipelineLayout& pipelineLayout, size_t index)
-{
-
 }
 
 VkShaderModule GP2Shader3D::CreateShaderModule(const VkDevice& device, const std::vector<char>& code)

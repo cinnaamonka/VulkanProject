@@ -107,7 +107,7 @@ void Mesh3D::CreateUniformBuffers(const VkDevice& device, const VkPhysicalDevice
 	}
 }
 
-void Mesh3D::DestroyUniformBuffers(const VkDevice& device, const VkDescriptorSetLayout& descriptiveSetLayout)
+void Mesh3D::DestroyUniformBuffers(const VkDevice& device)
 {
 	for (size_t i = 0; i < m_MaxFramesInFlight; i++)
 	{
