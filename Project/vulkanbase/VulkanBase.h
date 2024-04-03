@@ -73,6 +73,7 @@ private:
 	VkSemaphore renderFinishedSemaphore;
 	VkSemaphore renderFinishedSemaphore2;
 	VkFence inFlightFence;
+	VkFence inFlightFence2;
 
 	void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
 	void setupDebugMessenger();

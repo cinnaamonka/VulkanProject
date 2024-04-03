@@ -25,7 +25,7 @@ void VulkanBase::setupDebugMessenger() {
 	}
 }
 
-void VulkanBase::createSyncObjects() 
+void VulkanBase::createSyncObjects()
 {
 
 	VkSemaphoreCreateInfo semaphoreInfo{};
@@ -37,8 +37,10 @@ void VulkanBase::createSyncObjects()
 
 	if (vkCreateSemaphore(device, &semaphoreInfo, nullptr, &imageAvailableSemaphore) != VK_SUCCESS ||
 		vkCreateSemaphore(device, &semaphoreInfo, nullptr, &renderFinishedSemaphore) != VK_SUCCESS ||
-		vkCreateSemaphore(device, &semaphoreInfo, nullptr, &renderFinishedSemaphore2) != VK_SUCCESS || 
-		vkCreateFence(device, &fenceInfo, nullptr, &inFlightFence) != VK_SUCCESS) {
+		vkCreateSemaphore(device, &semaphoreInfo, nullptr, &renderFinishedSemaphore2) != VK_SUCCESS ||
+		vkCreateFence(device, &fenceInfo, nullptr, &inFlightFence) != VK_SUCCESS ||
+		vkCreateFence(device, &fenceInfo, nullptr, &inFlightFence2) != VK_SUCCESS)
+	{
 		throw std::runtime_error("failed to create synchronization objects for a frame!");
 	}
 
@@ -46,7 +48,6 @@ void VulkanBase::createSyncObjects()
 
 void VulkanBase::DrawFrame()
 {
-	//Synchronization - fences
 	vkWaitForFences(device, 1, &inFlightFence, VK_TRUE, UINT64_MAX);
 	vkResetFences(device, 1, &inFlightFence);
 
@@ -92,7 +93,6 @@ void VulkanBase::DrawFrame()
 
 	m_DAEPipeline.GetCommandBuffer().SubmitCommandBuffer(submitInfo1);
 
-	// Submit command buffer for the second pipeline
 	VkSubmitInfo submitInfo2{};
 	submitInfo2.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
@@ -114,11 +114,18 @@ void VulkanBase::DrawFrame()
 
 	if (vkQueueSubmit(m_DeviceManager.GetGraphicsQueue(), submitInfos.size(), submitInfos.data(), inFlightFence) != VK_SUCCESS)
 	{
-		std::cerr << "failed to submit draw command buffer!" << std::endl; return;
+		std::cerr << "Failed to submit draw command buffer!" << std::endl;
+		throw std::runtime_error("Failed to submit draw command buffer!");
 	}
 
+	vkQueueWaitIdle(m_DeviceManager.GetGraphicsQueue());
+
+	VkFence fences[] = { inFlightFence, inFlightFence2 };
+
+	vkWaitForFences(device, 2, fences, VK_TRUE, UINT64_MAX);
+
 	std::array<VkSemaphore, 2> presentWaitSemaphores{ renderFinishedSemaphore, renderFinishedSemaphore2 };
-	//wait and present
+	
 	VkPresentInfoKHR presentInfo{};
 	presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 
@@ -132,6 +139,7 @@ void VulkanBase::DrawFrame()
 	presentInfo.pImageIndices = &imageIndex;
 
 	vkQueuePresentKHR(m_DeviceManager.GetPresentQueue(), &presentInfo);
+
 }
 
 bool checkValidationLayerSupport()

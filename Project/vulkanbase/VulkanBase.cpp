@@ -62,6 +62,7 @@ void VulkanBase::Cleanup()
 	vkDestroySemaphore(device, renderFinishedSemaphore2, nullptr);
 	vkDestroySemaphore(device, imageAvailableSemaphore, nullptr);
 	vkDestroyFence(device, inFlightFence, nullptr);
+	vkDestroyFence(device, inFlightFence2, nullptr);
 
 	m_DAEPipeline.DestroyPipeline(device, m_CommandPool);
 	m_DAEPipeline3D.DestroyPipeline(device, m_CommandPool);
