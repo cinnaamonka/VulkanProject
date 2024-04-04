@@ -36,6 +36,7 @@
 #include "../Engine/SwapChain.h"
 #include "../Engine/GPUObject.h"
 #include "../Engine/DeviceManager.h"
+#include "../Engine/Camera.h"
 
 class VulkanBase
 {
@@ -56,6 +57,7 @@ private:
 	void OnMouseMove(GLFWwindow* window, double xpos, double ypos);
 	void OnMouseEvent(GLFWwindow* window, int button, int action, int mods);
 
+	Camera m_Camera;
 	float m_CameraRadius;
 	glm::vec3 m_DragStart;
 	float m_Rotation;

@@ -17,6 +17,9 @@
 
 #endif 
 #include "Structs.h"
+constexpr float PI = 3.14159265358979323846f;
+
+constexpr auto TO_RADIANS(PI / 180.0f);
 
 struct Camera
 {
@@ -28,8 +31,7 @@ struct Camera
 	{
 	}
 
-
-	glm::vec3 origin = { 0,0,0 };
+	glm::vec3 origin = { 1 * cosf(0),0,-5 * sinf(1) };
 	float fovAngle = 90.f;
 
 	glm::vec3 forward = { 0,0,1 };
@@ -39,21 +41,24 @@ struct Camera
 	float totalPitch = 0.f;
 	float totalYaw = 0.f;
 
-	glm::mat4 cameraToWorld = {};
+	glm::mat4 m_RotationMatrix = {};
 
+	const glm::vec3 UnitX = glm::vec3{ 1, 0, 0 };
+	const glm::vec3 UnitY = glm::vec3{ 0, 1, 0 };
+	const glm::vec3 UnitZ = glm::vec3{ 0, 0, 1 };
+	const glm::vec3 Zero = glm::vec3{ 0, 0, 0 };
+
+	bool m_DirtyFlag = false;
 
 	glm::mat4 CalculateCameraToWorld()
 	{
-		right = glm::cross({ 0,1,0 }, glm::normalize(forward));
-		up = glm::cross(forward, right);
-
-		return
-		{
-			right,
-			up,
-			forward,
-			origin
-		};
+		// Construct the camera-to-world transformation matrix
+		return glm::mat4(
+			glm::vec4(right, 0.0f),
+			glm::vec4(up, 0.0f),
+			glm::vec4(-forward, 0.0f), // Negate forward if it's meant to be the view direction
+			glm::vec4(origin, 1.0f)
+		);
 	}
 
 	void HandleZoom(int zoomValue)
@@ -64,91 +69,60 @@ struct Camera
 		fovAngle += zoomValue;
 		fovAngle = std::max(minFOV, std::min(maxFOV, fovAngle));
 	}
-	void OnKeyEvent(int key, int scancode, int action, int mods,float deltaTime,float step)
+	void OnKeyEvent(int key, int scancode, int action, int mods, float elapsedSec)
 	{
+		const float step = 0.3f;
+
 		if (key == GLFW_KEY_W && (action == GLFW_REPEAT || action == GLFW_PRESS))
 		{
-			origin += (step * deltaTime) * forward.Normalized();
+			origin += (step * elapsedSec) * glm::normalize(forward);
+			totalYaw += 0.1f;
 		}
 		if (key == GLFW_KEY_S && (action == GLFW_REPEAT || action == GLFW_PRESS))
 		{
-			origin -= (step * deltaTime) * forward.Normalized();
+			origin -= (step * elapsedSec) * glm::normalize(forward);
+			totalYaw -= 0.1f;
 		}
 		if (key == GLFW_KEY_D && (action == GLFW_REPEAT || action == GLFW_PRESS))
 		{
-			origin += (step * deltaTime) * right.Normalized();
+			origin -= (step * elapsedSec) * glm::normalize(right);
 		}
 		if (key == GLFW_KEY_A && (action == GLFW_REPEAT || action == GLFW_PRESS))
 		{
-			origin -= (step * deltaTime) * right.Normalized();
+			origin += (step * elapsedSec) * glm::normalize(right);
 		}
 
 	}
-	void OnMouseMove(double xpos, double ypos, float dragStartX,float deltaTime)
+	void OnMouseMove(double xpos, double ypos, float dragStartX, float elapsedSec)
 	{
-		const float rotationSpeed = 1.5f;
+		float dx = static_cast<float>(xpos) - dragStartX;
 
-		totalYaw += TO_RADIANS * rotationSpeed * deltaTime * dragStartX;
-	}
-	void Update(Timer* pTimer)
-	{
-		const float deltaTime = pTimer->GetElapsed();
-		const float step = 1.0f;
-
-		const glm::vec3 movementDirection{};
-
-		const glm::mat4 cameraToWorld = this->CalculateCameraToWorld();
-
-		glm::vec3 transformedVector = glm::vec3(cameraToWorld[0]) * movementDirection.x +
-			                          glm::vec3(cameraToWorld[1]) * movementDirection.y + 
-			                          glm::vec3(cameraToWorld[2]) * movementDirection.z; 
-
-		origin += transformedVector * deltaTime;
-
-
-		const glm::mat4 rotMat
+		if (dx > 0)
 		{
-		CalculateRotationMatrix(glm::vec3{totalPitch,totalYaw, 0.f})
-		};
+			totalPitch += 0.01f;
+		}
+		else 
+		{
+			totalPitch -= 0.01f;
+		}
 
-		glm::vec3 transformedVector2 = glm::vec3(rotMat[0]) * 0 +
-									   glm::vec3(rotMat[1]) * 0 +
-									   glm::vec3(rotMat[2]) * 1;
-
-		forward = transformedVector2;
 	}
-	glm::mat3 CalculateRotationMatrix(const glm::vec3& r) 
+
+	void Update(float elapsedSec)
 	{
-		// Convert Euler angles to radians
-		float pitch = glm::radians(r.x);
-		float yaw = glm::radians(r.y);
-		float roll = glm::radians(r.z);
-
-		// Calculate the rotation matrix
-		glm::mat3 rotationMatrix;
-		rotationMatrix[0][0] = glm::cos(yaw) * glm::cos(roll);
-		rotationMatrix[0][1] = glm::cos(yaw) * glm::sin(roll);
-		rotationMatrix[0][2] = -glm::sin(yaw);
-		rotationMatrix[1][0] = glm::sin(pitch) * glm::sin(yaw) * glm::cos(roll) - glm::cos(pitch) * glm::sin(roll);
-		rotationMatrix[1][1] = glm::sin(pitch) * glm::sin(yaw) * glm::sin(roll) + glm::cos(pitch) * glm::cos(roll);
-		rotationMatrix[1][2] = glm::sin(pitch) * glm::cos(yaw);
-		rotationMatrix[2][0] = glm::cos(pitch) * glm::sin(yaw) * glm::cos(roll) + glm::sin(pitch) * glm::sin(roll);
-		rotationMatrix[2][1] = glm::cos(pitch) * glm::sin(yaw) * glm::sin(roll) - glm::sin(pitch) * glm::cos(roll);
-		rotationMatrix[2][2] = glm::cos(pitch) * glm::cos(yaw);
-
-		return rotationMatrix;
+		m_RotationMatrix = glm::rotate(glm::mat4(1.0f), totalPitch, UnitY);
 	}
 
 	ViewProjection GetViewProjection(float screenWidth, float screenHeight, float nearPlane, float farPlane)
 	{
-		ViewProjection vp;
+		ViewProjection vp{};
 
 		// Calculate aspect ratio
 		float aspectRatio = screenWidth / screenHeight;
 
 		// Generate the view matrix using glm::lookAt()
-		glm::vec3 targetPos = origin + forward; // Assuming forward is normalized
-		vp.view = glm::lookAt(origin, targetPos, up);
+		glm::vec3 targetPos = origin + forward;
+		vp.view = glm::lookAt(origin, targetPos, up) * m_RotationMatrix;
 
 		// Generate the projection matrix using glm::perspective()
 		vp.proj = glm::perspective(glm::radians(fovAngle), aspectRatio, nearPlane, farPlane);

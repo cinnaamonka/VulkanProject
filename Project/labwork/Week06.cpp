@@ -4,6 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "../Engine/GraphicsPipeline3D.h"
+#include "../Engine/Timer.h"
 
 void VulkanBase::populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo) {
 	createInfo = {};
@@ -14,7 +15,8 @@ void VulkanBase::populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInf
 }
 
 
-void VulkanBase::setupDebugMessenger() {
+void VulkanBase::setupDebugMessenger()
+{
 	if (!enableValidationLayers) return;
 
 	VkDebugUtilsMessengerCreateInfoEXT createInfo;
@@ -67,18 +69,13 @@ void VulkanBase::DrawFrame()
 	float windowHeight = 600.0f;
 	float aspectRatio = windowWidth / windowHeight;
 
-	// Field of View
-	float fov = 45.0f; // In degrees
-
 	// Near and Far planes
 	float nearPlane = 0.001f;
 	float farPlane = 100.0f;
 
-	// View matrix
-	std::cout <<"x pos:" << cameraPos.x << std::endl;
-	std::cout << "z pos:" << cameraPos.z << std::endl;
-	vp.view = glm::lookAt(cameraPos, targetPos, upVector);
-	vp.proj = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
+	m_Camera.Update(Timer::GetElapsed());
+
+	vp = m_Camera.GetViewProjection(windowWidth, windowHeight, nearPlane, farPlane);
 
 	m_DAEPipeline3D.GetGraphicsPipeline().SetUBO(vp, 0);
 	m_DAEPipeline.GetGraphicsPipeline().SetUBO(vp, 0);

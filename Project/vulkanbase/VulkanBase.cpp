@@ -20,7 +20,8 @@ VulkanBase::VulkanBase():
 	m_DeviceManager{},
 	m_CameraRadius{5},
 	m_DragStart{},
-	m_Rotation{}
+	m_Rotation{},
+	m_Camera{}
 {
 }
 
@@ -52,8 +53,6 @@ void VulkanBase::Run()
 
 		std::this_thread::sleep_for(sleepTime);
 	}
-
-	
 }
 
 void VulkanBase::InitVulkan()
@@ -168,35 +167,16 @@ void VulkanBase::initWindow()
 }
 void VulkanBase::OnKeyEvent(int key, int scancode, int action, int mods)
 {
-	if (key == GLFW_KEY_W && (action == GLFW_REPEAT || action == GLFW_PRESS))
-	{
-		m_CameraRadius -= 0.2f;
-		m_CameraRadius = std::max(m_CameraRadius, 0.1f);
-		
-	}
-	if (key == GLFW_KEY_S && (action == GLFW_REPEAT || action == GLFW_PRESS))
-	{
-		m_CameraRadius += 2.f;
-		m_CameraRadius = std::min(m_CameraRadius, 30.f);
-	}
-
-	std::cout << m_CameraRadius << std::endl;
+	m_Camera.OnKeyEvent(key, scancode, action, mods, Timer::GetElapsed());
 }
 void VulkanBase::OnMouseMove(GLFWwindow* window, double xpos, double ypos)
 {
 	int state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
 
+	
 	if (state == GLFW_PRESS)
 	{
-		float dx = static_cast<float>(xpos) - m_DragStart.x;
-
-		if (dx > 0)
-		{
-			m_Rotation += 0.01f;
-		}
-		else {
-			m_Rotation -= 0.01f;
-		}
+		m_Camera.OnMouseMove(xpos, ypos, m_DragStart.x, Timer::GetElapsed());
 	}
 }
 void VulkanBase::OnMouseEvent(GLFWwindow* window, int button, int action, int mods)
