@@ -52,6 +52,14 @@ private:
 
 	GLFWwindow* m_Window;
 	void initWindow();
+	void OnKeyEvent(int key, int scancode, int action, int mods);
+	void OnMouseMove(GLFWwindow* window, double xpos, double ypos);
+	void OnMouseEvent(GLFWwindow* window, int button, int action, int mods);
+
+	float m_CameraRadius;
+	glm::vec3 m_DragStart;
+	float m_Rotation;
+	double m_Lag = 0;
 
 	Pipeline m_DAEPipeline;
 	Pipeline3D m_DAEPipeline3D;

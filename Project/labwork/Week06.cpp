@@ -48,8 +48,9 @@ void VulkanBase::createSyncObjects()
 
 void VulkanBase::DrawFrame()
 {
-	vkWaitForFences(device, 1, &m_InFlightFence, VK_TRUE, UINT64_MAX);
-	vkResetFences(device, 1, &m_InFlightFence);
+	const VkFence waitFences[] = {m_InFlightFence,m_InFlightFence2};
+	vkWaitForFences(device, 1, waitFences, VK_TRUE, UINT64_MAX);
+	vkResetFences(device, 1, waitFences);
 
 	// get next image to draw
 	uint32_t imageIndex;
@@ -58,8 +59,8 @@ void VulkanBase::DrawFrame()
 	ViewProjection vp{};
 	glm::vec3 scaleFactors(1 / 400.0f, 1 / 300.0f, 1.0f);
 
-	glm::vec3 cameraPos = glm::vec3(10 * cosf(1), -6, 10 * sinf(1));
-	glm::vec3 targetPos = glm::vec3(0, 0, 0);
+	glm::vec3 cameraPos = glm::vec3(m_CameraRadius * cosf(m_Rotation), -6, m_CameraRadius * sinf(m_Rotation));
+	glm::vec3 targetPos = glm::vec3(0.f, 0.f, 0.f);
 	glm::vec3 upVector = glm::vec3(0, 1, 0);
 
 	float windowWidth = 800.0f;
@@ -70,10 +71,12 @@ void VulkanBase::DrawFrame()
 	float fov = 45.0f; // In degrees
 
 	// Near and Far planes
-	float nearPlane = 0.1f;
+	float nearPlane = 0.001f;
 	float farPlane = 100.0f;
 
 	// View matrix
+	std::cout <<"x pos:" << cameraPos.x << std::endl;
+	std::cout << "z pos:" << cameraPos.z << std::endl;
 	vp.view = glm::lookAt(cameraPos, targetPos, upVector);
 	vp.proj = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
 
