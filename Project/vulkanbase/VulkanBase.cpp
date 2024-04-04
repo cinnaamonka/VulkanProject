@@ -3,7 +3,17 @@
 
 #include <functional>
 
-VulkanBase::VulkanBase()
+VulkanBase::VulkanBase():
+	m_Window{},
+	m_Surface{},
+	imageAvailableSemaphore{},
+	renderFinishedSemaphore{},
+	renderFinishedSemaphore2{},
+	m_DebugMessenger{},
+	m_InFlightFence{},
+	m_InFlightFence2{},
+	m_Instance{},
+	m_DeviceManager{}
 {
 }
 
@@ -22,22 +32,22 @@ void VulkanBase::InitVulkan()
 	setupDebugMessenger();
 	CreateSurface();
 
-	m_DeviceManager.PickPhysicalDevice(instance, surface);
-	m_DeviceManager.CreateLogicalDevice(device,surface);
+	m_DeviceManager.PickPhysicalDevice(m_Instance, m_Surface);
+	m_DeviceManager.CreateLogicalDevice(device, m_Surface);
 
-	m_SwapChain.CreateSwapChain(surface, window, FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(),surface),device, m_DeviceManager.GetPhysicalDevice());
+	m_SwapChain.CreateSwapChain(m_Surface, m_Window, FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(), m_Surface),device, m_DeviceManager.GetPhysicalDevice());
 	m_SwapChain.CreateImageViews(device); 
 
-	m_CommandPool.CreateCommandPool(device, FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(), surface));
+	m_CommandPool.CreateCommandPool(device, FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(), m_Surface));
 
 	m_DAEPipeline.Initialize(device, m_DeviceManager.GetPhysicalDevice(), m_SwapChain.GetSwapChainImageFormat(),
 		m_SwapChain.GetSwapChainImageViews(),
-		m_SwapChain.GetSwapChainExtent(), FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(),surface),
+		m_SwapChain.GetSwapChainExtent(), FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(), m_Surface),
 		m_DeviceManager.GetGraphicsQueue(),m_CommandPool);
 
 	m_DAEPipeline3D.Initialize(device, m_DeviceManager.GetPhysicalDevice(), m_SwapChain.GetSwapChainImageFormat(),
 		m_SwapChain.GetSwapChainImageViews(),m_SwapChain.GetSwapChainExtent(),
-		FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(), surface), m_DeviceManager.GetGraphicsQueue(), m_CommandPool);
+		FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(), m_Surface), m_DeviceManager.GetGraphicsQueue(), m_CommandPool);
 
 	// week 06
 	createSyncObjects();
@@ -45,7 +55,7 @@ void VulkanBase::InitVulkan()
 
 void VulkanBase::MainLoop()
 {
-	while (!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(m_Window))
 	{
 		glfwPollEvents();
 		// week 06
@@ -61,8 +71,8 @@ void VulkanBase::Cleanup()
 	vkDestroySemaphore(device, renderFinishedSemaphore, nullptr);
 	vkDestroySemaphore(device, renderFinishedSemaphore2, nullptr);
 	vkDestroySemaphore(device, imageAvailableSemaphore, nullptr);
-	vkDestroyFence(device, inFlightFence, nullptr);
-	vkDestroyFence(device, inFlightFence2, nullptr);
+	vkDestroyFence(device, m_InFlightFence, nullptr);
+	vkDestroyFence(device, m_InFlightFence2, nullptr);
 
 	m_DAEPipeline.DestroyPipeline(device, m_CommandPool);
 	m_DAEPipeline3D.DestroyPipeline(device, m_CommandPool);
@@ -74,7 +84,7 @@ void VulkanBase::Cleanup()
 
 	if (enableValidationLayers)
 	{
-		DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
+		DestroyDebugUtilsMessengerEXT(m_Instance, m_DebugMessenger, nullptr);
 	}
 	vkDestroySwapchainKHR(device, m_SwapChain.GetSwapChain(), nullptr);
 
@@ -82,17 +92,17 @@ void VulkanBase::Cleanup()
 	m_DAEPipeline3D.DestroyMeshes(device);
 	
 	vkDestroyDevice(device, nullptr);
-	vkDestroySurfaceKHR(instance, surface, nullptr);
-	vkDestroyInstance(instance, nullptr);
+	vkDestroySurfaceKHR(m_Instance, m_Surface, nullptr);
+	vkDestroyInstance(m_Instance, nullptr);
 
 	
-	glfwDestroyWindow(window);
+	glfwDestroyWindow(m_Window);
 	glfwTerminate();
 }
 
 void VulkanBase::CreateSurface()
 {
-	if (glfwCreateWindowSurface(instance, window, nullptr, &surface) != VK_SUCCESS)
+	if (glfwCreateWindowSurface(m_Instance, m_Window, nullptr, &m_Surface) != VK_SUCCESS)
 	{
 		throw std::runtime_error("failed to create window surface!");
 	}
@@ -104,5 +114,5 @@ void VulkanBase::initWindow()
 	glfwInit();
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-	window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
+	m_Window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
 }

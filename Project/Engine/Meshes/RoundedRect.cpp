@@ -69,9 +69,9 @@ void RoundedRect::InitializeRoundedRect(const VkPhysicalDevice& physicalDevice, 
 		glm::vec2 point(startPoint.pos.x + m_Radius * glm::cos(angle), startPoint.pos.y + m_Radius * glm::sin(angle));
 		finalVertexes.push_back({ point, glm::vec3{0.0f, 1.0f, 0.0f} });
 
-		indices.push_back(i + size); // index starts from the last vertex of the previous loop
-		indices.push_back((i + size - 3) % (m_SegmentsNum + size + 1) + 4); // cyclically connect vertices
-		indices.push_back(m_SegmentsNum + 1 + size); // index of the center vertex
+		indices.push_back(static_cast<uint16_t>(i + size));
+		indices.push_back(static_cast<uint16_t>((i + size - 3) % (m_SegmentsNum + size + 1) + 4)); // cyclically connect vertices
+		indices.push_back(static_cast<uint16_t>(m_SegmentsNum + 1 + size)); // index of the center vertex
 	}
 
 	startPoint.pos = { vertices[2].pos.x - m_Radius,vertices[2].pos.y };
@@ -84,9 +84,9 @@ void RoundedRect::InitializeRoundedRect(const VkPhysicalDevice& physicalDevice, 
 		glm::vec2 point(startPoint.pos.x + m_Radius * glm::cos(angle), startPoint.pos.y + m_Radius * glm::sin(angle));
 		finalVertexes.push_back({ point, glm::vec3{0.0f, 1.0f, 0.0f} });
 
-		indices.push_back(i + size); // index starts from the last vertex of the previous loop
-		indices.push_back((i + size - 3) % (m_SegmentsNum + size + 1) + 4); // cyclically connect vertices
-		indices.push_back(m_SegmentsNum + 1 + size); // index of the center vertex
+		indices.push_back(static_cast<uint16_t>(i + size)); // index starts from the last vertex of the previous loop
+		indices.push_back(static_cast<uint16_t>((i + size - 3) % (m_SegmentsNum + size + 1) + 4)); // cyclically connect vertices
+		indices.push_back(static_cast<uint16_t>(m_SegmentsNum + 1 + size)); // index of the center vertex
 	}
 
 	startPoint.pos = { vertices[2].pos.x,vertices[2].pos.y };
@@ -99,9 +99,9 @@ void RoundedRect::InitializeRoundedRect(const VkPhysicalDevice& physicalDevice, 
 		glm::vec2 point(startPoint.pos.x + m_Radius * glm::cos(angle), startPoint.pos.y + m_Radius * glm::sin(angle));
 		finalVertexes.push_back({ point, glm::vec3{0.0f, 1.0f, 0.0f} });
 
-		indices.push_back(i + size); // index starts from the last vertex of the previous loop
-		indices.push_back((i + size - 3) % (m_SegmentsNum + size + 1) + 4); // cyclically connect vertices
-		indices.push_back(m_SegmentsNum + 1 + size); // index of the center vertex
+		indices.push_back(static_cast<uint16_t>(i + size)); // index starts from the last vertex of the previous loop
+		indices.push_back(static_cast<uint16_t>((i + size - 3) % (m_SegmentsNum + size + 1) + 4)); // cyclically connect vertices
+		indices.push_back(static_cast<uint16_t>(m_SegmentsNum + 1 + size)); // index of the center vertex
 	}
 
 	vertices[0].pos = glm::vec2{ m_LeftPos.x, m_LeftPos.y + 3 * m_Radius };
@@ -114,12 +114,12 @@ void RoundedRect::InitializeRoundedRect(const VkPhysicalDevice& physicalDevice, 
 	finalVertexes.push_back({ vertices[2].pos, vertices[2].color });
 	finalVertexes.push_back({ vertices[3].pos, vertices[3].color });
 
-	indices.push_back(finalVertexes.size() - 4);
-	indices.push_back(finalVertexes.size() - 4 + 1);
-	indices.push_back(finalVertexes.size() - 4 + 2);
-	indices.push_back(finalVertexes.size() - 4);
-	indices.push_back(finalVertexes.size() - 4 + 2);
-	indices.push_back(finalVertexes.size() - 4 + 3);
+	indices.push_back(static_cast<uint16_t>(finalVertexes.size() - 4));
+	indices.push_back(static_cast<uint16_t>(finalVertexes.size() - 4 + 1));
+	indices.push_back(static_cast<uint16_t>(finalVertexes.size() - 4 + 2));
+	indices.push_back(static_cast<uint16_t>(finalVertexes.size() - 4));
+	indices.push_back(static_cast<uint16_t>(finalVertexes.size() - 4 + 2));
+	indices.push_back(static_cast<uint16_t>(finalVertexes.size() - 4 + 3));
 
 
 	// middle rect
@@ -133,12 +133,12 @@ void RoundedRect::InitializeRoundedRect(const VkPhysicalDevice& physicalDevice, 
 	finalVertexes.push_back({ vertices[2].pos, vertices[2].color });
 	finalVertexes.push_back({ vertices[3].pos, vertices[3].color });
 
-	indices.push_back(finalVertexes.size() - 4);
-	indices.push_back(finalVertexes.size() - 4 + 1);
-	indices.push_back(finalVertexes.size() - 4 + 2);
-	indices.push_back(finalVertexes.size() - 4);
-	indices.push_back(finalVertexes.size() - 4 + 2);
-	indices.push_back(finalVertexes.size() - 4 + 3);
+	indices.push_back(static_cast<uint16_t>(finalVertexes.size() - 4));
+	indices.push_back(static_cast<uint16_t>(finalVertexes.size() - 4 + 1));
+	indices.push_back(static_cast<uint16_t>(finalVertexes.size() - 4 + 2));
+	indices.push_back(static_cast<uint16_t>(finalVertexes.size() - 4));
+	indices.push_back(static_cast<uint16_t>(finalVertexes.size() - 4 + 2));
+	indices.push_back(static_cast<uint16_t>(finalVertexes.size() - 4 + 3));
 
 	//Right Rect
 	vertices[0].pos = glm::vec2{ m_LeftPos.x + 2 * m_Radius, m_LeftPos.y + 3 * m_Radius };
@@ -151,12 +151,12 @@ void RoundedRect::InitializeRoundedRect(const VkPhysicalDevice& physicalDevice, 
 	finalVertexes.push_back({ vertices[2].pos, vertices[2].color });
 	finalVertexes.push_back({ vertices[3].pos, vertices[3].color });
 
-	indices.push_back(finalVertexes.size() - 4);
-	indices.push_back(finalVertexes.size() - 4 + 1);
-	indices.push_back(finalVertexes.size() - 4 + 2);
-	indices.push_back(finalVertexes.size() - 4);
-	indices.push_back(finalVertexes.size() - 4 + 2);
-	indices.push_back(finalVertexes.size() - 4 + 3);
+	indices.push_back(static_cast<uint16_t>(finalVertexes.size() - 4));
+	indices.push_back(static_cast<uint16_t>(finalVertexes.size() - 4 + 1));
+	indices.push_back(static_cast<uint16_t>(finalVertexes.size() - 4 + 2));
+	indices.push_back(static_cast<uint16_t>(finalVertexes.size() - 4));
+	indices.push_back(static_cast<uint16_t>(finalVertexes.size() - 4 + 2));
+	indices.push_back(static_cast<uint16_t>(finalVertexes.size() - 4 + 3));
 
 
 	//Bottom Rect
@@ -170,15 +170,12 @@ void RoundedRect::InitializeRoundedRect(const VkPhysicalDevice& physicalDevice, 
 	finalVertexes.push_back({ vertices[2].pos, vertices[2].color });
 	finalVertexes.push_back({ vertices[3].pos, vertices[3].color });
 
-	indices.push_back(finalVertexes.size() - 4);
-	indices.push_back(finalVertexes.size() - 4 + 1);
-	indices.push_back(finalVertexes.size() - 4 + 2);
-	indices.push_back(finalVertexes.size() - 4);
-	indices.push_back(finalVertexes.size() - 4 + 2);
-	indices.push_back(finalVertexes.size() - 4 + 3);
-
-
-
+	indices.push_back(static_cast<uint16_t>(finalVertexes.size() - 4));
+	indices.push_back(static_cast<uint16_t>(finalVertexes.size() - 4 + 1));
+	indices.push_back(static_cast<uint16_t>(finalVertexes.size() - 4 + 2));
+	indices.push_back(static_cast<uint16_t>(finalVertexes.size() - 4));
+	indices.push_back(static_cast<uint16_t>(finalVertexes.size() - 4 + 2));
+	indices.push_back(static_cast<uint16_t>(finalVertexes.size() - 4 + 3));
 
 	m_Vertices = finalVertexes;
 

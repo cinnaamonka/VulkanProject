@@ -16,7 +16,8 @@ public:
 		m_FragmentShaderFile{ fragmentShaderFile },
 		m_VecShadersStageInfos{  },
 		m_InputBinding{ Vertex3D::GetBindingDescription() },
-		m_AttributeDescriptions{ Vertex3D::GetAttributeDescriptions() }
+		m_AttributeDescriptions{ Vertex3D::GetAttributeDescriptions() },
+		m_UBOSrc{}
 	{}
 
 	~GP2Shader3D() = default;

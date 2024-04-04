@@ -11,7 +11,8 @@
 class SwapChain final
 {
 public:
-    SwapChain() = default;
+    SwapChain();
+       
     ~SwapChain() = default;
 
     SwapChain(const SwapChain& other) = delete;
@@ -27,7 +28,7 @@ public:
 
     const VkFormat GetSwapChainImageFormat() const
     {
-        return swapChainImageFormat;
+        return m_SwapChainImageFormat;
     }
 
     std::vector<VkImageView>& GetSwapChainImageViews()
@@ -37,11 +38,11 @@ public:
 
     const VkExtent2D& GetSwapChainExtent()
     {
-        return swapChainExtent;
+        return m_SwapChainExtent;
     }
     const VkSwapchainKHR& GetSwapChain()
     {
-        return swapChain;
+        return m_SwapChain;
     }
 
 private:
@@ -49,10 +50,10 @@ private:
     VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities, GLFWwindow* window);
     VkSurfaceFormatKHR ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
 
-    VkSwapchainKHR swapChain;
+    VkSwapchainKHR m_SwapChain;
     std::vector<VkImage> swapChainImages;
-    VkFormat swapChainImageFormat;
-    VkExtent2D swapChainExtent;
+    VkFormat m_SwapChainImageFormat;
+    VkExtent2D m_SwapChainExtent;
 
     std::vector<VkImageView> swapChainImageViews;
 

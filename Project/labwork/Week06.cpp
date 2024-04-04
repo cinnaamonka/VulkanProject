@@ -20,7 +20,7 @@ void VulkanBase::setupDebugMessenger() {
 	VkDebugUtilsMessengerCreateInfoEXT createInfo;
 	populateDebugMessengerCreateInfo(createInfo);
 
-	if (CreateDebugUtilsMessengerEXT(instance, &createInfo, nullptr, &debugMessenger) != VK_SUCCESS) {
+	if (CreateDebugUtilsMessengerEXT(m_Instance, &createInfo, nullptr, &m_DebugMessenger) != VK_SUCCESS) {
 		throw std::runtime_error("failed to set up debug messenger!");
 	}
 }
@@ -38,8 +38,8 @@ void VulkanBase::createSyncObjects()
 	if (vkCreateSemaphore(device, &semaphoreInfo, nullptr, &imageAvailableSemaphore) != VK_SUCCESS ||
 		vkCreateSemaphore(device, &semaphoreInfo, nullptr, &renderFinishedSemaphore) != VK_SUCCESS ||
 		vkCreateSemaphore(device, &semaphoreInfo, nullptr, &renderFinishedSemaphore2) != VK_SUCCESS ||
-		vkCreateFence(device, &fenceInfo, nullptr, &inFlightFence) != VK_SUCCESS ||
-		vkCreateFence(device, &fenceInfo, nullptr, &inFlightFence2) != VK_SUCCESS)
+		vkCreateFence(device, &fenceInfo, nullptr, &m_InFlightFence) != VK_SUCCESS ||
+		vkCreateFence(device, &fenceInfo, nullptr, &m_InFlightFence2) != VK_SUCCESS)
 	{
 		throw std::runtime_error("failed to create synchronization objects for a frame!");
 	}
@@ -48,8 +48,8 @@ void VulkanBase::createSyncObjects()
 
 void VulkanBase::DrawFrame()
 {
-	vkWaitForFences(device, 1, &inFlightFence, VK_TRUE, UINT64_MAX);
-	vkResetFences(device, 1, &inFlightFence);
+	vkWaitForFences(device, 1, &m_InFlightFence, VK_TRUE, UINT64_MAX);
+	vkResetFences(device, 1, &m_InFlightFence);
 
 	// get next image to draw
 	uint32_t imageIndex;
@@ -112,7 +112,7 @@ void VulkanBase::DrawFrame()
 	submitInfo2.pSignalSemaphores = signalSemaphores2;
 	std::array<VkSubmitInfo, 2> submitInfos{ submitInfo1, submitInfo2 };
 
-	if (vkQueueSubmit(m_DeviceManager.GetGraphicsQueue(), submitInfos.size(), submitInfos.data(), inFlightFence) != VK_SUCCESS)
+	if (vkQueueSubmit(m_DeviceManager.GetGraphicsQueue(), static_cast<uint32_t>(submitInfos.size()), submitInfos.data(), m_InFlightFence) != VK_SUCCESS)
 	{
 		std::cerr << "Failed to submit draw command buffer!" << std::endl;
 		throw std::runtime_error("Failed to submit draw command buffer!");
@@ -120,7 +120,7 @@ void VulkanBase::DrawFrame()
 
 	vkQueueWaitIdle(m_DeviceManager.GetGraphicsQueue());
 
-	VkFence fences[] = { inFlightFence, inFlightFence2 };
+	VkFence fences[] = { m_InFlightFence, m_InFlightFence2 };
 
 	vkWaitForFences(device, 2, fences, VK_TRUE, UINT64_MAX);
 
@@ -129,7 +129,7 @@ void VulkanBase::DrawFrame()
 	VkPresentInfoKHR presentInfo{};
 	presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 
-	presentInfo.waitSemaphoreCount = presentWaitSemaphores.size();
+	presentInfo.waitSemaphoreCount = static_cast<uint32_t>(presentWaitSemaphores.size());
 	presentInfo.pWaitSemaphores = presentWaitSemaphores.data();
 
 	VkSwapchainKHR swapChains[] = { m_SwapChain.GetSwapChain() };
@@ -227,7 +227,7 @@ void VulkanBase::createInstance()
 		createInfo.pNext = nullptr;
 	}
 
-	if (vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS)
+	if (vkCreateInstance(&createInfo, nullptr, &m_Instance) != VK_SUCCESS)
 	{
 		throw std::runtime_error("failed to create instance!");
 	}

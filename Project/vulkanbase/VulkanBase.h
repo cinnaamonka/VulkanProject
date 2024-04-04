@@ -50,7 +50,7 @@ private:
 	
 	void CreateSurface();
 
-	GLFWwindow* window;
+	GLFWwindow* m_Window;
 	void initWindow();
 
 	Pipeline m_DAEPipeline;
@@ -64,16 +64,16 @@ private:
 	// Week 06
 	// Main initialization
 
-	VkInstance instance;
-	VkDebugUtilsMessengerEXT debugMessenger;
+	VkInstance m_Instance;
+	VkDebugUtilsMessengerEXT m_DebugMessenger;
 	VkDevice device = VK_NULL_HANDLE;
-	VkSurfaceKHR surface;
+	VkSurfaceKHR m_Surface;
 
 	VkSemaphore imageAvailableSemaphore;
 	VkSemaphore renderFinishedSemaphore;
 	VkSemaphore renderFinishedSemaphore2;
-	VkFence inFlightFence;
-	VkFence inFlightFence2;
+	VkFence m_InFlightFence;
+	VkFence m_InFlightFence2;
 
 	void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
 	void setupDebugMessenger();

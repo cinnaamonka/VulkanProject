@@ -17,7 +17,7 @@ void Oval::InitializeOval(const VkPhysicalDevice& physicalDevice, const VkDevice
 
     for (int i = 0; i < m_VertixesNum; i++)
     {
-        float angle = 2 * g_Pi * i / m_VertixesNum;
+        float angle = static_cast<float>(2 * g_Pi * i / m_VertixesNum);
         glm::vec2 point(m_Center.x + m_Radius * glm::cos(angle), m_Center.y + m_Radius * glm::sin(angle));
         finalVertexes.push_back({ point, glm::vec3{0.0f, 1.0f, 0.0f} });
     }

@@ -117,7 +117,7 @@ void DAEDescriptorPool<UBO>::createDescriptorSets()
 	VkDescriptorSetAllocateInfo allocInfo{};
 	allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
 	allocInfo.descriptorPool = m_DescriptorPool;
-	allocInfo.descriptorSetCount = m_Count;
+	allocInfo.descriptorSetCount = static_cast<uint32_t>(m_Count);
 	allocInfo.pSetLayouts = layouts.data();
 
 	m_DescriptorSets.resize(m_Count);

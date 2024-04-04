@@ -1,6 +1,13 @@
 #pragma once
 #include "SwapChain.h"
 
+SwapChain::SwapChain():
+	m_SwapChain{},
+	m_SwapChainExtent{},
+	m_SwapChainImageFormat{}
+{
+}
+
 SwapChainSupportDetails SwapChain::QuerySwapChainSupport(const VkPhysicalDevice& device,
 	const VkSurfaceKHR& surface)
 {
@@ -124,17 +131,17 @@ void SwapChain::CreateSwapChain(const VkSurfaceKHR& surface, GLFWwindow* window,
 
 	createInfo.oldSwapchain = VK_NULL_HANDLE;
 
-	if (vkCreateSwapchainKHR(device, &createInfo, nullptr, &swapChain) != VK_SUCCESS)
+	if (vkCreateSwapchainKHR(device, &createInfo, nullptr, &m_SwapChain) != VK_SUCCESS)
 	{
 		throw std::runtime_error("failed to create swap chain!");
 	}
 
-	vkGetSwapchainImagesKHR(device, swapChain, &imageCount, nullptr);
+	vkGetSwapchainImagesKHR(device, m_SwapChain, &imageCount, nullptr);
 	swapChainImages.resize(imageCount);
-	vkGetSwapchainImagesKHR(device, swapChain, &imageCount, swapChainImages.data());
+	vkGetSwapchainImagesKHR(device, m_SwapChain, &imageCount, swapChainImages.data());
 
-	swapChainImageFormat = surfaceFormat.format;
-	swapChainExtent = extent;
+	m_SwapChainImageFormat = surfaceFormat.format;
+	m_SwapChainExtent = extent;
 
 }
 
@@ -148,7 +155,7 @@ void SwapChain::CreateImageViews(const VkDevice& device)
 		createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
 		createInfo.image = swapChainImages[i];
 		createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-		createInfo.format = swapChainImageFormat;
+		createInfo.format = m_SwapChainImageFormat;
 		createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
 		createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
 		createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
