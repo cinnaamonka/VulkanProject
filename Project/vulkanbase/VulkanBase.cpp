@@ -176,7 +176,7 @@ void VulkanBase::OnMouseMove(GLFWwindow* window, double xpos, double ypos)
 	
 	if (state == GLFW_PRESS)
 	{
-		m_Camera.OnMouseMove(xpos, ypos, m_DragStart.x, Timer::GetElapsed());
+		m_Camera.OnMouseMove(xpos, ypos, m_DragStart.x, m_DragStart.y, Timer::GetElapsed());
 	}
 }
 void VulkanBase::OnMouseEvent(GLFWwindow* window, int button, int action, int mods)

@@ -31,7 +31,6 @@ void VulkanBase::setupDebugMessenger()
 
 void VulkanBase::createSyncObjects()
 {
-
 	VkSemaphoreCreateInfo semaphoreInfo{};
 	semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
 
@@ -47,7 +46,6 @@ void VulkanBase::createSyncObjects()
 	{
 		throw std::runtime_error("failed to create synchronization objects for a frame!");
 	}
-
 }
 
 void VulkanBase::DrawFrame()
@@ -77,10 +75,6 @@ void VulkanBase::DrawFrame()
 	m_DAEPipeline.Record(m_SwapChain.GetSwapChainExtent(), imageIndex);
 
 	ViewProjection vp3D{};
-
-	glm::vec3 cameraPos = glm::vec3(m_CameraRadius * cosf(m_Rotation), -6, m_CameraRadius * sinf(m_Rotation));
-	glm::vec3 targetPos = glm::vec3(0.f, 0.f, 0.f);
-	glm::vec3 upVector = glm::vec3(0, 1, 0);
 
 	m_Camera.Update(Timer::GetElapsed());
 
