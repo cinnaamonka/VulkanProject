@@ -93,46 +93,48 @@ struct Camera
 	}
 	void OnMouseMove(double xpos, double ypos, float dragStartX, float dragStartY, float elapsedSec)
 	{
-		// Calculate the change in mouse position
-		float dx = static_cast<float>(xpos) - dragStartX;
+		float threshold = 20.0f;
+
 		float dy = static_cast<float>(ypos) - dragStartY;
+		float dx = static_cast<float>(xpos) - dragStartX;
 
-		// Set threshold for sensitivity
-		float threshold = 5.0f;
+		// Set sensitivity for mouse movement
+		float sensitivity = 0.001f;
 
-		// Sensitivity of rotation
-		float sensitivity = 0.00001f;
-
-		// Update totalYaw based on mouse movement to the right
-		if (std::abs(dx) > threshold)
-		{
-			totalPitch += dx * sensitivity;
-		}
-
-		// Update totalPitch based on mouse movement up or down
 		if (std::abs(dy) > threshold)
 		{
-			totalYaw += dy * sensitivity;
+			// Update the pitch based on mouse movement
+			totalPitch += dy * sensitivity;
 		}
+		if (std::abs(dx) > threshold)
+		{
+			// Update the pitch based on mouse movement
+			totalYaw += dx * sensitivity;
+		}
+
+		// Clamp the pitch to prevent flipping
+		if (totalPitch > 89.0f)
+			totalPitch = 89.0f;
+		if (totalPitch < -89.0f)
+			totalPitch = -89.0f;
+
+		if (totalYaw > 89.0f)
+			totalYaw = 89.0f;
+		if (totalYaw < -89.0f)
+			totalYaw = -89.0f;
+
+		// Adjust the camera's orientation based on the new pitch
+		glm::mat4 rotationY = glm::rotate(glm::mat4(1.0f), glm::radians(totalPitch), UnitX);
+		glm::mat4 rotationX = glm::rotate(glm::mat4(1.0f), glm::radians(totalYaw), -UnitY);
+		forward = glm::vec3(rotationX * rotationY * glm::vec4(0.0f, 0.0f, 1.0f, 0.0f));
+		right = glm::vec3(rotationX * rotationY * glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
+		up = glm::vec3(rotationX * rotationY * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
 	}
 
 	void Update(float elapsedSec)
 	{
-		/*m_RotationMatrixX = glm::rotate(glm::mat4(1.0f), totalPitch, UnitY);
-		m_RotationMatrixY = glm::rotate(glm::mat4(1.0f), totalYaw, UnitX);*/
-
-		// Calculate the rotation matrix based on totalPitch and totalYaw
-		glm::mat4 rotationX = glm::rotate(glm::mat4(1.0f), totalPitch, UnitY);
-		glm::mat4 rotationY = glm::rotate(glm::mat4(1.0f), totalYaw, UnitX);
-		glm::mat4 rotation = rotationX * rotationY;
-
-		// Update the camera's forward, up, and right vectors
-		forward = glm::vec3(rotation * glm::vec4(0.0f, 0.0f, 1.0f, 0.0f)); // Assuming camera looks along -Z axis
-		up = glm::vec3(rotation * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f)); // Assuming camera's up vector is +Y
-		right = glm::vec3(rotation * glm::vec4(1.0f, 0.0f, 0.0f, 0.0f)); // Calculate right vector from up and forward vectors
-
-	
-
+		m_RotationMatrixX = glm::rotate(glm::mat4(1.0f), totalPitch, UnitY);
+		m_RotationMatrixY = glm::rotate(glm::mat4(1.0f), totalYaw, UnitX);
 	}
 
 	ViewProjection GetViewProjection(float screenWidth, float screenHeight, float nearPlane, float farPlane)
