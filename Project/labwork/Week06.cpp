@@ -6,7 +6,8 @@
 #include "../Engine/GraphicsPipeline3D.h"
 #include "../Engine/Timer.h"
 
-void VulkanBase::populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo) {
+void VulkanBase::populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo)
+{
 	createInfo = {};
 	createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
 	createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
@@ -22,7 +23,8 @@ void VulkanBase::setupDebugMessenger()
 	VkDebugUtilsMessengerCreateInfoEXT createInfo;
 	populateDebugMessengerCreateInfo(createInfo);
 
-	if (CreateDebugUtilsMessengerEXT(m_Instance, &createInfo, nullptr, &m_DebugMessenger) != VK_SUCCESS) {
+	if (CreateDebugUtilsMessengerEXT(m_Instance, &createInfo, nullptr, &m_DebugMessenger) != VK_SUCCESS) 
+	{
 		throw std::runtime_error("failed to set up debug messenger!");
 	}
 }
@@ -58,13 +60,6 @@ void VulkanBase::DrawFrame()
 	uint32_t imageIndex;
 	vkAcquireNextImageKHR(device, m_SwapChain.GetSwapChain(), UINT64_MAX, imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
 
-	ViewProjection vp{};
-	glm::vec3 scaleFactors(1 / 400.0f, 1 / 300.0f, 1.0f);
-
-	glm::vec3 cameraPos = glm::vec3(m_CameraRadius * cosf(m_Rotation), -6, m_CameraRadius * sinf(m_Rotation));
-	glm::vec3 targetPos = glm::vec3(0.f, 0.f, 0.f);
-	glm::vec3 upVector = glm::vec3(0, 1, 0);
-
 	float windowWidth = 800.0f;
 	float windowHeight = 600.0f;
 	float aspectRatio = windowWidth / windowHeight;
@@ -73,13 +68,25 @@ void VulkanBase::DrawFrame()
 	float nearPlane = 0.001f;
 	float farPlane = 100.0f;
 
+	// 2D Camera matrix
+	ViewProjection vp2D{};
+	vp2D = m_Camera.GetViewProjection(windowWidth, windowHeight, nearPlane, farPlane);
+
+	// draw pipeline 1.
+	m_DAEPipeline.GetGraphicsPipeline().SetUBO(vp2D, 0);
+	m_DAEPipeline.Record(m_SwapChain.GetSwapChainExtent(), imageIndex);
+
+	ViewProjection vp3D{};
+
+	glm::vec3 cameraPos = glm::vec3(m_CameraRadius * cosf(m_Rotation), -6, m_CameraRadius * sinf(m_Rotation));
+	glm::vec3 targetPos = glm::vec3(0.f, 0.f, 0.f);
+	glm::vec3 upVector = glm::vec3(0, 1, 0);
+
 	m_Camera.Update(Timer::GetElapsed());
 
-	vp = m_Camera.GetViewProjection(windowWidth, windowHeight, nearPlane, farPlane);
+	vp3D = m_Camera.GetViewProjection(windowWidth, windowHeight, nearPlane, farPlane);
 
-	m_DAEPipeline3D.GetGraphicsPipeline().SetUBO(vp, 0);
-	m_DAEPipeline.GetGraphicsPipeline().SetUBO(vp, 0);
-	m_DAEPipeline.Record(m_SwapChain.GetSwapChainExtent(), imageIndex);
+	m_DAEPipeline3D.GetGraphicsPipeline().SetUBO(vp3D, 0);
 	m_DAEPipeline3D.Record(m_SwapChain.GetSwapChainExtent(), imageIndex);
 
 	VkSubmitInfo submitInfo1{};
