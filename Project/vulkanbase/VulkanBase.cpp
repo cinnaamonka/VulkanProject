@@ -8,6 +8,7 @@
 #include <thread>
 #include <algorithm>
 
+
 VulkanBase::VulkanBase() :
 	m_Window{},
 	m_Surface{},

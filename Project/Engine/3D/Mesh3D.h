@@ -27,6 +27,8 @@ public:
 		m_UniformBuffersMapped = other.m_UniformBuffersMapped;
     }
 
+	
+
 	void Initialize(const VkPhysicalDevice& physicalDevice, const VkDevice& device,
 		const VkQueue& graphicsQueue, const CommandPool& commandPool);
 	void InitializeModel(const VkPhysicalDevice& physicalDevice, const VkDevice& device,

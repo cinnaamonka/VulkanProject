@@ -4,6 +4,7 @@
 #include  <iostream>
 #include <glm/glm.hpp>
 #include <array>
+#include <functional>
 #include <Vector>
 
 const std::vector<const char*> deviceExtensions =
@@ -42,6 +43,11 @@ struct Vertex3D
 	glm::vec3 normal;
 	glm::vec3 color;
 
+	bool operator==(const Vertex3D& other) const 
+	{
+		return position == other.position && color == other.color && normal == other.normal;
+	}
+
 	static VkVertexInputBindingDescription GetBindingDescription()
 	{
 		VkVertexInputBindingDescription bindingDescription{};
@@ -77,7 +83,32 @@ struct Vertex3D
 
 		return attributeDescriptions;
 	}
+
 };
+namespace std {
+	template<>
+	struct hash<glm::vec3> {
+		size_t operator()(const glm::vec3& v) const {
+			size_t h1 = std::hash<float>{}(v.x);
+			size_t h2 = std::hash<float>{}(v.y);
+			size_t h3 = std::hash<float>{}(v.z);
+			return h1 ^ (h2 << 1) ^ (h3 << 2);
+		}
+	};
+}
+
+namespace std
+{
+	template<> struct hash<Vertex3D>
+	{
+		size_t operator()(Vertex3D const& vertex) const
+		{
+			return ((hash<glm::vec3>()(vertex.position) ^
+				(hash<glm::vec3>()(vertex.color) << 1)) >> 1) ^
+				(hash<glm::vec3>()(vertex.normal) << 1);
+		}
+	};
+}
 struct ViewProjection 
 {
 	glm::mat4 proj;

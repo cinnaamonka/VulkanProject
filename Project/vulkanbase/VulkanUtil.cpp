@@ -2,6 +2,8 @@
 #include "../Engine/Structs.h"
 #include <set>
 #include <string>
+#include <unordered_map>
+#include <functional>
 
 
 #define TINYOBJLOADER_IMPLEMENTATION
@@ -116,6 +118,8 @@ void LoadModel(const std::string& filename, std::vector<Vertex3D>& vertices, std
 		throw std::runtime_error(warn + err);
 	}
 
+	std::unordered_map<Vertex3D, uint32_t> uniqueVertices{};
+
 	// Loop trough every shape that was read from the file
 	for (const auto& shape : shapes)
 	{
@@ -146,9 +150,12 @@ void LoadModel(const std::string& filename, std::vector<Vertex3D>& vertices, std
 				attrib.colors[static_cast<uint64_t>(3) * index.vertex_index + static_cast<uint64_t>(2)]
 			};
 
-			// Add index to indices vector
-			vertices.push_back(vertex);
-			indices.push_back(indices.size());
+			if (uniqueVertices.count(vertex) == 0)
+			{
+				uniqueVertices[vertex] = static_cast<uint32_t>(vertices.size());
+				vertices.push_back(vertex);
+			}
+			indices.push_back(uniqueVertices[vertex]);
 		}
 	}
 
