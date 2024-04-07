@@ -29,6 +29,7 @@ public:
 	void Destroy();
 	void BindAsVertexBuffer(const VkCommandBuffer& commandBuffer);
 	void BindAsIndexBuffer(const VkCommandBuffer& commandBuffer);
+	void BindAsModelIndexBuffer(const VkCommandBuffer& commandBuffer);
 	VkBuffer& GetVkBuffer();
 	const VkDeviceSize& GetSizeInBytes();
 

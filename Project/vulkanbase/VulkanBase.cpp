@@ -1,13 +1,14 @@
 #include "VulkanBase.h"
 #include "../Engine/Meshes/Rect.h"
 #include "../Engine/Timer.h"
+#include "VulkanUtil.h"
 
 #include <functional>
 #include <chrono>
 #include <thread>
 #include <algorithm>
 
-VulkanBase::VulkanBase():
+VulkanBase::VulkanBase() :
 	m_Window{},
 	m_Surface{},
 	imageAvailableSemaphore{},
@@ -18,11 +19,49 @@ VulkanBase::VulkanBase():
 	m_InFlightFence2{},
 	m_Instance{},
 	m_DeviceManager{},
-	m_CameraRadius{5},
+	m_CameraRadius{ 5 },
 	m_DragStart{},
 	m_Rotation{},
 	m_Camera{}
 {
+
+	const float xOffset = 3.f;
+
+	glm::vec3 vertices[] = {
+	glm::vec3(-0.5f - 0.3f + xOffset, -0.5f, -0.5f),
+	glm::vec3(-0.5f - 0.3f + xOffset, -0.5f, 0.5f),
+	glm::vec3(-0.5f - 0.3f + xOffset, 0.5f, -0.5f),
+	glm::vec3(-0.5f - 0.3f + xOffset, 0.5f, 0.5f),
+	glm::vec3(0.5f - 0.3f + xOffset, -0.5f, -0.5f),
+	glm::vec3(0.5f - 0.3f + xOffset, -0.5f, 0.5f),
+	glm::vec3(0.5f - 0.3f + xOffset, 0.5f, -0.5f),
+	glm::vec3(0.5f - 0.3f + xOffset, 0.5f, 0.5f)
+	};
+
+	for (int i = 0; i < 8; ++i)
+	{
+		m_CubeMesh.AddVertex(vertices[i], glm::vec3(1.0f)); // Assuming color is white for all vertices
+	}
+
+	m_CubeMesh.AddTriangle(0, 1, 2);
+	m_CubeMesh.AddTriangle(1, 3, 2);
+
+	m_CubeMesh.AddTriangle(4, 0, 6);
+	m_CubeMesh.AddTriangle(0, 2, 6);
+
+	m_CubeMesh.AddTriangle(5, 4, 7);
+	m_CubeMesh.AddTriangle(4, 6, 7);
+
+	m_CubeMesh.AddTriangle(1, 5, 3);
+	m_CubeMesh.AddTriangle(5, 7, 3);
+
+	m_CubeMesh.AddTriangle(4, 5, 0);
+	m_CubeMesh.AddTriangle(5, 1, 0);
+
+	m_CubeMesh.AddTriangle(2, 3, 6);
+	m_CubeMesh.AddTriangle(3, 7, 6);
+
+	LoadModel(MODEL_PATH, m_Model.GetVertices(), m_Model.GetModelIndices(), m_Model);
 }
 
 void VulkanBase::Run()
@@ -65,19 +104,20 @@ void VulkanBase::InitVulkan()
 	m_DeviceManager.PickPhysicalDevice(m_Instance, m_Surface);
 	m_DeviceManager.CreateLogicalDevice(device, m_Surface);
 
-	m_SwapChain.CreateSwapChain(m_Surface, m_Window, FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(), m_Surface),device, m_DeviceManager.GetPhysicalDevice());
-	m_SwapChain.CreateImageViews(device); 
+	m_SwapChain.CreateSwapChain(m_Surface, m_Window, FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(), m_Surface), device, m_DeviceManager.GetPhysicalDevice());
+	m_SwapChain.CreateImageViews(device);
 
 	m_CommandPool.CreateCommandPool(device, FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(), m_Surface));
 
 	m_DAEPipeline.Initialize(device, m_DeviceManager.GetPhysicalDevice(), m_SwapChain.GetSwapChainImageFormat(),
 		m_SwapChain.GetSwapChainImageViews(),
 		m_SwapChain.GetSwapChainExtent(), FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(), m_Surface),
-		m_DeviceManager.GetGraphicsQueue(),m_CommandPool);
+		m_DeviceManager.GetGraphicsQueue(), m_CommandPool);
+
 
 	m_DAEPipeline3D.Initialize(device, m_DeviceManager.GetPhysicalDevice(), m_SwapChain.GetSwapChainImageFormat(),
-		m_SwapChain.GetSwapChainImageViews(),m_SwapChain.GetSwapChainExtent(),
-		FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(), m_Surface), m_DeviceManager.GetGraphicsQueue(), m_CommandPool);
+		m_SwapChain.GetSwapChainImageViews(), m_SwapChain.GetSwapChainExtent(),
+		FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(), m_Surface), m_DeviceManager.GetGraphicsQueue(), m_CommandPool, m_CubeMesh, m_Model);
 
 	// week 06
 	createSyncObjects();
@@ -118,12 +158,12 @@ void VulkanBase::Cleanup()
 
 	m_DAEPipeline.DestroyMeshes(device);
 	m_DAEPipeline3D.DestroyMeshes(device);
-	
+
 	vkDestroyDevice(device, nullptr);
 	vkDestroySurfaceKHR(m_Instance, m_Surface, nullptr);
 	vkDestroyInstance(m_Instance, nullptr);
 
-	
+
 	glfwDestroyWindow(m_Window);
 	glfwTerminate();
 }
@@ -173,7 +213,7 @@ void VulkanBase::OnMouseMove(GLFWwindow* window, double xpos, double ypos)
 {
 	int state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
 
-	
+
 	if (state == GLFW_PRESS)
 	{
 		m_Camera.OnMouseMove(xpos, ypos, m_DragStart.x, m_DragStart.y, Timer::GetElapsed());

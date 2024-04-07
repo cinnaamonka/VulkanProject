@@ -112,17 +112,6 @@ struct Camera
 			totalYaw += dx * sensitivity;
 		}
 
-		// Clamp the pitch to prevent flipping
-		if (totalPitch > 89.0f)
-			totalPitch = 89.0f;
-		if (totalPitch < -89.0f)
-			totalPitch = -89.0f;
-
-		if (totalYaw > 89.0f)
-			totalYaw = 89.0f;
-		if (totalYaw < -89.0f)
-			totalYaw = -89.0f;
-
 		// Adjust the camera's orientation based on the new pitch
 		glm::mat4 rotationY = glm::rotate(glm::mat4(1.0f), glm::radians(totalPitch), UnitX);
 		glm::mat4 rotationX = glm::rotate(glm::mat4(1.0f), glm::radians(totalYaw), -UnitY);

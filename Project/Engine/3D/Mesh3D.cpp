@@ -58,7 +58,44 @@ void Mesh3D::Initialize(const VkPhysicalDevice& physicalDevice, const VkDevice& 
 
 	CreateUniformBuffers(device, physicalDevice);
 }
+void Mesh3D::InitializeModel(const VkPhysicalDevice& physicalDevice, const VkDevice& device,
+	const VkQueue& graphicsQueue, const CommandPool& commandPool)
+{
+	VkDeviceSize bufferSize = sizeof(Vertex3D) * m_Vertices.size();
 
+	m_VertexBuffer = std::make_unique<DAEDataBuffer>(physicalDevice, device,
+		VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, bufferSize);
+
+	m_IndexBuffer = std::make_unique<DAEDataBuffer>(physicalDevice, device,
+		VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, bufferSize);
+
+	VkBuffer stagingBuffer{};
+	VkDeviceMemory stagingBufferMemory{};
+
+	VertexBuffer::CreateVertexBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+		stagingBuffer, stagingBufferMemory, device, physicalDevice);
+
+	void* data;
+	vkMapMemory(device, stagingBufferMemory, 0, bufferSize, 0, &data);
+	memcpy(data, m_Vertices.data(), (size_t)bufferSize);
+	vkUnmapMemory(device, stagingBufferMemory);
+
+	m_VertexBuffer->Destroy();
+	m_IndexBuffer->Destroy();
+
+	VertexBuffer::CreateVertexBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+		VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_VertexBuffer->GetVkBuffer(), m_VertexBuffer->GetDeviceMemory(), device, physicalDevice);
+
+	BaseBuffer::CopyBuffer(stagingBuffer, m_VertexBuffer->GetVkBuffer(), bufferSize, device, commandPool, graphicsQueue);
+
+	vkDestroyBuffer(device, stagingBuffer, nullptr);
+	vkFreeMemory(device, stagingBufferMemory, nullptr);
+
+	IndexBuffer::CreateIndexBuffer(m_ModelIndices, device, commandPool, graphicsQueue, physicalDevice,
+		m_IndexBuffer->GetVkBuffer(), m_IndexBuffer->GetDeviceMemory());
+
+	CreateUniformBuffers(device, physicalDevice);
+}
 void Mesh3D::DestroyMesh(const VkDevice& device)
 {
 	m_IndexBuffer->Destroy();
@@ -79,17 +116,36 @@ void Mesh3D::AddTriangle(uint16_t i1, uint16_t i2, uint16_t i3, uint16_t offset)
 
 void Mesh3D::Draw(const VkPipelineLayout& pipelineLayout, const VkCommandBuffer& commandBuffer)
 {
-	m_VertexBuffer->BindAsVertexBuffer(commandBuffer);
-	m_IndexBuffer->BindAsIndexBuffer(commandBuffer);
-	vkCmdPushConstants(
-		commandBuffer,
-		pipelineLayout,
-		VK_SHADER_STAGE_VERTEX_BIT,
-		0,
-		sizeof(MeshData),
-		&m_VertexConstant);
+	
 
-	vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(m_Indices.size()), 1, 0, 0, 0);
+	if (m_ModelIndices.size() == 0)
+	{
+		m_VertexBuffer->BindAsVertexBuffer(commandBuffer);
+		m_IndexBuffer->BindAsIndexBuffer(commandBuffer);
+		vkCmdPushConstants(
+			commandBuffer,
+			pipelineLayout,
+			VK_SHADER_STAGE_VERTEX_BIT,
+			0,
+			sizeof(MeshData),
+			&m_VertexConstant);
+		
+		vkCmdDrawIndexed(commandBuffer, static_cast<uint16_t>(m_Indices.size()), 1, 0, 0, 0);
+	}
+	else
+	{
+		m_VertexBuffer->BindAsVertexBuffer(commandBuffer);
+		m_IndexBuffer->BindAsModelIndexBuffer(commandBuffer);
+		vkCmdPushConstants(
+			commandBuffer,
+			pipelineLayout,
+			VK_SHADER_STAGE_VERTEX_BIT,
+			0,
+			sizeof(MeshData),
+			&m_VertexConstant);
+
+		vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(m_ModelIndices.size()), 1, 0, 0, 0);
+	}
 }
 
 void Mesh3D::CreateUniformBuffers(const VkDevice& device, const VkPhysicalDevice& physcialDevice)

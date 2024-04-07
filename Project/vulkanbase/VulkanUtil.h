@@ -9,6 +9,7 @@
 #include <GLFW/glfw3native.h>
 
 #include "../Engine/Structs.h"
+#include "../Engine/3D/Mesh3D.h"
 
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
@@ -32,3 +33,4 @@ QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device, const VkSurfaceKHR
 
 bool CheckDeviceExtensionSupport(const VkPhysicalDevice& device);
 
+void LoadModel(const std::string& filename, std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, Mesh3D& mesh); 

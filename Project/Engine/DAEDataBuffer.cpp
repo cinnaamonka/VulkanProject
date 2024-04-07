@@ -55,7 +55,10 @@ void DAEDataBuffer::BindAsIndexBuffer(const VkCommandBuffer& commandBuffer)
 {
 	vkCmdBindIndexBuffer(commandBuffer, m_VkBuffer, 0, VK_INDEX_TYPE_UINT16);
 }
-
+void DAEDataBuffer::BindAsModelIndexBuffer(const VkCommandBuffer& commandBuffer)
+{
+	vkCmdBindIndexBuffer(commandBuffer, m_VkBuffer, 0, VK_INDEX_TYPE_UINT32);
+}
 VkBuffer& DAEDataBuffer::GetVkBuffer()
 {
 	return m_VkBuffer;

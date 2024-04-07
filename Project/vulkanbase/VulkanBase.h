@@ -71,6 +71,10 @@ private:
 
 	CommandPool m_CommandPool;
 
+	Mesh3D m_CubeMesh;
+	Mesh3D m_Model;
+	const std::string MODEL_PATH = "models/viking_room.obj";
+
 	// Week 06
 	// Main initialization
 
