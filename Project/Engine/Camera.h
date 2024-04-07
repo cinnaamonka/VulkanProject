@@ -31,7 +31,7 @@ struct Camera
 	{
 	}
 
-	glm::vec3 origin = { 1 * cosf(0),0,-5 * sinf(1) };
+	glm::vec3 origin = { 1 * cosf(0),0,-30 * sinf(1) };
 	float fovAngle = 90.f;
 
 	glm::vec3 forward = { 0,0,1 };

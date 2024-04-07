@@ -17,6 +17,16 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(glfw)
 
+include(FetchContent)
+
+FetchContent_Declare(
+  tinyobjloader
+  GIT_REPOSITORY https://github.com/tinyobjloader/tinyobjloader.git
+  GIT_TAG        release # You can specify a particular version tag here
+)
+
+FetchContent_MakeAvailable(tinyobjloader)
+
 # Find the required packages
 find_package(Vulkan REQUIRED)
 
@@ -30,3 +40,12 @@ add_subdirectory(Project)
 #    COMMAND ${CMAKE_COMMAND} -E copy_if_different
 #        "${CMAKE_SOURCE_DIR}/path_to_json/VK_LAYER_KHRONOS_validation.json"
 #        $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+
+# Set the source directory
+set(SOURCE_DIR ${CMAKE_SOURCE_DIR}/Project/models)
+
+# Set the destination directory
+set(DESTINATION_DIR ${CMAKE_BINARY_DIR}/Project)
+
+# Copy the folder to the destination directory
+file(COPY ${SOURCE_DIR} DESTINATION ${DESTINATION_DIR})
