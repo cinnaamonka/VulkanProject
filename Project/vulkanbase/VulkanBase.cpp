@@ -28,65 +28,65 @@ VulkanBase::VulkanBase() :
 
 	const float xOffset = 3.f;
 
-	glm::vec3 vertices[] = {
-	glm::vec3((-0.5f - 0.3f + xOffset) * 10.0f, -0.5f * 10.0f, -0.5f * 10.0f),
-	glm::vec3((-0.5f - 0.3f + xOffset) * 10.0f, -0.5f * 10.0f,  0.5f * 10.0f),
-	glm::vec3((-0.5f - 0.3f + xOffset) * 10.0f,  0.5f * 10.0f, -0.5f * 10.0f),
-	glm::vec3((-0.5f - 0.3f + xOffset) * 10.0f,  0.5f * 10.0f,  0.5f * 10.0f),
-	glm::vec3((0.5f - 0.3f + xOffset) * 10.0f, -0.5f * 10.0f, -0.5f * 10.0f),
-	glm::vec3((0.5f - 0.3f + xOffset) * 10.0f, -0.5f * 10.0f,  0.5f * 10.0f),
-	glm::vec3((0.5f - 0.3f + xOffset) * 10.0f,  0.5f * 10.0f, -0.5f * 10.0f),
-	glm::vec3((0.5f - 0.3f + xOffset) * 10.0f,  0.5f * 10.0f,  0.5f * 10.0f)
-	};
+	//glm::vec3 vertices[] =
+	//{
+	//glm::vec3((-0.5f - 0.3f + xOffset) * 10.0f, -0.5f * 10.0f, -0.5f * 10.0f), //Front bottom-left corner
+	//glm::vec3((-0.5f - 0.3f + xOffset) * 10.0f, -0.5f * 10.0f,  0.5f * 10.0f), //Back bottom-left corner
+	//glm::vec3((-0.5f - 0.3f + xOffset) * 10.0f,  0.5f * 10.0f, -0.5f * 10.0f), //Front top-left corner
+	//glm::vec3((-0.5f - 0.3f + xOffset) * 10.0f,  0.5f * 10.0f,  0.5f * 10.0f), //Back top-left corner
+	//glm::vec3((0.5f - 0.3f + xOffset) * 10.0f, -0.5f * 10.0f, -0.5f * 10.0f),  //Front bottom-right corner
+	//glm::vec3((0.5f - 0.3f + xOffset) * 10.0f, -0.5f * 10.0f,  0.5f * 10.0f),  //Back bottom-right corner
+	//glm::vec3((0.5f - 0.3f + xOffset) * 10.0f,  0.5f * 10.0f, -0.5f * 10.0f),  //Front top-right corner
+	//glm::vec3((0.5f - 0.3f + xOffset) * 10.0f,  0.5f * 10.0f,  0.5f * 10.0f)   //Back top-right corner
 
+	//};
 
-	m_CubeMesh.AddTriangle(0, 1, 2);
-	m_CubeMesh.AddTriangle(1, 3, 2);
+	//m_CubeMesh.AddTriangle(0, 1, 2);// front face
+	//m_CubeMesh.AddTriangle(1, 3, 2);
 
-	m_CubeMesh.AddTriangle(4, 0, 6);
-	m_CubeMesh.AddTriangle(0, 2, 6);
+	//m_CubeMesh.AddTriangle(4, 0, 6);
+	//m_CubeMesh.AddTriangle(0, 2, 6);//back
 
-	m_CubeMesh.AddTriangle(5, 4, 7);
-	m_CubeMesh.AddTriangle(4, 6, 7);
+	//m_CubeMesh.AddTriangle(5, 4, 7);
+	//m_CubeMesh.AddTriangle(4, 6, 7);//top
 
-	m_CubeMesh.AddTriangle(1, 5, 3);
-	m_CubeMesh.AddTriangle(5, 7, 3);
+	//m_CubeMesh.AddTriangle(1, 5, 3);
+	//m_CubeMesh.AddTriangle(5, 7, 3);//bottom
 
-	m_CubeMesh.AddTriangle(4, 5, 0);
-	m_CubeMesh.AddTriangle(5, 1, 0);
+	//m_CubeMesh.AddTriangle(2, 3, 6);// right
+	//m_CubeMesh.AddTriangle(3, 7, 6);
 
-	m_CubeMesh.AddTriangle(2, 3, 6);
-	m_CubeMesh.AddTriangle(3, 7, 6);
+	//m_CubeMesh.AddTriangle(4, 5, 0);// left 
+	//m_CubeMesh.AddTriangle(5, 1, 0);
 
-	for (int i = 0; i < 8; ++i)
-	{
-		m_CubeMesh.AddVertex(vertices[i], glm::vec3(1.0f), vertices[i]); // Assuming color is white for all vertices
-	}
+	//for (int i = 0; i < 8; ++i)
+	//{
+	//	m_CubeMesh.AddVertex(vertices[i], glm::vec3(1.0f), vertices[i]); // Assuming color is white for all vertices
+	//}
+	//std::vector<Vertex3D> meshVertexes = m_CubeMesh.GetVertices();
 
-	// Calculate normals
-	for (size_t i = 0; i < m_CubeMesh.GetIndices().size(); i += 3) 
-	{
-		uint16_t i1 = m_CubeMesh.GetIndices()[i];
-		uint16_t i2 = m_CubeMesh.GetIndices()[i + 1];
-		uint16_t i3 = m_CubeMesh.GetIndices()[i + 2];
+	//// Calculate normals
+	//for (size_t i = 0; i < m_CubeMesh.GetIndices().size(); i += 3)
+	//{
+	//	uint16_t i1 = m_CubeMesh.GetIndices()[i];
+	//	uint16_t i2 = m_CubeMesh.GetIndices()[i + 1];
+	//	uint16_t i3 = m_CubeMesh.GetIndices()[i + 2];
 
-		glm::vec3 v1 = vertices[i1];
-		glm::vec3 v2 = vertices[i2];
-		glm::vec3 v3 = vertices[i3];
+	//	glm::vec3 v1 = meshVertexes[i1].position;
+	//	glm::vec3 v2 = meshVertexes[i2].position;
+	//	glm::vec3 v3 = meshVertexes[i3].position;
 
-		glm::vec3 faceNormal = glm::normalize(glm::cross(v2 - v1, v3 - v1));
+	//	glm::vec3 faceNormal = glm::normalize(glm::cross(v2 - v1, v3 - v1));
+	//	if (i / 2 % 2 == 1) faceNormal *= 1;
+	//	// Add the face normal to each vertex normal
+	//	meshVertexes[i1].normal += faceNormal;
+	//	meshVertexes[i2].normal += faceNormal;
+	//	meshVertexes[i3].normal += faceNormal;
+	//}
 
-		// Add the face normal to each vertex normal
-		m_CubeMesh.GetVertices()[i1].normal += faceNormal;
-		m_CubeMesh.GetVertices()[i2].normal += faceNormal;
-		m_CubeMesh.GetVertices()[i3].normal += faceNormal;
-	}
+	//m_CubeMesh.SetVertices(meshVertexes);
 
-	// Normalize the vertex normals
-	for (auto& vertex : m_CubeMesh.GetVertices())
-	{
-		vertex.normal = glm::normalize(vertex.normal);
-	}
+	m_CubeMesh.InitializeCube(glm::vec3((-0.5f - 0.3f + xOffset) * 10.0f, -0.5f * 10.0f, -0.5f * 10.0f), 10);
 
 	LoadModel(MODEL_PATH, m_Model.GetVertices(), m_Model.GetModelIndices(), m_Model);
 }

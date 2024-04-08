@@ -93,18 +93,19 @@ struct Camera
 	}
 	void OnMouseMove(double xpos, double ypos, float dragStartX, float dragStartY, float elapsedSec)
 	{
-		float threshold = 20.0f;
+		float threshold = 90.0f;
 
 		float dy = static_cast<float>(ypos) - dragStartY;
 		float dx = static_cast<float>(xpos) - dragStartX;
 
 		// Set sensitivity for mouse movement
-		float sensitivity = 0.001f;
+		float sensitivity = 0.0001f;
 
 		if (std::abs(dy) > threshold)  
 		{
 			// Update the pitch based on mouse movement
 			totalPitch += dy * sensitivity;
+
 		}
 		if (std::abs(dx) > threshold)
 		{
@@ -122,8 +123,8 @@ struct Camera
 
 	void Update(float elapsedSec)
 	{
-		m_RotationMatrixX = glm::rotate(glm::mat4(1.0f), totalPitch, UnitY);
-		m_RotationMatrixY = glm::rotate(glm::mat4(1.0f), totalYaw, UnitX);
+		m_RotationMatrixX = glm::rotate(glm::mat4(1.0f), totalPitch, UnitX);
+		m_RotationMatrixY = glm::rotate(glm::mat4(1.0f), totalYaw, UnitY);
 	}
 
 	ViewProjection GetViewProjection(float screenWidth, float screenHeight, float nearPlane, float farPlane)
@@ -135,10 +136,11 @@ struct Camera
 
 		// Generate the view matrix using glm::lookAt()
 		glm::vec3 targetPos = origin + forward;
-		vp.view = glm::lookAt(origin, targetPos, up);
+		vp.view = glm::lookAt(origin, targetPos, up) /** m_RotationMatrixX * m_RotationMatrixY*/;
 
 		// Generate the projection matrix using glm::perspective()
 		vp.proj = glm::perspective(glm::radians(fovAngle), aspectRatio, nearPlane, farPlane);
+		vp.proj[1][1] *= -1;
 
 		return vp;
 	}

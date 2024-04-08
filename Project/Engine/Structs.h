@@ -41,7 +41,7 @@ struct Vertex3D
 {
 	glm::vec3 position;
 	glm::vec3 normal;
-	glm::vec3 color;
+	glm::vec3 color{ 1.f,1.f,1.f };
 
 	bool operator==(const Vertex3D& other) const 
 	{
