@@ -112,19 +112,25 @@ struct Camera
 			// Update the pitch based on mouse movement
 			totalYaw += dx * sensitivity;
 		}
-
-		// Adjust the camera's orientation based on the new pitch
-		glm::mat4 rotationY = glm::rotate(glm::mat4(1.0f), glm::radians(totalPitch), UnitX);
-		glm::mat4 rotationX = glm::rotate(glm::mat4(1.0f), glm::radians(totalYaw), -UnitY);
-		forward = glm::vec3(rotationX * rotationY * glm::vec4(0.0f, 0.0f, 1.0f, 0.0f));
-		right = glm::vec3(rotationX * rotationY * glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
-		up = glm::vec3(rotationX * rotationY * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
 	}
 
 	void Update(float elapsedSec)
 	{
-		m_RotationMatrixX = glm::rotate(glm::mat4(1.0f), totalPitch, UnitX);
-		m_RotationMatrixY = glm::rotate(glm::mat4(1.0f), totalYaw, UnitY);
+		glm::mat4x4 finalRotation{};
+
+		finalRotation = glm::rotate(glm::mat4x4(1.f), glm::radians(totalPitch), right);
+		finalRotation *= glm::rotate(glm::mat4x4(1.f), glm::radians(totalYaw), { 0, 1, 0 });
+
+		forward = glm::vec3(glm::normalize(finalRotation * glm::vec4{ 0, 0, 1, 0 }));
+		right = glm::normalize(glm::cross({ 0, 1, 0 }, forward));
+		up = glm::normalize(glm::cross(forward, right));
+
+		// Adjust the camera's orientation based on the new pitch
+		glm::mat4 rotationY = glm::rotate(glm::mat4(1.0f), glm::radians(totalPitch), UnitX);
+		glm::mat4 rotationX = glm::rotate(glm::mat4(1.0f), glm::radians(totalYaw), -UnitY);
+		forward = glm::vec3(glm::normalize(finalRotation * glm::vec4{ 0, 0, 1, 0 }));
+		right = -glm::normalize(glm::cross({ 0, 1, 0 }, forward));
+		up = glm::normalize(glm::cross(forward, right));
 	}
 
 	ViewProjection GetViewProjection(float screenWidth, float screenHeight, float nearPlane, float farPlane)
@@ -136,7 +142,7 @@ struct Camera
 
 		// Generate the view matrix using glm::lookAt()
 		glm::vec3 targetPos = origin + forward;
-		vp.view = glm::lookAt(origin, targetPos, up) /** m_RotationMatrixX * m_RotationMatrixY*/;
+		vp.view = glm::lookAt(origin, targetPos, up);
 
 		// Generate the projection matrix using glm::perspective()
 		vp.proj = glm::perspective(glm::radians(fovAngle), aspectRatio, nearPlane, farPlane);
