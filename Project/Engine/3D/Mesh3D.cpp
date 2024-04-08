@@ -102,9 +102,9 @@ void Mesh3D::DestroyMesh(const VkDevice& device)
 	m_VertexBuffer->Destroy();
 }
 
-void Mesh3D::AddVertex(glm::vec3 pos, glm::vec3 color)
+void Mesh3D::AddVertex(const glm::vec3& pos, const glm::vec3& color, const glm::vec3& normal)
 {
-	m_Vertices.push_back({ pos,glm::vec3{1.f},color });
+	m_Vertices.push_back({ pos,normal,color });
 }
 
 void Mesh3D::AddTriangle(uint16_t i1, uint16_t i2, uint16_t i3, uint16_t offset)

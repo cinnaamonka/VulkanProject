@@ -39,10 +39,6 @@ VulkanBase::VulkanBase() :
 	glm::vec3((0.5f - 0.3f + xOffset) * 10.0f,  0.5f * 10.0f,  0.5f * 10.0f)
 	};
 
-	for (int i = 0; i < 8; ++i)
-	{
-		m_CubeMesh.AddVertex(vertices[i], glm::vec3(1.0f)); // Assuming color is white for all vertices
-	}
 
 	m_CubeMesh.AddTriangle(0, 1, 2);
 	m_CubeMesh.AddTriangle(1, 3, 2);
@@ -61,6 +57,36 @@ VulkanBase::VulkanBase() :
 
 	m_CubeMesh.AddTriangle(2, 3, 6);
 	m_CubeMesh.AddTriangle(3, 7, 6);
+
+	for (int i = 0; i < 8; ++i)
+	{
+		m_CubeMesh.AddVertex(vertices[i], glm::vec3(1.0f), vertices[i]); // Assuming color is white for all vertices
+	}
+
+	// Calculate normals
+	for (size_t i = 0; i < m_CubeMesh.GetIndices().size(); i += 3) 
+	{
+		uint16_t i1 = m_CubeMesh.GetIndices()[i];
+		uint16_t i2 = m_CubeMesh.GetIndices()[i + 1];
+		uint16_t i3 = m_CubeMesh.GetIndices()[i + 2];
+
+		glm::vec3 v1 = vertices[i1];
+		glm::vec3 v2 = vertices[i2];
+		glm::vec3 v3 = vertices[i3];
+
+		glm::vec3 faceNormal = glm::normalize(glm::cross(v2 - v1, v3 - v1));
+
+		// Add the face normal to each vertex normal
+		m_CubeMesh.GetVertices()[i1].normal += faceNormal;
+		m_CubeMesh.GetVertices()[i2].normal += faceNormal;
+		m_CubeMesh.GetVertices()[i3].normal += faceNormal;
+	}
+
+	// Normalize the vertex normals
+	for (auto& vertex : m_CubeMesh.GetVertices())
+	{
+		vertex.normal = glm::normalize(vertex.normal);
+	}
 
 	LoadModel(MODEL_PATH, m_Model.GetVertices(), m_Model.GetModelIndices(), m_Model);
 }

@@ -101,7 +101,7 @@ struct Camera
 		// Set sensitivity for mouse movement
 		float sensitivity = 0.001f;
 
-		if (std::abs(dy) > threshold)
+		if (std::abs(dy) > threshold)  
 		{
 			// Update the pitch based on mouse movement
 			totalPitch += dy * sensitivity;

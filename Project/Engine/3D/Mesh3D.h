@@ -34,7 +34,7 @@ public:
 	void InitializeModel(const VkPhysicalDevice& physicalDevice, const VkDevice& device,
 		const VkQueue& graphicsQueue, const CommandPool& commandPool);
 	void DestroyMesh(const VkDevice& device);
-	void AddVertex(glm::vec3 pos, glm::vec3 color);
+	void AddVertex(const glm::vec3& pos,const glm::vec3& color,const glm::vec3& normal);
 	void AddTriangle(uint16_t i1, uint16_t i2, uint16_t i3, uint16_t offset = 0);
 
 	void Draw(const VkPipelineLayout& pipelineLayout,const VkCommandBuffer& commandBuffer);
@@ -59,6 +59,10 @@ public:
 	std::vector<uint32_t> GetModelIndices() const 
 	{
 		return m_ModelIndices;
+	}
+	std::vector<uint16_t> GetIndices() const
+	{
+		return m_Indices;
 	}
 
 private:

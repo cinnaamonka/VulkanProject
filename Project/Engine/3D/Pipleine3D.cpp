@@ -28,7 +28,7 @@ void Pipeline3D::Initialize(const VkDevice& device, const VkPhysicalDevice& phys
 
 	mesh.Initialize(physicalDevice, device, graphicsQueue, commandPool);
 	model.InitializeModel(physicalDevice, device, graphicsQueue, commandPool);
-
+	 
 	m_Scene.AddMesh(mesh);
 	m_Scene.AddMesh(model);
 

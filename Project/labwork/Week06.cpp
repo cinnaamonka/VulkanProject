@@ -115,7 +115,6 @@ void VulkanBase::DrawFrame()
 
 	if (vkQueueSubmit(m_DeviceManager.GetGraphicsQueue(), static_cast<uint32_t>(submitInfos.size()), submitInfos.data(), m_InFlightFence) != VK_SUCCESS)
 	{
-		std::cerr << "Failed to submit draw command buffer!" << std::endl;
 		throw std::runtime_error("Failed to submit draw command buffer!");
 	}
 
