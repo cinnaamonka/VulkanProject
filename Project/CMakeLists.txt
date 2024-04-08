@@ -44,7 +44,7 @@ set(SOURCES
         # Add other source files here
 
 
-        "labwork/Week06.cpp"
+        
         "Engine/2D/GP2Shader2D.h" "Engine/2D/GP2Shader2D.cpp")
 
 # Create the executable
