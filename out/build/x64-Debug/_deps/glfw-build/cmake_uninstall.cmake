@@ -1,9 +1,9 @@
 
-if (NOT EXISTS "C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-build/install_manifest.txt")
-  message(FATAL_ERROR "Cannot find install manifest: \"C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-build/install_manifest.txt\"")
+if (NOT EXISTS "C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/Milestone/out/build/x64-Debug/_deps/glfw-build/install_manifest.txt")
+  message(FATAL_ERROR "Cannot find install manifest: \"C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/Milestone/out/build/x64-Debug/_deps/glfw-build/install_manifest.txt\"")
 endif()
 
-file(READ "C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-build/install_manifest.txt" files)
+file(READ "C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/Milestone/out/build/x64-Debug/_deps/glfw-build/install_manifest.txt" files)
 string(REGEX REPLACE "\n" ";" files "${files}")
 
 foreach (file ${files})

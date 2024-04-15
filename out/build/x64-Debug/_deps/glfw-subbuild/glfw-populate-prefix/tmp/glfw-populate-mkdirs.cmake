@@ -4,19 +4,19 @@
 cmake_minimum_required(VERSION 3.5)
 
 file(MAKE_DIRECTORY
-  "C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-src"
-  "C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-build"
-  "C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix"
-  "C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/tmp"
-  "C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp"
-  "C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src"
-  "C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp"
+  "C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/Milestone/out/build/x64-Debug/_deps/glfw-src"
+  "C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/Milestone/out/build/x64-Debug/_deps/glfw-build"
+  "C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/Milestone/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix"
+  "C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/Milestone/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/tmp"
+  "C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/Milestone/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp"
+  "C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/Milestone/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src"
+  "C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/Milestone/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp"
 )
 
 set(configSubDirs )
 foreach(subDir IN LISTS configSubDirs)
-    file(MAKE_DIRECTORY "C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/${subDir}")
+    file(MAKE_DIRECTORY "C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/Milestone/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/${subDir}")
 endforeach()
 if(cfgdir)
-  file(MAKE_DIRECTORY "C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp${cfgdir}") # cfgdir has leading slash
+  file(MAKE_DIRECTORY "C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/Milestone/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp${cfgdir}") # cfgdir has leading slash
 endif()

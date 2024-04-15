@@ -28,8 +28,8 @@ set_property(GLOBAL PROPERTY _CMAKE_FindGit_GIT_EXECUTABLE_VERSION
 include(ExternalProject)
 ExternalProject_Add(glfw-populate
                      "UPDATE_DISCONNECTED" "False" "GIT_REPOSITORY" "https://github.com/glfw/glfw.git" "EXTERNALPROJECT_INTERNAL_ARGUMENT_SEPARATOR" "GIT_TAG" "3.3.8"
-                    SOURCE_DIR          "C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-src"
-                    BINARY_DIR          "C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/_deps/glfw-build"
+                    SOURCE_DIR          "C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/Milestone/out/build/x64-Debug/_deps/glfw-src"
+                    BINARY_DIR          "C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/Milestone/out/build/x64-Debug/_deps/glfw-build"
                     CONFIGURE_COMMAND   ""
                     BUILD_COMMAND       ""
                     INSTALL_COMMAND     ""

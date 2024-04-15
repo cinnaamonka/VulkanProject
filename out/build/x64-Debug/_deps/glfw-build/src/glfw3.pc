@@ -1,7 +1,7 @@
-prefix=C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/install/x64-Debug
+prefix=C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/Milestone/out/install/x64-Debug
 exec_prefix=${prefix}
-includedir=C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/install/x64-Debug/include
-libdir=C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/install/x64-Debug/lib
+includedir=C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/Milestone/out/install/x64-Debug/include
+libdir=C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/Milestone/out/install/x64-Debug/lib
 
 Name: GLFW
 Description: A multi-platform library for OpenGL, window and input

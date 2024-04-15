@@ -3,6 +3,7 @@
 *.slo
 *.lo
 *.o
+*.pdb
 
 # Precompiled Headers
 *.gch
@@ -54,3 +55,5 @@ lib/*
 bin/*
 test/test_runner
 out/*
+out/build/x64-Debug/Project/VulkanLab01.pdb
+out/build/x64-Debug/Project/VulkanLab01.pdb
