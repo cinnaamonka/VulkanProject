@@ -5,7 +5,7 @@
 #include <glm/glm.hpp>
 #include <array>
 #include <functional>
-#include <Vector>
+#include <vector>
 
 const std::vector<const char*> deviceExtensions =
 {
