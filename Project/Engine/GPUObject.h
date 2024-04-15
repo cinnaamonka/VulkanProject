@@ -36,5 +36,5 @@ public:
 	}
 private:
 	std::unique_ptr<DAEDataBuffer> m_UBOBuffer;
-	UBO m_UBOSrc;
+	UBO m_UBOSrc{};
 };

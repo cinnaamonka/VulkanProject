@@ -40,7 +40,7 @@ bool DeviceManager::IsDeviceSuitable(const VkPhysicalDevice& physicalDevice, con
 {
 	QueueFamilyIndices indices = FindQueueFamilies(physicalDevice, surface);
 	bool extensionsSupported = CheckDeviceExtensionSupport(physicalDevice);
-	return indices.isComplete() && extensionsSupported;
+	return indices.IsComplete() && extensionsSupported;
 }
 
 void DeviceManager::CreateLogicalDevice(VkDevice& device, const VkSurfaceKHR& surface)

@@ -33,7 +33,7 @@ public:
 
     std::vector<VkImageView>& GetSwapChainImageViews()
     {
-        return swapChainImageViews;
+        return m_SwapChainImageViews;
     }
 
     const VkExtent2D& GetSwapChainExtent()
@@ -55,7 +55,7 @@ private:
     VkFormat m_SwapChainImageFormat;
     VkExtent2D m_SwapChainExtent;
 
-    std::vector<VkImageView> swapChainImageViews;
+    std::vector<VkImageView> m_SwapChainImageViews;
 
 
 };

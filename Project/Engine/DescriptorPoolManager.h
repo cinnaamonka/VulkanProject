@@ -69,7 +69,8 @@ DAEDescriptorPool<UBO>::DAEDescriptorPool(const VkDevice& device, size_t count)
 	:m_Device{ device },
 	m_Size{ sizeof(UBO) },
 	m_Count(count),
-	m_DescriptorSetLayout{ nullptr }
+	m_DescriptorSetLayout{ nullptr },
+	m_DescriptorPool{}
 {
 	
 }

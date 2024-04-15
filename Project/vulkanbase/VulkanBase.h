@@ -75,9 +75,6 @@ private:
 	Mesh3D m_Model;
 	const std::string MODEL_PATH = "models/viking_room.obj";
 
-	// Week 06
-	// Main initialization
-
 	VkInstance m_Instance;
 	VkDebugUtilsMessengerEXT m_DebugMessenger;
 	VkDevice device = VK_NULL_HANDLE;

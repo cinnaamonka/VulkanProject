@@ -8,8 +8,8 @@
 void GP2Shader::Init(const VkDevice& device, const VkPhysicalDevice& physicalDevice, const RenderPass& renderPass,
 	const VkExtent2D& swapChainExtent)
 {
-	m_VecShadersStageInfos.push_back(createFragmentShaderInfo(device));
-	m_VecShadersStageInfos.push_back(createVertexShaderInfo(device));
+	m_VecShadersStageInfos.push_back(CreateFragmentShaderInfo(device));
+	m_VecShadersStageInfos.push_back(CreateVertexShaderInfo(device));
 
 	m_UBOBuffer = std::make_unique<DAEDataBuffer>(
 		physicalDevice,
@@ -28,10 +28,10 @@ void GP2Shader::DestroyShaderModules(const VkDevice& device)
 	}
 	m_VecShadersStageInfos.clear();
 }
-VkPipelineShaderStageCreateInfo GP2Shader::createFragmentShaderInfo(const VkDevice& device)
+VkPipelineShaderStageCreateInfo GP2Shader::CreateFragmentShaderInfo(const VkDevice& device)
 {
 	std::vector<char> fragShaderCode = readFile(m_FragmentShaderFile);
-	VkShaderModule fragShaderModule = createShaderModule(device, fragShaderCode);
+	VkShaderModule fragShaderModule = CreateShaderModule(device, fragShaderCode);
 
 	VkPipelineShaderStageCreateInfo fragShaderStageInfo{};
 	fragShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -42,10 +42,10 @@ VkPipelineShaderStageCreateInfo GP2Shader::createFragmentShaderInfo(const VkDevi
 	return fragShaderStageInfo;
 }
 
-VkPipelineShaderStageCreateInfo GP2Shader::createVertexShaderInfo(const VkDevice& device)
+VkPipelineShaderStageCreateInfo GP2Shader::CreateVertexShaderInfo(const VkDevice& device)
 {
 	std::vector<char> vertShaderCode = readFile(m_VertexShaderFile);
-	VkShaderModule vertShaderModule = createShaderModule(device, vertShaderCode);
+	VkShaderModule vertShaderModule = CreateShaderModule(device, vertShaderCode);
 
 	VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
 	vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -81,7 +81,7 @@ void GP2Shader::DestroyDataBuffer()
 	m_UBOBuffer->Destroy();
 }
 
-VkShaderModule GP2Shader::createShaderModule(const VkDevice& device, const std::vector<char>& code)
+VkShaderModule GP2Shader::CreateShaderModule(const VkDevice& device, const std::vector<char>& code)
 {
 	VkShaderModuleCreateInfo createInfo{};
 	createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;

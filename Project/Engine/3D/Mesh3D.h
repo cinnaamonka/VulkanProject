@@ -136,7 +136,7 @@ public:
 	void Mesh3D::AddVertex(const Vertex3D& vertex)
 	{
 		m_Vertices.push_back(vertex);
-		m_Indices.push_back(m_Indices.size());
+		m_Indices.push_back(static_cast<uint16_t>(m_Indices.size()));
 	}
 private:
 	std::vector<Vertex3D> m_Vertices;

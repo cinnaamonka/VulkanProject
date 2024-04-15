@@ -147,7 +147,7 @@ void SwapChain::CreateSwapChain(const VkSurfaceKHR& surface, GLFWwindow* window,
 
 void SwapChain::CreateImageViews(const VkDevice& device)
 {
-	swapChainImageViews.resize(swapChainImages.size());
+	m_SwapChainImageViews.resize(swapChainImages.size());
 
 	for (size_t i = 0; i < swapChainImages.size(); i++)
 	{
@@ -166,7 +166,7 @@ void SwapChain::CreateImageViews(const VkDevice& device)
 		createInfo.subresourceRange.baseArrayLayer = 0;
 		createInfo.subresourceRange.layerCount = 1;
 
-		if (vkCreateImageView(device, &createInfo, nullptr, &swapChainImageViews[i]) != VK_SUCCESS)
+		if (vkCreateImageView(device, &createInfo, nullptr, &m_SwapChainImageViews[i]) != VK_SUCCESS)
 		{
 			throw std::runtime_error("failed to create image views!");
 		}

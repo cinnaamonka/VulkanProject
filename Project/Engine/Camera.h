@@ -41,15 +41,15 @@ struct Camera
     float totalPitch = 0.f;
     float totalYaw = 0.f;
 
-    int m_CameraSpeedFactor = 2;
+    int cameraSpeedFactor = 2;
 
-    glm::mat4 m_RotationMatrixX = {};
-    glm::mat4 m_RotationMatrixY = {};
+    glm::mat4 rotationMatrixX = {};
+    glm::mat4 rotationMatrixY = {};
 
-    const glm::vec3 UnitX = glm::vec3{ 1, 0, 0 };
-    const glm::vec3 UnitY = glm::vec3{ 0, 1, 0 };
-    const glm::vec3 UnitZ = glm::vec3{ 0, 0, 1 };
-    const glm::vec3 Zero = glm::vec3{ 0, 0, 0 };
+    const glm::vec3 unitX = glm::vec3{ 1, 0, 0 };
+    const glm::vec3 unitY = glm::vec3{ 0, 1, 0 };
+    const glm::vec3 unitZ = glm::vec3{ 0, 0, 1 };
+    const glm::vec3 zero = glm::vec3{ 0, 0, 0 };
 
 
     glm::mat4 CalculateCameraToWorld()
@@ -106,7 +106,7 @@ struct Camera
         if (std::abs(dy) > threshold)
         {
             // Update the pitch based on mouse movement
-            totalPitch += dy * sensitivity * m_CameraSpeedFactor;
+            totalPitch += dy * sensitivity * cameraSpeedFactor;
             totalPitch = std::clamp(totalPitch, -15.0f, 15.0f);
 
         }
@@ -122,7 +122,7 @@ struct Camera
         glm::mat4x4 finalRotation{};
 
         finalRotation = glm::rotate(glm::mat4x4(1.f), glm::radians(totalPitch), right);
-        finalRotation *= glm::rotate(glm::mat4x4(1.f), glm::radians(totalYaw * m_CameraSpeedFactor), { 0, -1, 0 });
+        finalRotation *= glm::rotate(glm::mat4x4(1.f), glm::radians(totalYaw * cameraSpeedFactor), { 0, -1, 0 });
 
         forward = glm::vec3(glm::normalize(finalRotation * glm::vec4{ 0, 0, 1, 0 }));
         right = glm::normalize(glm::cross({ 0, 1, 0 }, forward));

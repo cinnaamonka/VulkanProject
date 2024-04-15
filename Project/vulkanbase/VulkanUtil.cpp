@@ -70,7 +70,7 @@ QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device,const VkSurfaceKHR&
 			indices.presentFamily = i;
 		}
 
-		if (indices.isComplete())
+		if (indices.IsComplete())
 		{
 			break;
 		}

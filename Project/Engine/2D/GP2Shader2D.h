@@ -48,8 +48,8 @@ private:
 
 	std::array<VkVertexInputAttributeDescription, 2> m_AttributeDescriptions;
 	VkVertexInputBindingDescription m_InputBinding;
-	VkPipelineShaderStageCreateInfo createFragmentShaderInfo(const VkDevice& device);
-	VkPipelineShaderStageCreateInfo createVertexShaderInfo(const VkDevice& device);
+	VkPipelineShaderStageCreateInfo CreateFragmentShaderInfo(const VkDevice& device);
+	VkPipelineShaderStageCreateInfo CreateVertexShaderInfo(const VkDevice& device);
 
-	VkShaderModule createShaderModule(const VkDevice& device, const std::vector<char>& code);
+	VkShaderModule CreateShaderModule(const VkDevice& device, const std::vector<char>& code);
 };

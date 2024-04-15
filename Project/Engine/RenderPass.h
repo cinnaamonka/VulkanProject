@@ -14,11 +14,11 @@ public:
 
     const VkRenderPass& GetRenderPass() const
     {
-        return renderPass;
+        return m_RenderPass;
     }
     void CreateRenderPass(const VkDevice& device, const VkFormat& swapChainImageFormat, bool shouldClear);
     void DestroyRenderPass(const VkDevice& device);
 
 private:
-    VkRenderPass renderPass;
+    VkRenderPass m_RenderPass;
 };

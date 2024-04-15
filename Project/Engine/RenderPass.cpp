@@ -29,7 +29,7 @@ void RenderPass::CreateRenderPass(const VkDevice& device, const VkFormat& swapCh
 	renderPassInfo.subpassCount = 1;
 	renderPassInfo.pSubpasses = &subpass;
 
-	if (vkCreateRenderPass(device, &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS) 
+	if (vkCreateRenderPass(device, &renderPassInfo, nullptr, &m_RenderPass) != VK_SUCCESS)
 	{
 		throw std::runtime_error("failed to create render pass!");
 	}
@@ -37,5 +37,5 @@ void RenderPass::CreateRenderPass(const VkDevice& device, const VkFormat& swapCh
 
 void RenderPass::DestroyRenderPass(const VkDevice& device)
 {
-	vkDestroyRenderPass(device, renderPass, nullptr);
+	vkDestroyRenderPass(device, m_RenderPass, nullptr);
 }

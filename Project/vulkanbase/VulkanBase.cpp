@@ -67,7 +67,6 @@ void VulkanBase::Run()
 
 void VulkanBase::InitVulkan()
 {
-	// week 06
 	createInstance();
 	setupDebugMessenger();
 	CreateSurface();

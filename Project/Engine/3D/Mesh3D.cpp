@@ -106,7 +106,7 @@ void Mesh3D::DestroyMesh(const VkDevice& device)
 void Mesh3D::AddVertex(const glm::vec3& pos, const glm::vec3& color, const glm::vec3& normal)
 {
 	m_Vertices.push_back({ pos,normal,color });
-	m_Indices.push_back(m_Indices.size());
+	m_Indices.push_back(static_cast<uint16_t>(m_Indices.size()));
 }
 
 void Mesh3D::AddTriangle(uint16_t i1, uint16_t i2, uint16_t i3, uint16_t offset)
