@@ -7,6 +7,7 @@
 #include <chrono>
 #include <thread>
 #include <algorithm>
+#include <vulkan/vk_enum_string_helper.h>
 
 
 VulkanBase::VulkanBase() :
@@ -307,12 +308,13 @@ void VulkanBase::DrawFrame()
 	submitInfo2.pSignalSemaphores = signalSemaphores2;
 	std::array<VkSubmitInfo, 2> submitInfos{ submitInfo1, submitInfo2 };
 
-	if (vkQueueSubmit(m_DeviceManager.GetGraphicsQueue(), static_cast<uint32_t>(submitInfos.size()), submitInfos.data(), m_InFlightFence) != VK_SUCCESS)
-	{
-		throw std::runtime_error("Failed to submit draw command buffer!");
+	if (const VkResult result{ vkQueueSubmit(m_DeviceManager.GetGraphicsQueue(), static_cast<uint32_t>(submitInfos.size()), submitInfos.data(), m_InFlightFence) }; result != VK_SUCCESS) {
+		throw std::runtime_error{ std::string{"Failed to submit draw command buffer: "} + string_VkResult(result) };
 	}
 
-	vkQueueWaitIdle(m_DeviceManager.GetGraphicsQueue());
+	if (const VkResult result{ vkQueueWaitIdle(m_DeviceManager.GetGraphicsQueue()) }; result != VK_SUCCESS) {
+		throw std::runtime_error{ std::string{"Failed to wait for queue idle: "} + string_VkResult(result) };
+	}
 
 	VkFence fences[] = { m_InFlightFence, m_InFlightFence2 };
 
@@ -333,7 +335,6 @@ void VulkanBase::DrawFrame()
 	presentInfo.pImageIndices = &imageIndex;
 
 	vkQueuePresentKHR(m_DeviceManager.GetPresentQueue(), &presentInfo);
-
 }
 
 bool checkValidationLayerSupport()

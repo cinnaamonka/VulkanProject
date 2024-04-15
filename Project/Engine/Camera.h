@@ -41,6 +41,8 @@ struct Camera
 	float totalPitch = 0.f;
 	float totalYaw = 0.f;
 
+	int m_CameraSpeedFactor = 2;
+
 	glm::mat4 m_RotationMatrixX = {};
 	glm::mat4 m_RotationMatrixY = {};
 
@@ -118,8 +120,8 @@ struct Camera
 	{
 		glm::mat4x4 finalRotation{};
 
-		finalRotation = glm::rotate(glm::mat4x4(1.f), glm::radians(totalPitch), right);
-		finalRotation *= glm::rotate(glm::mat4x4(1.f), glm::radians(totalYaw), { 0, 1, 0 });
+		finalRotation = glm::rotate(glm::mat4x4(1.f), glm::radians(totalPitch * m_CameraSpeedFactor), right);
+		finalRotation *= glm::rotate(glm::mat4x4(1.f), glm::radians(totalYaw * m_CameraSpeedFactor), { 0, 1, 0 });
 
 		forward = glm::vec3(glm::normalize(finalRotation * glm::vec4{ 0, 0, 1, 0 }));
 		right = glm::normalize(glm::cross({ 0, 1, 0 }, forward));

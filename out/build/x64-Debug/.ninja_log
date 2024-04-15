@@ -1,13 +1,13 @@
 # ninja log v5
 1278	1408	7342416749183129	_deps/glfw-build/tests/CMakeFiles/inputlag.dir/__/deps/getopt.c.obj	3b2c375b77648686
 50	471	7343180647099728	_deps/glfw-build/src/CMakeFiles/glfw.dir/win32_thread.c.obj	a2d6869cb565a886
-73	229	7343180644610778	Project/shaders/3DShader.vert.spv	d00c64b9f6276018
-61	486	7343180647139840	_deps/glfw-build/src/CMakeFiles/glfw.dir/egl_context.c.obj	53e377cb57f02e8f
+8	121	7345407485463390	Project/shaders/3DShader.vert.spv	d00c64b9f6276018
 78	218	7343180644585656	Project/shaders/shader.frag.spv	82e4ee3810ff1d05
-8	1065	7343184641034583	Project/CMakeFiles/VulkanLab01.dir/Engine/main.cpp.obj	9b3ffeb3abfd3d9c
-73	229	7343180644610778	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/Project/shaders/3DShader.vert.spv	d00c64b9f6276018
+61	486	7343180647139840	_deps/glfw-build/src/CMakeFiles/glfw.dir/egl_context.c.obj	53e377cb57f02e8f
+8	121	7345407485463390	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/Project/shaders/3DShader.vert.spv	d00c64b9f6276018
 22	431	7343180646691830	_deps/glfw-build/src/CMakeFiles/glfw.dir/input.c.obj	6ecad2985f3fbcb4
 78	218	7343180644585656	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/Project/shaders/shader.frag.spv	82e4ee3810ff1d05
+8	1065	7343184641034583	Project/CMakeFiles/VulkanLab01.dir/Engine/main.cpp.obj	9b3ffeb3abfd3d9c
 67	213	7343180644510869	Project/shaders/3DShader.frag.spv	7c21cb63c31d49cd
 403	3074	7343180673116277	Project/CMakeFiles/VulkanLab01.dir/vulkanbase/VulkanUtil.cpp.obj	7160d98268d66f4
 67	213	7343180644510869	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/Project/shaders/3DShader.frag.spv	7c21cb63c31d49cd
@@ -40,7 +40,7 @@
 1602	2035	7342416754402299	_deps/glfw-build/tests/icon.exe	55cbc56ccede9812
 43	512	7343180647394469	_deps/glfw-build/src/CMakeFiles/glfw.dir/win32_monitor.c.obj	4afff9c4e21c53c6
 909	2786	7343180670259663	Project/CMakeFiles/VulkanLab01.dir/Engine/3D/GP2Shader3D.cpp.obj	5ced72d8d4d5809f
-28	1386	7343870865632790	build.ninja	87a7962e8aadb2d9
+28	1386	7348848998551908	build.ninja	87a7962e8aadb2d9
 500	668	7343180649036838	Project/CMakeFiles/VulkanLab01.dir/Engine/VertexBuffer.cpp.obj	a9c222821fa6bd6c
 728	1014	7342416744396006	_deps/glfw-build/examples/offscreen.exe	d6c6d4e0ec03e03f
 513	622	7343180648091912	_deps/glfw-build/src/glfw3.lib	ba9299535bdd873
@@ -60,8 +60,8 @@
 302	448	7342416739591109	_deps/glfw-build/examples/CMakeFiles/heightmap.dir/heightmap.c.obj	11c11e3ae93ab346
 478	583	7342416740874484	_deps/glfw-build/examples/CMakeFiles/particles.dir/glfw.rc.res	c4a56f5b96695997
 24	1458	7343058490018042	Project/CMakeFiles/VulkanLab01.dir/labwork/Week06.cpp.obj	7583f53201edf816
-12	1144	7343184641809070	Project/CMakeFiles/VulkanLab01.dir/vulkanbase/VulkanBase.cpp.obj	837671e989bcbe
-1144	1298	7343184643044906	Project/VulkanLab01.exe	db9eb9a16f7da625
+109	1425	7345404831851516	Project/CMakeFiles/VulkanLab01.dir/vulkanbase/VulkanBase.cpp.obj	837671e989bcbe
+1426	1606	7345404833309801	Project/VulkanLab01.exe	db9eb9a16f7da625
 454	552	7342416740543311	_deps/glfw-build/examples/CMakeFiles/offscreen.dir/glfw.rc.res	5fe94f52609877ba
 583	845	7342416743442237	_deps/glfw-build/examples/CMakeFiles/wave.dir/wave.c.obj	aa8f243f517e730b
 395	543	7342416740198877	_deps/glfw-build/examples/CMakeFiles/heightmap.dir/glfw.rc.res	a5d851b09ce69d90
@@ -164,3 +164,21 @@
 4	25	0	clean	21a4d0550fd2b6b1
 1815	2282	7343180665185523	Project/CMakeFiles/VulkanLab01.dir/Engine/Timer.cpp.obj	fcd30bfa41c3d90f
 2035	3488	7342416769821343	_deps/tinyobjloader-build/CMakeFiles/tinyobjloader.dir/tiny_obj_loader.cc.obj	c4946f2965af219f
+21	1427	7348850898136571	Project/CMakeFiles/VulkanLab01.dir/Engine/main.cpp.obj	9b3ffeb3abfd3d9c
+26	1539	7348850899237482	Project/CMakeFiles/VulkanLab01.dir/vulkanbase/VulkanBase.cpp.obj	837671e989bcbe
+1539	1795	7348850901268475	Project/VulkanLab01.exe	db9eb9a16f7da625
+21	163	7348852058198613	Project/shaders/3DShader.frag.spv	7c21cb63c31d49cd
+21	163	7348852058198613	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/Project/shaders/3DShader.frag.spv	7c21cb63c31d49cd
+163	1212	7348852068689961	Project/CMakeFiles/VulkanLab01.dir/Engine/main.cpp.obj	9b3ffeb3abfd3d9c
+166	1343	7348852069968314	Project/CMakeFiles/VulkanLab01.dir/vulkanbase/VulkanBase.cpp.obj	837671e989bcbe
+1343	1615	7348852072289479	Project/VulkanLab01.exe	db9eb9a16f7da625
+19	106	7348852144862440	Project/shaders/3DShader.frag.spv	7c21cb63c31d49cd
+19	106	7348852144862440	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/Project/shaders/3DShader.frag.spv	7c21cb63c31d49cd
+14	105	7348852248393372	Project/shaders/3DShader.frag.spv	7c21cb63c31d49cd
+14	105	7348852248393372	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/Project/shaders/3DShader.frag.spv	7c21cb63c31d49cd
+13	109	7348852378303872	Project/shaders/3DShader.frag.spv	7c21cb63c31d49cd
+13	109	7348852378303872	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/Project/shaders/3DShader.frag.spv	7c21cb63c31d49cd
+16	106	7348852680138312	Project/shaders/3DShader.frag.spv	7c21cb63c31d49cd
+16	106	7348852680138312	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/Project/shaders/3DShader.frag.spv	7c21cb63c31d49cd
+13	108	7348852771404371	Project/shaders/3DShader.frag.spv	7c21cb63c31d49cd
+13	108	7348852771404371	C:/Users/parni/Desktop/2023-2024/4 semester/GraphicsProgramming2/VulkanProject/out/build/x64-Debug/Project/shaders/3DShader.frag.spv	7c21cb63c31d49cd

@@ -19,7 +19,7 @@ layout(location = 1) out vec3 fragColor;
 
 void main() { 
     mat4 model = mat4(1.0);
-    gl_Position = vp.proj * vp.view * model * vec4(inPosition,1);
+    gl_Position = vp.proj * vp.view * model * vec4(inPosition, 1);
     vec4 tNormal =  model * vec4(inNormal,0);
     fragNormal = normalize(tNormal.xyz); // interpolation of normal attribute in fragment shader.
     fragColor = inColor; // interpolation of color attribute in fragment shader.
