@@ -75,11 +75,14 @@ void GraphicsPipeline3D::CreateGraphicsPipeline(const VkDevice& device, const Vk
 
 	VkGraphicsPipelineCreateInfo pipelineInfo{};
 
+	auto vertexInputStateInfo = shader.CreateVertexInputStateInfo();
+	auto inputAssemblyInfo = shader.createInputAssemblyStateInfo();
+
 	pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
 	pipelineInfo.stageCount = 2;
 	pipelineInfo.pStages = shader.GetShaderStageInfos().data();
-	pipelineInfo.pVertexInputState = &shader.CreateVertexInputStateInfo();
-	pipelineInfo.pInputAssemblyState = &shader.createInputAssemblyStateInfo();
+	pipelineInfo.pVertexInputState = &vertexInputStateInfo;
+	pipelineInfo.pInputAssemblyState = &inputAssemblyInfo;
 
 #pragma region pipelineInfo
 	pipelineInfo.pViewportState = &viewportState;

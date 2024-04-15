@@ -9,6 +9,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <chrono>
+#include <cstring>
 
 Mesh2D::Mesh2D():
     m_Vertices{},

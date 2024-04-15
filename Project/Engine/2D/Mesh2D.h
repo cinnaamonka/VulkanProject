@@ -15,7 +15,7 @@ public:
 	Mesh2D();  
 	virtual ~Mesh2D() {};
 
-	Mesh2D::Mesh2D(const Mesh2D& other)
+	Mesh2D(const Mesh2D& other)
 		: m_Vertices(other.m_Vertices),
 		m_Indexes(other.m_Indexes),
 		m_MaxFramesInFlight(other.m_MaxFramesInFlight),

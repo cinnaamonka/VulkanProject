@@ -1,5 +1,7 @@
 #include "DaeDataBuffer.h"
 #include <iostream>
+#include <cstring>
+
 
 VkDeviceSize DAEDataBuffer::m_Size = {};
 

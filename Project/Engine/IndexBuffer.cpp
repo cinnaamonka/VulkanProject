@@ -1,6 +1,6 @@
 #include "IndexBuffer.h"
 #include "BaseBuffer.h"
-
+#include <cstring>
 
 void IndexBuffer::CreateIndexBuffer(const std::vector<uint16_t>& indices,const VkDevice& device,
     const CommandPool& commandPool,const VkQueue& graphicsQueue, const VkPhysicalDevice& physicalDevice,
