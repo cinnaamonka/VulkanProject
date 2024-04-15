@@ -14,5 +14,5 @@ public:
 
     static void CreateVertexBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties,
         VkBuffer& buffer, VkDeviceMemory& bufferMemory,
-        const VkDevice& device, const VkPhysicalDevice& physicalDevice);
+        const VkDevice& device, const VkPhysicalDevice& physicalDevice);   
 };
