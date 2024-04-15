@@ -7,7 +7,7 @@ layout(location = 0) out vec4 outColor;
 
 void main() 
 {
-    const vec3 lightDirection = normalize(vec3(-1, -1, -1));
+    const vec3 lightDirection = normalize(vec3(-0.5, -0.5, -0.5));
 
     // Calculate the dot product between the normal and the light direction
     float diff = max(dot(fragNormal, lightDirection), 0.2);
