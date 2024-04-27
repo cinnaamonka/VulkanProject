@@ -4,7 +4,7 @@
 
 void IndexBuffer::CreateIndexBuffer(const std::vector<uint16_t>& indices,const VkDevice& device,
     const CommandPool& commandPool,const VkQueue& graphicsQueue, const VkPhysicalDevice& physicalDevice,
-    VkBuffer& indexBuffer,VkDeviceMemory& deviceMemory)
+    VkBuffer& indexBuffer,VkDeviceMemory& deviceMemory,ImageManager& imageManager)
 {
     
     VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
@@ -22,7 +22,7 @@ void IndexBuffer::CreateIndexBuffer(const std::vector<uint16_t>& indices,const V
     BaseBuffer::CreateBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, 
         indexBuffer, deviceMemory,device,physicalDevice);
 
-    BaseBuffer::CopyBuffer(stagingBuffer, indexBuffer, bufferSize,device,commandPool,graphicsQueue);
+    BaseBuffer::CopyBuffer(stagingBuffer, indexBuffer, bufferSize, commandPool, imageManager,device,graphicsQueue);
 
     vkDestroyBuffer(device, stagingBuffer, nullptr);
     vkFreeMemory(device, stagingBufferMemory, nullptr);
@@ -30,7 +30,7 @@ void IndexBuffer::CreateIndexBuffer(const std::vector<uint16_t>& indices,const V
 
 void IndexBuffer::CreateIndexBuffer(const std::vector<uint32_t>& indices, const VkDevice& device,
     const CommandPool& commandPool, const VkQueue& graphicsQueue, const VkPhysicalDevice& physicalDevice,
-    VkBuffer& indexBuffer, VkDeviceMemory& deviceMemory)
+    VkBuffer& indexBuffer, VkDeviceMemory& deviceMemory, ImageManager& imageManager)
 {
 
     VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
@@ -48,7 +48,7 @@ void IndexBuffer::CreateIndexBuffer(const std::vector<uint32_t>& indices, const 
     BaseBuffer::CreateBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         indexBuffer, deviceMemory, device, physicalDevice);
 
-    BaseBuffer::CopyBuffer(stagingBuffer, indexBuffer, bufferSize, device, commandPool, graphicsQueue);
+    BaseBuffer::CopyBuffer(stagingBuffer, indexBuffer, bufferSize, commandPool,imageManager, device,graphicsQueue);
 
     vkDestroyBuffer(device, stagingBuffer, nullptr);
     vkFreeMemory(device, stagingBufferMemory, nullptr);

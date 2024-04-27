@@ -1,6 +1,5 @@
 #include "Pipeline2D.h"
 #include "../GraphicsPipeline.h"
-#include "../DescriptorSetManager.h"
 
 
 Pipeline::Pipeline() :
@@ -11,7 +10,7 @@ Pipeline::Pipeline() :
 
 void Pipeline::Initialize(const VkDevice& device, const VkPhysicalDevice& physicalDevice, const VkFormat& swapChainImageFormat,
 	std::vector<VkImageView>& swapChainImageViews, const VkExtent2D& swapChainExtent,
-	const QueueFamilyIndices& queueFamilyIndexes, const VkQueue& graphicsQueue, CommandPool& commandPool)
+	const QueueFamilyIndices& queueFamilyIndexes, const VkQueue& graphicsQueue, CommandPool& commandPool,ImageManager& imageManager)
 {
 	VkSemaphoreCreateInfo semaphoreInfo{};
 	semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
@@ -22,7 +21,7 @@ void Pipeline::Initialize(const VkDevice& device, const VkPhysicalDevice& physic
 
 	m_GraphicsPipeline.CreateGraphicsPipeline(device, physicalDevice, m_Shader, m_RenderPass,
 		VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-		DAEDataBuffer::GetDeviceSize(), swapChainExtent);
+		DAEDataBuffer::GetDeviceSize(), swapChainExtent, imageManager);
 
 	m_GraphicsPipeline.CreateFrameBuffers(device, swapChainImageViews, swapChainExtent, m_RenderPass);
 
@@ -30,9 +29,9 @@ void Pipeline::Initialize(const VkDevice& device, const VkPhysicalDevice& physic
 	Oval m_OvalMesh{ { -0.25f,0.8f},0.2f,6 };
 	RoundedRect m_RoundedRectMesh{ {0.25,0.25},0.3,0.2,0.1,21 };
 
-	m_Scene.AddMesh(m_RectMesh, physicalDevice, device, graphicsQueue, commandPool);
-	m_Scene.AddMesh(m_OvalMesh, physicalDevice, device, graphicsQueue, commandPool);
-	m_Scene.AddMesh(m_RoundedRectMesh, physicalDevice, device, graphicsQueue, commandPool);
+	m_Scene.AddMesh(m_RectMesh, physicalDevice, device, graphicsQueue, commandPool,imageManager);
+	m_Scene.AddMesh(m_OvalMesh, physicalDevice, device, graphicsQueue, commandPool,imageManager);
+	m_Scene.AddMesh(m_RoundedRectMesh, physicalDevice, device, graphicsQueue, commandPool,imageManager);
 
 	m_CommandBuffer = commandPool.CreateCommandBuffer(device);
 }

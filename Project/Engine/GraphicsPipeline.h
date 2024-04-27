@@ -20,7 +20,7 @@ public:
 	void CreateGraphicsPipeline(const VkDevice& device, const VkPhysicalDevice& physicalDevice, GP2Shader& shader,
 		const RenderPass& renderPass,const VkBufferUsageFlags& usageFlags,
 		const VkMemoryPropertyFlags& memoryPropertyFlags, const VkDeviceSize& deviceSize,
-		const VkExtent2D& swapChainExtent);
+		const VkExtent2D& swapChainExtent, ImageManager& imageManager);
 	void CreateFrameBuffers(const VkDevice& device, std::vector<VkImageView>& swapChainImageViews,
 		const VkExtent2D& swapChainExtent, const RenderPass& renderPass);
 

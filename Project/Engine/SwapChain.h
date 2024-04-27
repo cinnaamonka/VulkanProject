@@ -4,6 +4,7 @@
 #include "Structs.h"
 #include <GLFW/glfw3.h>
 #include <GLFW/glfw3native.h>
+#include "ImageManager.h"
 
 #include <limits>
 #include <algorithm>
@@ -24,7 +25,7 @@ public:
 
     void CreateSwapChain(const VkSurfaceKHR& surface, GLFWwindow* window,
         const QueueFamilyIndices& queueFamilyIndexes, const VkDevice& device, const VkPhysicalDevice& physicalDevice);
-    void CreateImageViews(const VkDevice& device);
+    void CreateImageViews(const VkDevice& device, ImageManager& imageManager);
 
     const VkFormat GetSwapChainImageFormat() const
     {

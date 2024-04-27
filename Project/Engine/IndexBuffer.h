@@ -15,10 +15,12 @@ public:
 	IndexBuffer& operator=(IndexBuffer&& other) = delete;
 
 	static void CreateIndexBuffer(const std::vector<uint16_t>& indices, const VkDevice& device, const CommandPool& commandPool,
-		const VkQueue& graphicsQueue, const VkPhysicalDevice& physicalDevice,VkBuffer& indexBuffer,VkDeviceMemory& deviceMemory);
+		const VkQueue& graphicsQueue, const VkPhysicalDevice& physicalDevice,VkBuffer& indexBuffer,
+		VkDeviceMemory& deviceMemory, ImageManager& imageManager);
 
 	static void CreateIndexBuffer(const std::vector<uint32_t>& indices, const VkDevice& device, const CommandPool& commandPool,
-		const VkQueue& graphicsQueue, const VkPhysicalDevice& physicalDevice, VkBuffer& indexBuffer, VkDeviceMemory& deviceMemory);
+		const VkQueue& graphicsQueue, const VkPhysicalDevice& physicalDevice, VkBuffer& indexBuffer, 
+		VkDeviceMemory& deviceMemory, ImageManager& imageManager);
 
 
 	static void DestroyIndexBuffer(const VkDevice& device,const VkBuffer& indexBuffer, VkDeviceMemory& deviceMemory);

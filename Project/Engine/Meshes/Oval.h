@@ -11,7 +11,7 @@ public:
 	~Oval() {};
 
 	void InitializeOval(const VkPhysicalDevice& physicalDevice, const VkDevice& device,const VkQueue& graphicsQueue,
-		const CommandPool& commandPool);
+		const CommandPool& commandPool, ImageManager& imageManager);
 
 private:
 	glm::vec2 m_Center;

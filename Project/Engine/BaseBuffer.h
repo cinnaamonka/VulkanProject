@@ -1,7 +1,8 @@
 #pragma once
 #include <vulkan/vulkan.h>
-
+#include "ImageManager.h"
 class CommandPool;
+
 
 class BaseBuffer
 {
@@ -18,9 +19,8 @@ public:
                        VkBuffer& buffer,VkDeviceMemory& bufferMemory,
                       const VkDevice& device, const VkPhysicalDevice& physicalDevice);
 
-    static void CopyBuffer(const VkBuffer& srcBuffer,const VkBuffer& dstBuffer,const VkDeviceSize& size,const VkDevice& device,
-        const CommandPool& commandPool,const VkQueue& graphicsQueue);
-private:
+    static void CopyBuffer(const VkBuffer& srcBuffer,const VkBuffer& dstBuffer,const VkDeviceSize& size,
+        const CommandPool& commandPool,ImageManager& imageManager, const VkDevice& device,const VkQueue& graphicsQueue);
 
     static uint32_t FindMemoryType(VkPhysicalDevice physicalDevice,
         uint32_t typeFilter,

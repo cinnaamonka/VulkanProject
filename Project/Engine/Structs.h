@@ -42,6 +42,7 @@ struct Vertex3D
 	glm::vec3 position;
 	glm::vec3 normal;
 	glm::vec3 color{ 1.f,1.f,1.f };
+	glm::vec2 texCoord;
 
 	bool operator==(const Vertex3D& other) const 
 	{
@@ -59,9 +60,9 @@ struct Vertex3D
 		return bindingDescription;
 	}
 
-	static std::array<VkVertexInputAttributeDescription, 3> GetAttributeDescriptions()
+	static std::array<VkVertexInputAttributeDescription, 4> GetAttributeDescriptions()
 	{
-		std::array<VkVertexInputAttributeDescription, 3> attributeDescriptions{};
+		std::array<VkVertexInputAttributeDescription, 4> attributeDescriptions{};
 
 		// Attribute 0: Position
 		attributeDescriptions[0].binding = 0;
@@ -80,6 +81,12 @@ struct Vertex3D
 		attributeDescriptions[2].location = 2;
 		attributeDescriptions[2].format = VK_FORMAT_R32G32B32_SFLOAT;
 		attributeDescriptions[2].offset = offsetof(Vertex3D, color);
+
+		//Attribute 3: texCoord
+		attributeDescriptions[3].binding = 0;
+		attributeDescriptions[3].location = 3;
+		attributeDescriptions[3].format = VK_FORMAT_R32G32_SFLOAT;
+		attributeDescriptions[3].offset = offsetof(Vertex3D, texCoord);
 
 		return attributeDescriptions;
 	}

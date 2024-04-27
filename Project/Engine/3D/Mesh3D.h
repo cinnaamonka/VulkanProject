@@ -30,9 +30,9 @@ public:
 	
 
 	void Initialize(const VkPhysicalDevice& physicalDevice, const VkDevice& device,
-		const VkQueue& graphicsQueue, const CommandPool& commandPool);
+		const VkQueue& graphicsQueue, const CommandPool& commandPool, ImageManager& imageManager);
 	void InitializeModel(const VkPhysicalDevice& physicalDevice, const VkDevice& device,
-		const VkQueue& graphicsQueue, const CommandPool& commandPool);
+		const VkQueue& graphicsQueue, const CommandPool& commandPool, ImageManager& imageManager);
 	void DestroyMesh(const VkDevice& device);
 	void AddVertex(const glm::vec3& pos,const glm::vec3& color,const glm::vec3& normal);
 	void AddTriangle(uint16_t i1, uint16_t i2, uint16_t i3, uint16_t offset = 0);
@@ -115,7 +115,13 @@ public:
 			bottomRight.normal = normal;
 			topRight.normal = normal;
 		}
+		bottomLeft.texCoord = glm::vec2(1.0f, 0.0f); 
+		topLeft.texCoord = glm::vec2(0.0f, 0.0f); 
+		topRight.texCoord = glm::vec2(0.0f, 1.0f); 
+		bottomLeft.texCoord = glm::vec2(1.0f, 1.0f); 
+
 		if (isClockWise) {
+			
 			AddVertex(bottomLeft);
 			AddVertex(topLeft);
 			AddVertex(topRight);

@@ -11,7 +11,7 @@ public:
     RectMesh(glm::vec2 left,double width,double height);
     ~RectMesh() {};
     void InitializeRect(const VkPhysicalDevice& physicalDevice, const VkDevice& device,const VkQueue& graphicsQueue,
-        const CommandPool& commandPool);
+        const CommandPool& commandPool, ImageManager& imageManager);
 private:
     glm::vec2 m_LeftPos;
     double m_Width;

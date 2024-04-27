@@ -70,6 +70,7 @@ private:
 	DeviceManager m_DeviceManager;
 
 	CommandPool m_CommandPool;
+	ImageManager m_ImageManager;
 
 	Mesh3D m_CubeMesh;
 	Mesh3D m_Model;

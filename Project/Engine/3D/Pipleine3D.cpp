@@ -1,6 +1,5 @@
 #include "Pipeline3D.h"
 #include "../GraphicsPipeline.h"
-#include "../DescriptorSetManager.h"
 #include "../DaeDataBuffer.h"
 
 #include <vector>
@@ -14,7 +13,8 @@ Pipeline3D::Pipeline3D() :
 
 void Pipeline3D::Initialize(const VkDevice& device, const VkPhysicalDevice& physicalDevice, const VkFormat& swapChainImageFormat,
 	std::vector<VkImageView>& swapChainImageViews, const VkExtent2D& swapChainExtent,
-	const QueueFamilyIndices& queueFamilyIndexes, const VkQueue& graphicsQueue, CommandPool& commandPool, Mesh3D& mesh, Mesh3D& model)
+	const QueueFamilyIndices& queueFamilyIndexes, const VkQueue& graphicsQueue,
+	CommandPool& commandPool, Mesh3D& mesh, Mesh3D& model,ImageManager& imageManager)
 {
 	m_RenderPass.CreateRenderPass(device, swapChainImageFormat, false);
 
@@ -22,12 +22,12 @@ void Pipeline3D::Initialize(const VkDevice& device, const VkPhysicalDevice& phys
 
 	m_GraphicsPipeline.CreateGraphicsPipeline(device, physicalDevice, m_Shader, m_RenderPass,
 		VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-		DAEDataBuffer::GetDeviceSize(), swapChainExtent);
+		DAEDataBuffer::GetDeviceSize(), swapChainExtent, imageManager);
 
 	m_GraphicsPipeline.CreateFrameBuffers(device, swapChainImageViews, swapChainExtent, m_RenderPass);
 
-	mesh.Initialize(physicalDevice, device, graphicsQueue, commandPool);
-	model.InitializeModel(physicalDevice, device, graphicsQueue, commandPool);
+	mesh.Initialize(physicalDevice, device, graphicsQueue, commandPool, imageManager);
+	model.InitializeModel(physicalDevice, device, graphicsQueue, commandPool, imageManager);
 	 
 	m_Scene.AddMesh(mesh);
 	m_Scene.AddMesh(model);

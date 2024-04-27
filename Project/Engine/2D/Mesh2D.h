@@ -34,7 +34,7 @@ public:
 	void AddVertex(glm::vec2 pos, glm::vec3 color);
 
 	void Initialize(const VkPhysicalDevice& physicalDevice, const VkDevice& device,const std::vector<Vertex> vertexes,
-		const VkQueue& graphicsQueue,const CommandPool& commandPool, std::vector<uint16_t> indices);
+		const VkQueue& graphicsQueue,const CommandPool& commandPool, std::vector<uint16_t> indices, ImageManager& imageManager);
 
 	void Draw(const VkPipelineLayout& pipelineLayout, const VkCommandBuffer& commandBuffer);
 

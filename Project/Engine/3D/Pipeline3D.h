@@ -22,7 +22,7 @@ public:
 	void Initialize(const VkDevice& device, const VkPhysicalDevice& physicalDevice, const VkFormat& swapChainImageFormat,
 		std::vector<VkImageView>& swapChainImageViews,
 		const VkExtent2D& swapChainExtent, const QueueFamilyIndices& queueFamilyIndexes,
-		const VkQueue& graphicsQueue,CommandPool& commandPool, Mesh3D& mesh, Mesh3D& model);
+		const VkQueue& graphicsQueue,CommandPool& commandPool, Mesh3D& mesh, Mesh3D& model, ImageManager& imageManager);
 	
 	    void DestroyPipeline(const VkDevice& device, CommandPool& commandPool);
 	    void DestroyMeshes(const VkDevice& device);

@@ -22,7 +22,7 @@ Mesh3D::Mesh3D() :
 }
 
 void Mesh3D::Initialize(const VkPhysicalDevice& physicalDevice, const VkDevice& device,
-	const VkQueue& graphicsQueue, const CommandPool& commandPool)
+	const VkQueue& graphicsQueue, const CommandPool& commandPool, ImageManager& imageManager)
 {
 	VkDeviceSize bufferSize = sizeof(Vertex3D) * m_Vertices.size();
 
@@ -49,18 +49,18 @@ void Mesh3D::Initialize(const VkPhysicalDevice& physicalDevice, const VkDevice& 
 	VertexBuffer::CreateVertexBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
 		VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_VertexBuffer->GetVkBuffer(), m_VertexBuffer->GetDeviceMemory(), device, physicalDevice);
 
-	BaseBuffer::CopyBuffer(stagingBuffer, m_VertexBuffer->GetVkBuffer(), bufferSize, device, commandPool, graphicsQueue);
+	BaseBuffer::CopyBuffer(stagingBuffer, m_VertexBuffer->GetVkBuffer(), bufferSize,commandPool,imageManager,device, graphicsQueue);
 
 	vkDestroyBuffer(device, stagingBuffer, nullptr);
 	vkFreeMemory(device, stagingBufferMemory, nullptr);
 
 	IndexBuffer::CreateIndexBuffer(m_Indices, device, commandPool, graphicsQueue, physicalDevice,
-		m_IndexBuffer->GetVkBuffer(), m_IndexBuffer->GetDeviceMemory());
+		m_IndexBuffer->GetVkBuffer(), m_IndexBuffer->GetDeviceMemory(),imageManager);
 
 	CreateUniformBuffers(device, physicalDevice);
 }
 void Mesh3D::InitializeModel(const VkPhysicalDevice& physicalDevice, const VkDevice& device,
-	const VkQueue& graphicsQueue, const CommandPool& commandPool)
+	const VkQueue& graphicsQueue, const CommandPool& commandPool, ImageManager& imageManager)
 {
 	VkDeviceSize bufferSize = sizeof(Vertex3D) * m_Vertices.size();
 
@@ -87,13 +87,13 @@ void Mesh3D::InitializeModel(const VkPhysicalDevice& physicalDevice, const VkDev
 	VertexBuffer::CreateVertexBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
 		VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_VertexBuffer->GetVkBuffer(), m_VertexBuffer->GetDeviceMemory(), device, physicalDevice);
 
-	BaseBuffer::CopyBuffer(stagingBuffer, m_VertexBuffer->GetVkBuffer(), bufferSize, device, commandPool, graphicsQueue);
+	BaseBuffer::CopyBuffer(stagingBuffer, m_VertexBuffer->GetVkBuffer(), bufferSize, commandPool,imageManager,device, graphicsQueue);
 
 	vkDestroyBuffer(device, stagingBuffer, nullptr);
 	vkFreeMemory(device, stagingBufferMemory, nullptr);
 
 	IndexBuffer::CreateIndexBuffer(m_ModelIndices, device, commandPool, graphicsQueue, physicalDevice,
-		m_IndexBuffer->GetVkBuffer(), m_IndexBuffer->GetDeviceMemory());
+		m_IndexBuffer->GetVkBuffer(), m_IndexBuffer->GetDeviceMemory(),imageManager);
 
 	CreateUniformBuffers(device, physicalDevice);
 }

@@ -33,7 +33,7 @@ void Mesh2D::AddVertex(glm::vec2 pos, glm::vec3 color)
 }
 
 void Mesh2D::Initialize(const VkPhysicalDevice& physicalDevice, const VkDevice& device, const std::vector<Vertex> vertexes,
-    const VkQueue& graphicsQueue, const CommandPool& commandPool, std::vector<uint16_t> indices)
+    const VkQueue& graphicsQueue, const CommandPool& commandPool, std::vector<uint16_t> indices,ImageManager& imageManager)
 {
     m_Indexes = indices;
 
@@ -61,13 +61,14 @@ void Mesh2D::Initialize(const VkPhysicalDevice& physicalDevice, const VkDevice& 
     VertexBuffer::CreateVertexBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_VertexBuffer->GetVkBuffer(), m_VertexBuffer->GetDeviceMemory(), device, physicalDevice);
 
-    BaseBuffer::CopyBuffer(stagingBuffer, m_VertexBuffer->GetVkBuffer(), bufferSize, device, commandPool, graphicsQueue);
+    BaseBuffer::CopyBuffer(stagingBuffer, m_VertexBuffer->GetVkBuffer(), bufferSize, commandPool, imageManager,
+        device,graphicsQueue);
 
     vkDestroyBuffer(device, stagingBuffer, nullptr);
     vkFreeMemory(device, stagingBufferMemory, nullptr);
 
     IndexBuffer::CreateIndexBuffer(indices, device, commandPool, graphicsQueue, physicalDevice,
-        m_IndexBuffer->GetVkBuffer(), m_IndexBuffer->GetDeviceMemory());
+        m_IndexBuffer->GetVkBuffer(), m_IndexBuffer->GetDeviceMemory(), imageManager);
 
     CreateUniformBuffers(device, physicalDevice);
 }

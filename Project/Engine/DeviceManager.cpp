@@ -40,7 +40,11 @@ bool DeviceManager::IsDeviceSuitable(const VkPhysicalDevice& physicalDevice, con
 {
 	QueueFamilyIndices indices = FindQueueFamilies(physicalDevice, surface);
 	bool extensionsSupported = CheckDeviceExtensionSupport(physicalDevice);
-	return indices.IsComplete() && extensionsSupported;
+
+	VkPhysicalDeviceFeatures supportedFeatures;
+	vkGetPhysicalDeviceFeatures(physicalDevice, &supportedFeatures);
+
+	return indices.IsComplete() && extensionsSupported && supportedFeatures.samplerAnisotropy;
 }
 
 void DeviceManager::CreateLogicalDevice(VkDevice& device, const VkSurfaceKHR& surface)
@@ -67,6 +71,7 @@ void DeviceManager::CreateLogicalDevice(VkDevice& device, const VkSurfaceKHR& su
 	queueCreateInfo.queueCount = 1;
 
 	VkPhysicalDeviceFeatures deviceFeatures{};
+	deviceFeatures.samplerAnisotropy = VK_TRUE;
 
 	VkDeviceCreateInfo createInfo{};
 	createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;

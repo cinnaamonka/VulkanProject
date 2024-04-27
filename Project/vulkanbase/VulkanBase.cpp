@@ -75,19 +75,24 @@ void VulkanBase::InitVulkan()
 	m_DeviceManager.CreateLogicalDevice(device, m_Surface);
 
 	m_SwapChain.CreateSwapChain(m_Surface, m_Window, FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(), m_Surface), device, m_DeviceManager.GetPhysicalDevice());
-	m_SwapChain.CreateImageViews(device);
+	m_SwapChain.CreateImageViews(device,m_ImageManager);
 
 	m_CommandPool.CreateCommandPool(device, FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(), m_Surface));
+
+	m_ImageManager.CreateTextureImage(device, m_DeviceManager.GetPhysicalDevice(),m_CommandPool.GetCommandPool(), m_DeviceManager.GetGraphicsQueue());
+	m_ImageManager.CreateTextureImageView(device);
+	m_ImageManager.CreateTextureSampler(device, m_DeviceManager.GetPhysicalDevice());
 
 	m_DAEPipeline.Initialize(device, m_DeviceManager.GetPhysicalDevice(), m_SwapChain.GetSwapChainImageFormat(),
 		m_SwapChain.GetSwapChainImageViews(),
 		m_SwapChain.GetSwapChainExtent(), FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(), m_Surface),
-		m_DeviceManager.GetGraphicsQueue(), m_CommandPool);
+		m_DeviceManager.GetGraphicsQueue(), m_CommandPool,m_ImageManager);
 
 
 	m_DAEPipeline3D.Initialize(device, m_DeviceManager.GetPhysicalDevice(), m_SwapChain.GetSwapChainImageFormat(),
 		m_SwapChain.GetSwapChainImageViews(), m_SwapChain.GetSwapChainExtent(),
-		FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(), m_Surface), m_DeviceManager.GetGraphicsQueue(), m_CommandPool, m_CubeMesh, m_Model);
+		FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(), m_Surface), m_DeviceManager.GetGraphicsQueue(),
+		m_CommandPool, m_CubeMesh, m_Model,m_ImageManager);
 
 	// week 06
 	createSyncObjects();
@@ -128,6 +133,8 @@ void VulkanBase::Cleanup()
 
 	m_DAEPipeline.DestroyMeshes(device);
 	m_DAEPipeline3D.DestroyMeshes(device);
+
+	m_ImageManager.CleanUp(device);
 
 	vkDestroyDevice(device, nullptr);
 	vkDestroySurfaceKHR(m_Instance, m_Surface, nullptr);

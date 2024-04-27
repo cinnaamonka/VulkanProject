@@ -11,7 +11,7 @@ RectMesh::RectMesh(glm::vec2 left, double width, double height) :
 }
 
 void RectMesh::InitializeRect(const VkPhysicalDevice& physicalDevice, const VkDevice& device, const VkQueue& graphicsQueue,
-	const CommandPool& commandPool)
+	const CommandPool& commandPool,ImageManager& imageManager)
 {
 
 	std::vector<Vertex> rectVertices =
@@ -30,5 +30,5 @@ void RectMesh::InitializeRect(const VkPhysicalDevice& physicalDevice, const VkDe
 	   0, 1, 2, 2, 3, 0
 	};
 
-	Initialize(physicalDevice, device, m_Vertices, graphicsQueue, commandPool, indices);
+	Initialize(physicalDevice, device, m_Vertices, graphicsQueue, commandPool, indices, imageManager);
 }

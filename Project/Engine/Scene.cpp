@@ -6,19 +6,18 @@
 #include "../Engine/Meshes/RoundedRect.h"
 #include "Structs.h"
 #include "IndexBuffer.h"
-#include "DescriptorSetManager.h"
 #include "GraphicsPipeline.h"
 
 constexpr float g_Pi = 3.14159265359f;
 
 void Scene::AddMesh(Mesh2D& mesh, const VkPhysicalDevice& physicalDevice,const VkDevice& device, const VkQueue& graphicsGueue, 
-	const CommandPool& commandPool)
+	const CommandPool& commandPool, ImageManager& imageManager)
 {
 	RectMesh* rectMesh = dynamic_cast<RectMesh*>(&mesh);
 
 	if (rectMesh)
 	{
-		rectMesh->InitializeRect(physicalDevice, device,graphicsGueue,commandPool);
+		rectMesh->InitializeRect(physicalDevice, device,graphicsGueue,commandPool, imageManager);
 		m_Meshes.push_back(*rectMesh);
 	}
 
@@ -26,7 +25,7 @@ void Scene::AddMesh(Mesh2D& mesh, const VkPhysicalDevice& physicalDevice,const V
 
 	if (ovalMesh)
 	{
-		ovalMesh->InitializeOval(physicalDevice, device,graphicsGueue,commandPool);
+		ovalMesh->InitializeOval(physicalDevice, device,graphicsGueue,commandPool, imageManager);
 	
 		m_Meshes.push_back(*ovalMesh);
 	}
@@ -35,7 +34,7 @@ void Scene::AddMesh(Mesh2D& mesh, const VkPhysicalDevice& physicalDevice,const V
 
 	if (roundedRectMesh)
 	{
-		roundedRectMesh->InitializeRoundedRect(physicalDevice, device,graphicsGueue,commandPool);
+		roundedRectMesh->InitializeRoundedRect(physicalDevice, device,graphicsGueue,commandPool, imageManager);
 		m_Meshes.push_back(*roundedRectMesh);
 	}
 

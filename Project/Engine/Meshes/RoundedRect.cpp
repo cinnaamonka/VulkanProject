@@ -13,7 +13,8 @@ RoundedRect::RoundedRect(glm::vec2 leftPos, double width, double height, double 
 
 }
 
-void RoundedRect::InitializeRoundedRect(const VkPhysicalDevice& physicalDevice, const VkDevice& device, const VkQueue& graphicsQueue, const CommandPool& commandPool)
+void RoundedRect::InitializeRoundedRect(const VkPhysicalDevice& physicalDevice,
+	const VkDevice& device, const VkQueue& graphicsQueue, const CommandPool& commandPool,ImageManager& imageManager)
 {
 	const float radians = g_Pi / 2 / m_SegmentsNum;
 
@@ -179,7 +180,7 @@ void RoundedRect::InitializeRoundedRect(const VkPhysicalDevice& physicalDevice, 
 
 	m_Vertices = finalVertexes;
 
-	Initialize(physicalDevice, device, m_Vertices, graphicsQueue, commandPool, indices);
+	Initialize(physicalDevice, device, m_Vertices, graphicsQueue, commandPool, indices,imageManager);
 }
 
 

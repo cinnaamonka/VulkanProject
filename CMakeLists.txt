@@ -27,6 +27,16 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(tinyobjloader)
 
+include(FetchContent)
+
+FetchContent_Declare(
+  image_stb
+  GIT_REPOSITORY https://github.com/natanaeljr/stb-cmake-package.git
+  GIT_TAG        master # You can specify a particular version tag here
+)
+
+FetchContent_MakeAvailable(image_stb)
+
 # Find the required packages
 find_package(Vulkan REQUIRED)
 
@@ -43,6 +53,7 @@ add_subdirectory(Project)
 
 # Set the source directory
 set(SOURCE_DIR ${CMAKE_SOURCE_DIR}/Project/models)
+set(SOURCE_DIR ${CMAKE_SOURCE_DIR}/Project/textures)
 
 # Set the destination directory
 set(DESTINATION_DIR ${CMAKE_BINARY_DIR}/Project)

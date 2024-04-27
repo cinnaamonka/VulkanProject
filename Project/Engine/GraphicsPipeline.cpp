@@ -5,10 +5,10 @@
 void GraphicsPipeline::CreateGraphicsPipeline(const VkDevice& device, const VkPhysicalDevice& physicalDevice, GP2Shader& shader,
 	const RenderPass& renderPass,const VkBufferUsageFlags& usageFlags,
 	const VkMemoryPropertyFlags& memoryPropertyFlags, const VkDeviceSize& deviceSize,
-	const VkExtent2D& swapChainExtent)
+	const VkExtent2D& swapChainExtent,ImageManager& imageManager)
 {
 	m_UBOPool = std::make_unique<DAEDescriptorPool<ViewProjection>>(device, 1);
-	m_UBOPool->initialize(physicalDevice, device, usageFlags, memoryPropertyFlags, deviceSize);
+	m_UBOPool->initialize(physicalDevice, device, usageFlags, memoryPropertyFlags, deviceSize, imageManager);
 
 	VkPipelineViewportStateCreateInfo viewportState{};
 	viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;

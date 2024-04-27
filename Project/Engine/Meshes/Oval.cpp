@@ -11,7 +11,7 @@ Oval::Oval(glm::vec2 center, float radius, int numVertexes) :
 
 }
 void Oval::InitializeOval(const VkPhysicalDevice& physicalDevice, const VkDevice& device, const VkQueue& graphicsQueue,
-    const CommandPool& commandPool)
+    const CommandPool& commandPool,ImageManager& imageManager)
 {
     std::vector<Vertex> finalVertexes;
 
@@ -34,5 +34,5 @@ void Oval::InitializeOval(const VkPhysicalDevice& physicalDevice, const VkDevice
 
     m_Vertices = finalVertexes;
 
-    Initialize(physicalDevice, device, m_Vertices, graphicsQueue, commandPool, indices);
+    Initialize(physicalDevice, device, m_Vertices, graphicsQueue, commandPool, indices, imageManager);
 }

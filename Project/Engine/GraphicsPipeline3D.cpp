@@ -8,10 +8,10 @@
 void GraphicsPipeline3D::CreateGraphicsPipeline(const VkDevice& device, const VkPhysicalDevice& physicalDevice, GP2Shader3D& shader,
 	const RenderPass& renderPass,const VkBufferUsageFlags& usageFlags,
 	const VkMemoryPropertyFlags& memoryPropertyFlags,const VkDeviceSize& deviceSize,
-	const VkExtent2D& swapChainExtent)
+	const VkExtent2D& swapChainExtent,ImageManager& imageManager)
 {
 	m_UBOPool = std::make_unique<DAEDescriptorPool<ViewProjection>>(device, 1);
-	m_UBOPool->initialize(physicalDevice, device, usageFlags, memoryPropertyFlags, deviceSize);
+	m_UBOPool->initialize(physicalDevice, device, usageFlags, memoryPropertyFlags, deviceSize, imageManager);
 
 	VkPipelineViewportStateCreateInfo viewportState{};
 	viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
@@ -102,8 +102,6 @@ void GraphicsPipeline3D::CreateGraphicsPipeline(const VkDevice& device, const Vk
 		throw std::runtime_error("failed to create graphics pipeline!");
 	}
 	shader.DestroyShaderModules(device);
-
-	
 }
 
 void GraphicsPipeline3D::CreateFrameBuffers(const VkDevice& device, std::vector<VkImageView>& swapChainImageViews,

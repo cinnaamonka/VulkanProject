@@ -20,7 +20,7 @@ public:
 	Scene& operator=(Scene&& other) noexcept = delete;
 
 	void AddMesh(Mesh2D& mesh, const VkPhysicalDevice& physicalDevice,const VkDevice& device,
-		const VkQueue& graphicsGueue,const CommandPool& commandPool);
+		const VkQueue& graphicsGueue,const CommandPool& commandPool, ImageManager& imageManager);
 
 	void AddMesh(const Mesh3D& mesh);
 
