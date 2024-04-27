@@ -1,20 +1,16 @@
 #pragma once
 #include <vulkan/vulkan.h>
-
+#include <string>
 class ImageManager
 {
 public:
 	ImageManager() = default;
 	~ImageManager() = default;
 
-	ImageManager(const ImageManager& other) = delete;
-	ImageManager& operator=(const ImageManager& other) = delete;
-	ImageManager(ImageManager&& other) = delete;
-	ImageManager& operator=(ImageManager&& other) = delete;
-
+	
 
 	void CreateTextureImage(const VkDevice& device,const VkPhysicalDevice& physicalDevice, 
-		const VkCommandPool& commandPool, const VkQueue& graphicsQueue);
+		const VkCommandPool& commandPool, const VkQueue& graphicsQueue,const std::string& imagePath);
 
 	void CreateImage(const VkDevice& device, uint32_t width, uint32_t height,const VkFormat& format,
 		const VkImageTiling& tiling,const VkImageUsageFlags& usage,const VkMemoryPropertyFlags& properties, VkImage& image,

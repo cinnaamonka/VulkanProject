@@ -79,7 +79,8 @@ void VulkanBase::InitVulkan()
 
 	m_CommandPool.CreateCommandPool(device, FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(), m_Surface));
 
-	m_ImageManager.CreateTextureImage(device, m_DeviceManager.GetPhysicalDevice(),m_CommandPool.GetCommandPool(), m_DeviceManager.GetGraphicsQueue());
+	m_ImageManager.CreateTextureImage(device, m_DeviceManager.GetPhysicalDevice(),m_CommandPool.GetCommandPool(),
+		m_DeviceManager.GetGraphicsQueue(), TEXTURE_MODEL_PATH);
 	m_ImageManager.CreateTextureImageView(device);
 	m_ImageManager.CreateTextureSampler(device, m_DeviceManager.GetPhysicalDevice());
 

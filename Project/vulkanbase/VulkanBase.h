@@ -76,6 +76,8 @@ private:
 	Mesh3D m_Model;
 	const std::string MODEL_PATH = "models/viking_room.obj";
 
+	const std::string TEXTURE_MODEL_PATH = "textures/vehicle_diffuse.png";
+
 	VkInstance m_Instance;
 	VkDebugUtilsMessengerEXT m_DebugMessenger;
 	VkDevice device = VK_NULL_HANDLE;

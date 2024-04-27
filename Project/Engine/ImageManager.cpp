@@ -7,13 +7,13 @@
 #include <filesystem>
 
 void ImageManager::CreateTextureImage(const VkDevice& device, const VkPhysicalDevice& physicalDevice,
-	const VkCommandPool& commandPool, const VkQueue& graphicsQueue)
+	const VkCommandPool& commandPool, const VkQueue& graphicsQueue, const std::string& imagePath)
 {
 	int texWidth, texHeight, texChannels;
 
 	auto path = std::filesystem::current_path();
 
-	stbi_uc* pixels = stbi_load("textures/vehicle_diffuse1.png", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+	stbi_uc* pixels = stbi_load(imagePath.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
 	VkDeviceSize imageSize = texWidth * texHeight * 4;
 
 	if (!pixels)

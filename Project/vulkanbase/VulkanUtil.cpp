@@ -43,7 +43,7 @@ std::vector<char> readFile(const std::string& filename) {
 	return buffer;
 }
 
-QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device,const VkSurfaceKHR& surface)
+QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device, const VkSurfaceKHR& surface)
 {
 	QueueFamilyIndices indices;
 
@@ -98,7 +98,7 @@ bool CheckDeviceExtensionSupport(const VkPhysicalDevice& device)
 	return requiredExtensions.empty();
 }
 
-void LoadModel(const std::string& filename, std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices,Mesh3D& mesh)
+void LoadModel(const std::string& filename, std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, Mesh3D& mesh)
 {
 	// Clear the vectors in case they aren't empty
 	vertices.clear();
@@ -148,6 +148,11 @@ void LoadModel(const std::string& filename, std::vector<Vertex3D>& vertices, std
 				attrib.colors[static_cast<uint64_t>(3) * index.vertex_index],
 				attrib.colors[static_cast<uint64_t>(3) * index.vertex_index + static_cast<uint64_t>(1)],
 				attrib.colors[static_cast<uint64_t>(3) * index.vertex_index + static_cast<uint64_t>(2)]
+			};
+
+			vertex.texCoord = {
+				  attrib.texcoords[static_cast<uint64_t>(2) * index.texcoord_index],
+				  attrib.texcoords[static_cast<uint64_t>(2) * index.texcoord_index + static_cast<uint64_t>(1)]
 			};
 
 			if (uniqueVertices.count(vertex) == 0)

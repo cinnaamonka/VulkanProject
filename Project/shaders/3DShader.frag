@@ -14,12 +14,12 @@ void main()
     // Calculate the dot product between the normal and the light direction
     float diff = max(dot(fragNormal, lightDirection), 0.2);
 
-      // Sample the texture
+    // Sample the texture
     vec4 texColor = texture(texSampler, fragTexCoord);
 
     // Simple diffuse lighting
-   vec3 diffuse = diff * vec3(1.0); // Assuming white light
+    vec3 diffuse = diff * vec3(1.0); // Assuming white light
 
     // Output color
-   outColor = vec4(texColor.rgb * diffuse, texColor.a); // Use diffuse color instead of fragColor
+    outColor = vec4(texColor.rgb * diffuse, texColor.a); // Use diffuse color instead of fragCaaaaaaaaaalor
 }
