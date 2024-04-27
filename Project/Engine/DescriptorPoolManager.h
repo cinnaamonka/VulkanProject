@@ -93,7 +93,7 @@ inline void DAEDescriptorPool<UBO>::initialize(const VkPhysicalDevice& physicalD
 {
 	VkDescriptorPoolSize poolSize{};
 	poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-	poolSize.descriptorCount = static_cast<uint32_t>(m_Count);
+	poolSizes[0].descriptorCount = static_cast<uint32_t>(m_UBOs.size());
 
 	VkDescriptorPoolCreateInfo poolInfo{};
 	poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
