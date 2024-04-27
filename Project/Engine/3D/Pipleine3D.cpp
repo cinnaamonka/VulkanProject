@@ -14,9 +14,9 @@ Pipeline3D::Pipeline3D() :
 void Pipeline3D::Initialize(const VkDevice& device, const VkPhysicalDevice& physicalDevice, const VkFormat& swapChainImageFormat,
 	std::vector<VkImageView>& swapChainImageViews, const VkExtent2D& swapChainExtent,
 	const QueueFamilyIndices& queueFamilyIndexes, const VkQueue& graphicsQueue,
-	CommandPool& commandPool, Mesh3D& mesh, Mesh3D& model,ImageManager& imageManager)
+	CommandPool& commandPool, Mesh3D& mesh, Mesh3D& model,ImageManager& imageManager, DepthBuffer& depthBuffer)
 {
-	m_RenderPass.CreateRenderPass(device, swapChainImageFormat, false);
+	m_RenderPass.CreateRenderPass(device,physicalDevice, swapChainImageFormat, false, depthBuffer);
 
 	m_Shader.Init(device, physicalDevice, m_RenderPass, swapChainExtent);
 
@@ -24,7 +24,7 @@ void Pipeline3D::Initialize(const VkDevice& device, const VkPhysicalDevice& phys
 		VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
 		DAEDataBuffer::GetDeviceSize(), swapChainExtent, imageManager);
 
-	m_GraphicsPipeline.CreateFrameBuffers(device, swapChainImageViews, swapChainExtent, m_RenderPass);
+	m_GraphicsPipeline.CreateFrameBuffers(device, swapChainImageViews, swapChainExtent, m_RenderPass, depthBuffer.GetDepthImageView());
 
 	mesh.Initialize(physicalDevice, device, graphicsQueue, commandPool, imageManager);
 	model.InitializeModel(physicalDevice, device, graphicsQueue, commandPool, imageManager);
@@ -69,6 +69,10 @@ void Pipeline3D::Record(const VkExtent2D& swapChainExtent, uint32_t imageIndex)
 
 void Pipeline3D::DrawScene(const VkExtent2D& swapChainExtent, uint32_t imageIndex)
 {
+	std::array<VkClearValue, 2> clearValues{};
+	clearValues[0].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
+	clearValues[1].depthStencil = { 1.0f, 0 };
+
 	VkRenderPassBeginInfo renderPassInfo{};
 	renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 	renderPassInfo.renderPass = m_RenderPass.GetRenderPass();
@@ -76,9 +80,8 @@ void Pipeline3D::DrawScene(const VkExtent2D& swapChainExtent, uint32_t imageInde
 	renderPassInfo.renderArea.offset = { 0, 0 };
 	renderPassInfo.renderArea.extent = swapChainExtent;
 
-	VkClearValue clearColor = { {{0.0f, 0.0f, 0.0f, 1.0f}} };
-	renderPassInfo.clearValueCount = 1;
-	renderPassInfo.pClearValues = &clearColor;
+	renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
+	renderPassInfo.pClearValues = clearValues.data();
 
 	vkCmdBeginRenderPass(m_CommandBuffer.GetVkCommandBuffer(), &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 

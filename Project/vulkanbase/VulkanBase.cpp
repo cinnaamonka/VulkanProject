@@ -3,6 +3,7 @@
 #include "../Engine/Timer.h"
 #include "VulkanUtil.h"
 
+
 #include <functional>
 #include <chrono>
 #include <thread>
@@ -81,19 +82,23 @@ void VulkanBase::InitVulkan()
 
 	m_ImageManager.CreateTextureImage(device, m_DeviceManager.GetPhysicalDevice(),m_CommandPool.GetCommandPool(),
 		m_DeviceManager.GetGraphicsQueue(), TEXTURE_MODEL_PATH);
+
 	m_ImageManager.CreateTextureImageView(device);
 	m_ImageManager.CreateTextureSampler(device, m_DeviceManager.GetPhysicalDevice());
+
+	m_DepthBuffer.CreateDepthResources(device, m_DeviceManager.GetPhysicalDevice(), m_SwapChain.GetSwapChainExtent(),
+		m_ImageManager, m_CommandPool.GetCommandPool(), m_DeviceManager.GetGraphicsQueue());
 
 	m_DAEPipeline.Initialize(device, m_DeviceManager.GetPhysicalDevice(), m_SwapChain.GetSwapChainImageFormat(),
 		m_SwapChain.GetSwapChainImageViews(),
 		m_SwapChain.GetSwapChainExtent(), FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(), m_Surface),
-		m_DeviceManager.GetGraphicsQueue(), m_CommandPool,m_ImageManager);
+		m_DeviceManager.GetGraphicsQueue(), m_CommandPool,m_ImageManager,m_DepthBuffer);
 
 
 	m_DAEPipeline3D.Initialize(device, m_DeviceManager.GetPhysicalDevice(), m_SwapChain.GetSwapChainImageFormat(),
 		m_SwapChain.GetSwapChainImageViews(), m_SwapChain.GetSwapChainExtent(),
 		FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(), m_Surface), m_DeviceManager.GetGraphicsQueue(),
-		m_CommandPool, m_CubeMesh, m_Model,m_ImageManager);
+		m_CommandPool, m_CubeMesh, m_Model,m_ImageManager, m_DepthBuffer);
 
 	// week 06
 	createSyncObjects();
@@ -136,6 +141,7 @@ void VulkanBase::Cleanup()
 	m_DAEPipeline3D.DestroyMeshes(device);
 
 	m_ImageManager.CleanUp(device);
+	m_DepthBuffer.CleanUp(device);
 
 	vkDestroyDevice(device, nullptr);
 	vkDestroySurfaceKHR(m_Instance, m_Surface, nullptr);

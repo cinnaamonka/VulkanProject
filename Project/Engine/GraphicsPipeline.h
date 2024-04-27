@@ -22,7 +22,7 @@ public:
 		const VkMemoryPropertyFlags& memoryPropertyFlags, const VkDeviceSize& deviceSize,
 		const VkExtent2D& swapChainExtent, ImageManager& imageManager);
 	void CreateFrameBuffers(const VkDevice& device, std::vector<VkImageView>& swapChainImageViews,
-		const VkExtent2D& swapChainExtent, const RenderPass& renderPass);
+		const VkExtent2D& swapChainExtent, const RenderPass& renderPass, const VkImageView& imageView);
 
 	void DestroySwapChainFramebuffers(const VkDevice& device);
 	void DestroyGraphicsPipeline(const VkDevice& device);

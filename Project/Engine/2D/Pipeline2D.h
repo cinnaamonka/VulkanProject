@@ -10,6 +10,7 @@
 #include "../Meshes/Rect.h"
 #include "../Meshes/Oval.h"
 #include "../Meshes/RoundedRect.h"
+#include "../DepthBuffer.h"
 
 class Pipeline
 {
@@ -25,7 +26,7 @@ public:
    void Initialize(const VkDevice& device, const VkPhysicalDevice& physicalDevice, const VkFormat& swapChainImageFormat,
        std::vector<VkImageView>& swapChainImageViews,
        const VkExtent2D& swapChainExtent,const QueueFamilyIndices& queueFamilyIndexes,
-       const VkQueue& graphicsQueue, CommandPool& commandPool, ImageManager& imageManager);
+       const VkQueue& graphicsQueue, CommandPool& commandPool, ImageManager& imageManager,DepthBuffer& depthBuffer);
 
    void DestroyPipeline(const VkDevice& device, CommandPool& commandPool);
    void DestroyMeshes(const VkDevice device);

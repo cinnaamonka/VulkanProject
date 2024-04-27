@@ -152,6 +152,6 @@ void SwapChain::CreateImageViews(const VkDevice& device,ImageManager& imageManag
 
 	for (uint32_t i = 0; i < swapChainImages.size(); i++) 
 	{
-		m_SwapChainImageViews[i] = imageManager.CreateImageView(swapChainImages[i], m_SwapChainImageFormat,device);
+		m_SwapChainImageViews[i] = imageManager.CreateImageView(swapChainImages[i], m_SwapChainImageFormat,device, VK_IMAGE_ASPECT_COLOR_BIT);
 	}
 }

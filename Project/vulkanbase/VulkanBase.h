@@ -37,6 +37,7 @@
 #include "../Engine/GPUObject.h"
 #include "../Engine/DeviceManager.h"
 #include "../Engine/Camera.h"
+#include "../Engine/DepthBuffer.h"
 
 class VulkanBase
 {
@@ -88,6 +89,8 @@ private:
 	VkSemaphore renderFinishedSemaphore2;
 	VkFence m_InFlightFence;
 	VkFence m_InFlightFence2;
+
+	DepthBuffer m_DepthBuffer;
 
 	void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
 	void setupDebugMessenger();

@@ -3,8 +3,14 @@
 
 #include "ImageManager.h"
 #include "BaseBuffer.h"
+#include "DepthBuffer.h"
 #include <stdexcept>
 #include <filesystem>
+
+ImageManager::ImageManager():
+	m_TextureImage(VK_NULL_HANDLE)
+{
+}
 
 void ImageManager::CreateTextureImage(const VkDevice& device, const VkPhysicalDevice& physicalDevice,
 	const VkCommandPool& commandPool, const VkQueue& graphicsQueue, const std::string& imagePath)
@@ -140,6 +146,18 @@ void ImageManager::TransitionImageLayout(const VkDevice& device, const VkCommand
 	barrier.subresourceRange.baseArrayLayer = 0;
 	barrier.subresourceRange.layerCount = 1;
 
+	if (newLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL)
+	{
+		barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+
+		if (DepthBuffer::HasStencilComponent(format)) {
+			barrier.subresourceRange.aspectMask |= VK_IMAGE_ASPECT_STENCIL_BIT;
+		}
+	}
+	else {
+		barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	}
+
 	if (oldLayout == VK_IMAGE_LAYOUT_UNDEFINED && newLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL) {
 		barrier.srcAccessMask = 0;
 		barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
@@ -153,6 +171,13 @@ void ImageManager::TransitionImageLayout(const VkDevice& device, const VkCommand
 
 		m_SourceStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
 		m_DestinationStage = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+	}
+	else if (oldLayout == VK_IMAGE_LAYOUT_UNDEFINED && newLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL) {
+		barrier.srcAccessMask = 0;
+		barrier.dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+
+		m_SourceStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+		m_DestinationStage = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
 	}
 	else {
 		throw std::invalid_argument("unsupported layout transition!");
@@ -197,6 +222,7 @@ void ImageManager::CleanUp(const VkDevice& device)
 {
 	vkDestroySampler(device, m_TextureSampler, nullptr);
 	vkDestroyImageView(device, m_TextureImageView, nullptr);
+	vkDestroyImageView(device, m_ImageView, nullptr);
 	vkDestroyImage(device, m_TextureImage, nullptr);
 	vkFreeMemory(device, m_TextureImageMemory, nullptr);
 	
@@ -204,28 +230,28 @@ void ImageManager::CleanUp(const VkDevice& device)
 
 void ImageManager::CreateTextureImageView(const VkDevice& device)
 {
-	m_TextureImageView = CreateImageView(m_TextureImage, VK_FORMAT_R8G8B8A8_SRGB,device);
+	m_TextureImageView = CreateImageView(m_TextureImage, VK_FORMAT_R8G8B8A8_SRGB,device, VK_IMAGE_ASPECT_COLOR_BIT);
 }
 
-VkImageView& ImageManager::CreateImageView(const VkImage& image, const VkFormat& format, const VkDevice& device)
+VkImageView& ImageManager::CreateImageView(const VkImage& image, const VkFormat& format, const VkDevice& device,
+	const VkImageAspectFlags& aspectFlags)
 {
 	VkImageViewCreateInfo viewInfo{};
 	viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
 	viewInfo.image = image;
 	viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
 	viewInfo.format = format;
-	viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	viewInfo.subresourceRange.aspectMask = aspectFlags;
 	viewInfo.subresourceRange.baseMipLevel = 0;
 	viewInfo.subresourceRange.levelCount = 1;
 	viewInfo.subresourceRange.baseArrayLayer = 0;
 	viewInfo.subresourceRange.layerCount = 1;
 
-	VkImageView imageView;
-	if (vkCreateImageView(device, &viewInfo, nullptr, &imageView) != VK_SUCCESS) {
+	if (vkCreateImageView(device, &viewInfo, nullptr, &m_ImageView) != VK_SUCCESS) {
 		throw std::runtime_error("failed to create texture image view!");
 	}
 
-	return imageView;
+	return m_ImageView;
 }
 
 void ImageManager::CreateTextureSampler(const VkDevice& device, const VkPhysicalDevice& physicalDevice)

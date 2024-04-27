@@ -7,6 +7,7 @@
 #include "./Engine/RenderPass.h"
 #include "./Engine/3D/Mesh3D.h"
 #include "./Engine/Scene.h"
+#include "./Engine/DepthBuffer.h"
 
 class Pipeline3D
 {
@@ -22,7 +23,8 @@ public:
 	void Initialize(const VkDevice& device, const VkPhysicalDevice& physicalDevice, const VkFormat& swapChainImageFormat,
 		std::vector<VkImageView>& swapChainImageViews,
 		const VkExtent2D& swapChainExtent, const QueueFamilyIndices& queueFamilyIndexes,
-		const VkQueue& graphicsQueue,CommandPool& commandPool, Mesh3D& mesh, Mesh3D& model, ImageManager& imageManager);
+		const VkQueue& graphicsQueue,CommandPool& commandPool, Mesh3D& mesh, Mesh3D& model, 
+		ImageManager& imageManager, DepthBuffer& depthBuffer);
 	
 	    void DestroyPipeline(const VkDevice& device, CommandPool& commandPool);
 	    void DestroyMeshes(const VkDevice& device);

@@ -3,9 +3,9 @@
 #include <stdexcept>
 
 void GraphicsPipeline::CreateGraphicsPipeline(const VkDevice& device, const VkPhysicalDevice& physicalDevice, GP2Shader& shader,
-	const RenderPass& renderPass,const VkBufferUsageFlags& usageFlags,
+	const RenderPass& renderPass, const VkBufferUsageFlags& usageFlags,
 	const VkMemoryPropertyFlags& memoryPropertyFlags, const VkDeviceSize& deviceSize,
-	const VkExtent2D& swapChainExtent,ImageManager& imageManager)
+	const VkExtent2D& swapChainExtent, ImageManager& imageManager)
 {
 	m_UBOPool = std::make_unique<DAEDescriptorPool<ViewProjection>>(device, 1);
 	m_UBOPool->initialize(physicalDevice, device, usageFlags, memoryPropertyFlags, deviceSize, imageManager);
@@ -70,6 +70,19 @@ void GraphicsPipeline::CreateGraphicsPipeline(const VkDevice& device, const VkPh
 		throw std::runtime_error("failed to create pipeline layout!");
 	}
 
+	VkPipelineDepthStencilStateCreateInfo depthStencil{};
+	depthStencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+	depthStencil.depthTestEnable = VK_TRUE;
+	depthStencil.depthWriteEnable = VK_TRUE;
+	depthStencil.depthCompareOp = VK_COMPARE_OP_LESS;
+	depthStencil.depthBoundsTestEnable = VK_FALSE;
+	depthStencil.minDepthBounds = 0.0f; // Optional
+	depthStencil.maxDepthBounds = 1.0f; // Optional
+	depthStencil.stencilTestEnable = VK_FALSE;
+	depthStencil.front = {}; // Optional
+	depthStencil.back = {}; // Optional
+
+
 	VkGraphicsPipelineCreateInfo pipelineInfo{};
 
 	auto vertexInputStateInfo = shader.createVertexInputStateInfo();
@@ -79,7 +92,7 @@ void GraphicsPipeline::CreateGraphicsPipeline(const VkDevice& device, const VkPh
 	pipelineInfo.stageCount = 2;
 	pipelineInfo.pStages = shader.GetShaderStageInfos().data();
 	pipelineInfo.pVertexInputState = &vertexInputStateInfo;
-	pipelineInfo.pInputAssemblyState = &inputAssemblyInfo; 
+	pipelineInfo.pInputAssemblyState = &inputAssemblyInfo;
 
 #pragma region pipelineInfo
 	pipelineInfo.pViewportState = &viewportState;
@@ -91,6 +104,7 @@ void GraphicsPipeline::CreateGraphicsPipeline(const VkDevice& device, const VkPh
 	pipelineInfo.renderPass = renderPass.GetRenderPass();
 	pipelineInfo.subpass = 0;
 	pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
+	pipelineInfo.pDepthStencilState = &depthStencil;
 
 #pragma endregion
 	if (vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_GraphicsPipeline) != VK_SUCCESS)
@@ -101,21 +115,22 @@ void GraphicsPipeline::CreateGraphicsPipeline(const VkDevice& device, const VkPh
 }
 
 void GraphicsPipeline::CreateFrameBuffers(const VkDevice& device, std::vector<VkImageView>& swapChainImageViews,
-	const VkExtent2D& swapChainExtent, const RenderPass& renderPass)
+	const VkExtent2D& swapChainExtent, const RenderPass& renderPass, const VkImageView& imageView)
 {
 	m_SwapChainFramebuffers.resize(swapChainImageViews.size());
 	for (size_t i = 0; i < swapChainImageViews.size(); i++)
 	{
-		VkImageView attachments[] =
+		std::array<VkImageView, 2> attachments =
 		{
-			swapChainImageViews[i]
+		swapChainImageViews[i],
+		imageView
 		};
 
 		VkFramebufferCreateInfo framebufferInfo{};
 		framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
 		framebufferInfo.renderPass = renderPass.GetRenderPass();
-		framebufferInfo.attachmentCount = 1;
-		framebufferInfo.pAttachments = attachments;
+		framebufferInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
+		framebufferInfo.pAttachments = attachments.data();
 		framebufferInfo.width = swapChainExtent.width;
 		framebufferInfo.height = swapChainExtent.height;
 		framebufferInfo.layers = 1;

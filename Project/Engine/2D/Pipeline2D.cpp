@@ -10,12 +10,13 @@ Pipeline::Pipeline() :
 
 void Pipeline::Initialize(const VkDevice& device, const VkPhysicalDevice& physicalDevice, const VkFormat& swapChainImageFormat,
 	std::vector<VkImageView>& swapChainImageViews, const VkExtent2D& swapChainExtent,
-	const QueueFamilyIndices& queueFamilyIndexes, const VkQueue& graphicsQueue, CommandPool& commandPool,ImageManager& imageManager)
+	const QueueFamilyIndices& queueFamilyIndexes, const VkQueue& graphicsQueue, CommandPool& 
+	commandPool,ImageManager& imageManager, DepthBuffer& depthBuffer)
 {
 	VkSemaphoreCreateInfo semaphoreInfo{};
 	semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
 
-	m_RenderPass.CreateRenderPass(device, swapChainImageFormat, true);
+	m_RenderPass.CreateRenderPass(device, physicalDevice,swapChainImageFormat, true,depthBuffer);
 
 	m_Shader.Init(device, physicalDevice, m_RenderPass, swapChainExtent);
 
@@ -23,7 +24,8 @@ void Pipeline::Initialize(const VkDevice& device, const VkPhysicalDevice& physic
 		VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
 		DAEDataBuffer::GetDeviceSize(), swapChainExtent, imageManager);
 
-	m_GraphicsPipeline.CreateFrameBuffers(device, swapChainImageViews, swapChainExtent, m_RenderPass);
+	m_GraphicsPipeline.CreateFrameBuffers(device, swapChainImageViews, swapChainExtent, m_RenderPass,
+		depthBuffer.GetDepthImageView());
 
 	RectMesh m_RectMesh{ {-0.25,-0.25},0.5,0.3 };
 	Oval m_OvalMesh{ { -0.25f,0.8f},0.2f,6 };
@@ -71,6 +73,10 @@ void Pipeline::Record(const VkExtent2D& swapChainExtent, uint32_t imageIndex)
 
 void Pipeline::DrawScene(const VkExtent2D& swapChainExtent, uint32_t imageIndex)
 {
+	std::array<VkClearValue, 2> clearValues{}; 
+	clearValues[0].color = { {0.0f, 0.0f, 0.0f, 1.0f} }; 
+	clearValues[1].depthStencil = { 1.0f, 0 }; 
+
 	VkRenderPassBeginInfo renderPassInfo{};
 	renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 	renderPassInfo.renderPass = m_RenderPass.GetRenderPass();
@@ -80,9 +86,8 @@ void Pipeline::DrawScene(const VkExtent2D& swapChainExtent, uint32_t imageIndex)
 	renderPassInfo.renderArea.offset = { 0, 0 };
 	renderPassInfo.renderArea.extent = swapChainExtent;
 
-	VkClearValue clearColor = { {{0.0f, 0.0f, 0.0f, 1.0f}} };
-	renderPassInfo.clearValueCount = 1;
-	renderPassInfo.pClearValues = &clearColor;
+	renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
+	renderPassInfo.pClearValues = clearValues.data();
 
 	vkCmdBeginRenderPass(m_CommandBuffer.GetVkCommandBuffer(), &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 

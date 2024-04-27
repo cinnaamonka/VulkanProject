@@ -4,7 +4,7 @@
 class ImageManager
 {
 public:
-	ImageManager() = default;
+	ImageManager();
 	~ImageManager() = default;
 
 	
@@ -29,7 +29,7 @@ public:
 
 	void CreateTextureImageView(const VkDevice& device);
 
-	VkImageView& CreateImageView(const VkImage& image,const VkFormat& format, const VkDevice& device);
+	VkImageView& CreateImageView(const VkImage& image,const VkFormat& format, const VkDevice& device, const VkImageAspectFlags& aspectFlags);
 
 	void CreateTextureSampler(const VkDevice& device, const VkPhysicalDevice& physicalDevice);
 		
@@ -52,4 +52,5 @@ private:
 	VkImageView m_TextureImageView;
 	VkPhysicalDeviceProperties m_Properties;
 	VkSampler m_TextureSampler;
+	VkImageView m_ImageView;
 };
