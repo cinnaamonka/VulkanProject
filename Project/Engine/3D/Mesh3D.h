@@ -118,8 +118,8 @@ public:
 		bottomLeft.texCoord = glm::vec2(1.0f, 0.0f); 
 		topLeft.texCoord = glm::vec2(0.0f, 0.0f); 
 		topRight.texCoord = glm::vec2(0.0f, 1.0f); 
-		bottomLeft.texCoord = glm::vec2(1.0f, 1.0f); 
-		bottomRight.texCoord = glm::vec2(1.0f, 0.0f);
+		//bottomLeft.texCoord = glm::vec2(1.0f, 1.0f); 
+		bottomRight.texCoord = glm::vec2(1.0f, 1.0f);
 
 		if (isClockWise) {
 			

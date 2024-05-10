@@ -46,7 +46,7 @@ struct Vertex3D
 
 	bool operator==(const Vertex3D& other) const 
 	{
-		return position == other.position && color == other.color && normal == other.normal;
+		return position == other.position && texCoord == other.texCoord && normal == other.normal;
 	}
 
 	static VkVertexInputBindingDescription GetBindingDescription()

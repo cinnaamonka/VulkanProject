@@ -144,7 +144,7 @@ void DAEDescriptorPool<UBO>::createDescriptorSets(ImageManager& imageManager)
 
 		std::array<VkWriteDescriptorSet, 2> descriptorWrites{}; 
 
-		descriptorWrites[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET; 
+		descriptorWrites[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 		descriptorWrites[0].dstSet = m_DescriptorSets[descriptorIndex];
 		descriptorWrites[0].dstBinding = 0; 
 		descriptorWrites[0].dstArrayElement = 0; 
@@ -160,6 +160,8 @@ void DAEDescriptorPool<UBO>::createDescriptorSets(ImageManager& imageManager)
 		descriptorWrites[1].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER; 
 		descriptorWrites[1].descriptorCount = 1; 
 		descriptorWrites[1].pImageInfo = &imageInfo; 
+
+		// expand this
 
 		vkUpdateDescriptorSets(m_Device, static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
 
