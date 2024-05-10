@@ -32,8 +32,10 @@ VulkanBase::VulkanBase() :
 	m_CubeMesh.InitializeCube(glm::vec3((-0.5f - 0.3f + xOffset) * 10.0f, -0.5f * 10.0f, -0.5f * 10.0f), 10);
 
 	auto modelVertices = m_Model.GetVertices();
+	auto sphereVertices = m_Sphere.GetVertices();
 
-	LoadModel(MODEL_PATH, modelVertices, m_Model.GetModelIndices(), m_Model); 
+	LoadModel(MODEL_PATH, modelVertices, m_Model.GetModelIndices(), m_Model);
+	LoadModel(SPHERE_PATH, sphereVertices, m_Sphere.GetModelIndices(), m_Sphere);
 }
 
 void VulkanBase::Run()
@@ -95,10 +97,10 @@ void VulkanBase::InitVulkan()
 		m_DeviceManager.GetGraphicsQueue(), m_CommandPool,m_ImageManager,m_DepthBuffer);
 
 
-	m_DAEPipeline3D.Initialize(device, m_DeviceManager.GetPhysicalDevice(), m_SwapChain.GetSwapChainImageFormat(),
+	m_PBRPipeline.Initialize(device, m_DeviceManager.GetPhysicalDevice(), m_SwapChain.GetSwapChainImageFormat(),
 		m_SwapChain.GetSwapChainImageViews(), m_SwapChain.GetSwapChainExtent(),
 		FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(), m_Surface), m_DeviceManager.GetGraphicsQueue(),
-		m_CommandPool, m_CubeMesh, m_Model,m_ImageManager, m_DepthBuffer);
+		m_CommandPool, m_CubeMesh, m_Model, m_Sphere,m_ImageManager, m_DepthBuffer);
 
 	// week 06
 	createSyncObjects();
@@ -124,7 +126,7 @@ void VulkanBase::Cleanup()
 	vkDestroyFence(device, m_InFlightFence2, nullptr);
 
 	m_DAEPipeline.DestroyPipeline(device, m_CommandPool);
-	m_DAEPipeline3D.DestroyPipeline(device, m_CommandPool);
+	m_PBRPipeline.DestroyPipeline(device, m_CommandPool);
 
 	for (auto imageView : m_SwapChain.GetSwapChainImageViews())
 	{
@@ -138,7 +140,7 @@ void VulkanBase::Cleanup()
 	vkDestroySwapchainKHR(device, m_SwapChain.GetSwapChain(), nullptr);
 
 	m_DAEPipeline.DestroyMeshes(device);
-	m_DAEPipeline3D.DestroyMeshes(device);
+	m_PBRPipeline.DestroyMeshes(device);
 
 	m_ImageManager.CleanUp(device);
 	m_DepthBuffer.CleanUp(device);
@@ -290,8 +292,8 @@ void VulkanBase::DrawFrame()
 
 	vp3D = m_Camera.GetViewProjection(windowWidth, windowHeight, nearPlane, farPlane);
 
-	m_DAEPipeline3D.GetGraphicsPipeline().SetUBO(vp3D, 0);
-	m_DAEPipeline3D.Record(m_SwapChain.GetSwapChainExtent(), imageIndex);
+	m_PBRPipeline.GetGraphicsPipeline().SetUBO(vp3D, 0);
+	m_PBRPipeline.Record(m_SwapChain.GetSwapChainExtent(), imageIndex);
 
 	VkSubmitInfo submitInfo1{};
 	submitInfo1.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -312,7 +314,7 @@ void VulkanBase::DrawFrame()
 	submitInfo2.pWaitSemaphores = nullptr;
 	submitInfo2.pWaitDstStageMask = waitStages2;
 
-	m_DAEPipeline3D.GetCommandBuffer().SubmitCommandBuffer(submitInfo2);
+	m_PBRPipeline.GetCommandBuffer().SubmitCommandBuffer(submitInfo2);
 
 	VkSemaphore signalSemaphores[] = { renderFinishedSemaphore };
 	submitInfo1.signalSemaphoreCount = 1;

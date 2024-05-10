@@ -65,7 +65,7 @@ private:
 	double m_Lag = 0;
 
 	Pipeline m_DAEPipeline;
-	Pipeline3D m_DAEPipeline3D;
+	Pipeline3D m_PBRPipeline;
 	
 	SwapChain m_SwapChain;
 	DeviceManager m_DeviceManager;
@@ -75,7 +75,10 @@ private:
 
 	Mesh3D m_CubeMesh;
 	Mesh3D m_Model;
+	Mesh3D m_Sphere;
+
 	const std::string MODEL_PATH = "models/viking_room.obj";
+	const std::string SPHERE_PATH = "models/sphere.obj";
 
 	const std::string TEXTURE_MODEL_PATH = "textures/vehicle_diffuse.png";
 

@@ -145,6 +145,22 @@ public:
 		m_Vertices.push_back(vertex);
 		m_Indices.push_back(static_cast<uint16_t>(m_Indices.size()));
 	}
+
+	void Translate(const glm::vec3& translation)
+	{
+		for (auto& vertex : m_Vertices)
+		{
+			vertex.position += translation;
+		}
+	}
+
+	void Scale(const glm::vec3& scaleFactor)
+	{
+		for (auto& vertex : m_Vertices)
+		{
+			vertex.position *= scaleFactor;
+		}
+	}
 private:
 	std::vector<Vertex3D> m_Vertices;
 	std::vector<uint16_t > m_Indices;

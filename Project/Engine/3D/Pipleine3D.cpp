@@ -14,7 +14,7 @@ Pipeline3D::Pipeline3D() :
 void Pipeline3D::Initialize(const VkDevice& device, const VkPhysicalDevice& physicalDevice, const VkFormat& swapChainImageFormat,
 	std::vector<VkImageView>& swapChainImageViews, const VkExtent2D& swapChainExtent,
 	const QueueFamilyIndices& queueFamilyIndexes, const VkQueue& graphicsQueue,
-	CommandPool& commandPool, Mesh3D& mesh, Mesh3D& model,ImageManager& imageManager, DepthBuffer& depthBuffer)
+	CommandPool& commandPool, Mesh3D& mesh, Mesh3D& model, Mesh3D& sphere,ImageManager& imageManager, DepthBuffer& depthBuffer)
 {
 	m_RenderPass.CreateRenderPass(device,physicalDevice, swapChainImageFormat, false, depthBuffer);
 
@@ -26,11 +26,19 @@ void Pipeline3D::Initialize(const VkDevice& device, const VkPhysicalDevice& phys
 
 	m_GraphicsPipeline.CreateFrameBuffers(device, swapChainImageViews, swapChainExtent, m_RenderPass, depthBuffer.GetDepthImageView());
 
+	sphere.Scale({ 3.0f, 3.0f, 3.0f });
+	sphere.Translate({ -20.0f, .0f, -20.0f });
+	
+
 	mesh.Initialize(physicalDevice, device, graphicsQueue, commandPool, imageManager);
 	model.InitializeModel(physicalDevice, device, graphicsQueue, commandPool, imageManager);
+	sphere.InitializeModel(physicalDevice, device, graphicsQueue, commandPool, imageManager);
 	 
+	
+
 	m_Scene.AddMesh(mesh);
 	m_Scene.AddMesh(model);
+	m_Scene.AddMesh(sphere);
 
 	m_CommandBuffer = commandPool.CreateCommandBuffer(device);
 }
