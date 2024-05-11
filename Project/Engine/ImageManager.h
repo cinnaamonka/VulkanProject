@@ -1,26 +1,25 @@
 #pragma once
 #include <vulkan/vulkan.h>
 #include <string>
+#include "Texture.h"
 class ImageManager
 {
 public:
 	ImageManager();
 	~ImageManager() = default;
 
-	
-
 	void CreateTextureImage(const VkDevice& device,const VkPhysicalDevice& physicalDevice, 
-		const VkCommandPool& commandPool, const VkQueue& graphicsQueue,const std::string& imagePath);
+		const VkCommandPool& commandPool, const VkQueue& graphicsQueue,const std::string& diffuseTexturePath, const std::string& normalPathPath);
 
 	void CreateImage(const VkDevice& device, uint32_t width, uint32_t height,const VkFormat& format,
 		const VkImageTiling& tiling,const VkImageUsageFlags& usage,const VkMemoryPropertyFlags& properties, VkImage& image,
 		VkDeviceMemory& imageMemory, const VkPhysicalDevice& physicalDevice);
 	 
-	VkCommandBuffer BeginSingleTimeCommands(const VkDevice& device,const VkCommandPool& commandPool);
+	VkCommandBuffer& BeginSingleTimeCommands(const VkDevice& device,const VkCommandPool& commandPool);
 	void EndSingleTimeCommands(const VkDevice& device,const VkCommandBuffer& commandBuffer,const VkQueue& graphicsQueue,const VkCommandPool& commandPool);
 	
 	void TransitionImageLayout(const VkDevice& device,const VkCommandPool& commandPool,
-		const VkQueue& graphicsQueue, VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
+		const VkQueue& graphicsQueue,const VkImage& image, const VkFormat& format, const VkImageLayout& oldLayout, const VkImageLayout& newLayout);
 
 	void CopyBufferToImage(const VkBuffer& buffer,const VkImage& image, uint32_t width, uint32_t height,
 		const VkCommandPool& commandPool, const VkDevice& device, const VkQueue& graphicsQueue);
@@ -31,26 +30,32 @@ public:
 
 	VkImageView& CreateImageView(const VkImage& image,const VkFormat& format, const VkDevice& device, const VkImageAspectFlags& aspectFlags);
 
-	void CreateTextureSampler(const VkDevice& device, const VkPhysicalDevice& physicalDevice);
+	void CreateDiffuseTextureSampler(const VkDevice& device, const VkPhysicalDevice& physicalDevice);
+	void CreateNormalMapSampler(const VkDevice& device, const VkPhysicalDevice& physicalDevice);
 		
-	VkImageView& GetTextureImageView()
+	VkImageView& GetDiffuseTextureImageView()
 	{
-		return m_TextureImageView;
+		return  m_DiffuseTexture.GetTextureImageView();;
 	}
 	
-	VkSampler& GetTextureSampler()
+	VkSampler& GetDiffuseTextureSampler()
 	{
-		return m_TextureSampler;
+		return m_DiffuseTexture.GetTextureSampler();;
+	}
+
+
+	VkImageView& GetNormalMapImageView()
+	{
+		return  m_NormalMap.GetTextureImageView();;
+	}
+
+	VkSampler& GetNormalMapTextureSampler()
+	{
+		return m_NormalMap.GetTextureSampler();;
 	}
 private:
-	VkBuffer m_StagingBuffer;
-	VkDeviceMemory m_StagingBufferMemory;
-	VkImage m_TextureImage;
-	VkDeviceMemory m_TextureImageMemory;
-	VkPipelineStageFlags m_SourceStage;
-	VkPipelineStageFlags m_DestinationStage;
-	VkImageView m_TextureImageView;
-	VkPhysicalDeviceProperties m_Properties;
-	VkSampler m_TextureSampler;
-	VkImageView m_ImageView;
+	Texture m_DiffuseTexture;
+	Texture m_NormalMap;
+	
+	VkCommandBuffer m_CommandBuffer;
 };

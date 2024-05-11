@@ -91,11 +91,13 @@ inline void DAEDescriptorPool<UBO>::initialize(const VkPhysicalDevice& physicalD
 	const VkMemoryPropertyFlags& properties,
 	const VkDeviceSize& size,ImageManager& imageMamager)
 {
-	std::array<VkDescriptorPoolSize, 2> poolSizes{}; 
+	std::array<VkDescriptorPoolSize, 3> poolSizes{}; 
 	poolSizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER; 
 	poolSizes[0].descriptorCount = static_cast<uint32_t>(m_Count);
 	poolSizes[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER; 
 	poolSizes[1].descriptorCount = static_cast<uint32_t>(m_Count);
+	poolSizes[2].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+	poolSizes[2].descriptorCount = static_cast<uint32_t>(m_Count);
 
 	VkDescriptorPoolCreateInfo poolInfo{}; 
 	poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO; 
@@ -137,12 +139,17 @@ void DAEDescriptorPool<UBO>::createDescriptorSets(ImageManager& imageManager)
 		bufferInfo.offset = 0;
 		bufferInfo.range = m_Size;
 
-		VkDescriptorImageInfo imageInfo{}; 
-		imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL; 
-		imageInfo.imageView = imageManager.GetTextureImageView();
-		imageInfo.sampler = imageManager.GetTextureSampler();
+		VkDescriptorImageInfo diffuseImageInfo{}; 
+		diffuseImageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL; 
+		diffuseImageInfo.imageView = imageManager.GetDiffuseTextureImageView();
+		diffuseImageInfo.sampler = imageManager.GetDiffuseTextureSampler(); 
 
-		std::array<VkWriteDescriptorSet, 2> descriptorWrites{}; 
+		VkDescriptorImageInfo normalMapInfo{};
+		normalMapInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		normalMapInfo.imageView = imageManager.GetNormalMapImageView();
+		normalMapInfo.sampler = imageManager.GetNormalMapTextureSampler();
+
+		std::array<VkWriteDescriptorSet, 3> descriptorWrites{}; 
 
 		descriptorWrites[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 		descriptorWrites[0].dstSet = m_DescriptorSets[descriptorIndex];
@@ -159,10 +166,18 @@ void DAEDescriptorPool<UBO>::createDescriptorSets(ImageManager& imageManager)
 		descriptorWrites[1].dstArrayElement = 0; 
 		descriptorWrites[1].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER; 
 		descriptorWrites[1].descriptorCount = 1; 
-		descriptorWrites[1].pImageInfo = &imageInfo; 
+		descriptorWrites[1].pImageInfo = &diffuseImageInfo;
 
-		// expand this
+		// Binding 2: Combined image sampler (second texture)
+		descriptorWrites[2].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+		descriptorWrites[2].dstSet = m_DescriptorSets[descriptorIndex];
+		descriptorWrites[2].dstBinding = 2;
+		descriptorWrites[2].dstArrayElement = 0;
+		descriptorWrites[2].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+		descriptorWrites[2].descriptorCount = 1;
+		descriptorWrites[2].pImageInfo = &normalMapInfo;
 
+		
 		vkUpdateDescriptorSets(m_Device, static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
 
 		++descriptorIndex;
@@ -199,7 +214,14 @@ inline void DAEDescriptorPool<UBO>::CreateDescriptorSetLayout(const VkDevice& de
 	samplerLayoutBinding.pImmutableSamplers = nullptr;
 	samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 
-	std::array<VkDescriptorSetLayoutBinding, 2> bindings = { uboLayoutBinding, samplerLayoutBinding };
+	VkDescriptorSetLayoutBinding secondSamplerLayoutBinding{};
+	secondSamplerLayoutBinding.binding = 2;
+	secondSamplerLayoutBinding.descriptorCount = 1;
+	secondSamplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+	secondSamplerLayoutBinding.pImmutableSamplers = nullptr;
+	secondSamplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+
+	std::array<VkDescriptorSetLayoutBinding, 3> bindings = { uboLayoutBinding, samplerLayoutBinding,secondSamplerLayoutBinding };
 	VkDescriptorSetLayoutCreateInfo layoutInfoSampler{};
 	layoutInfoSampler.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
 	layoutInfoSampler.bindingCount = static_cast<uint32_t>(bindings.size());

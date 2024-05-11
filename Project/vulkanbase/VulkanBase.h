@@ -81,6 +81,7 @@ private:
 	const std::string SPHERE_PATH = "models/sphere.obj";
 
 	const std::string TEXTURE_MODEL_PATH = "textures/vehicle_diffuse.png";
+	const std::string NORMAL_MAP_PATH = "textures/vehicle_normal.png";
 
 	VkInstance m_Instance;
 	VkDebugUtilsMessengerEXT m_DebugMessenger;
