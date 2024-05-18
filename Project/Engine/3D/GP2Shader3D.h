@@ -47,7 +47,7 @@ private:
 	std::unique_ptr<DAEDataBuffer> m_UBOBuffer;
 	VertexUBO m_UBOSrc;
 
-	std::array<VkVertexInputAttributeDescription, 4> m_AttributeDescriptions;
+	std::array<VkVertexInputAttributeDescription, 5> m_AttributeDescriptions;
 	VkVertexInputBindingDescription m_InputBinding;
 	VkPipelineShaderStageCreateInfo createFragmentShaderInfo(const VkDevice& device);
 	VkPipelineShaderStageCreateInfo createVertexShaderInfo(const VkDevice& device);

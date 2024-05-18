@@ -83,11 +83,12 @@ void VulkanBase::InitVulkan()
 	m_CommandPool.CreateCommandPool(device, FindQueueFamilies(m_DeviceManager.GetPhysicalDevice(), m_Surface));
 
 	m_ImageManager.CreateTextureImage(device, m_DeviceManager.GetPhysicalDevice(),m_CommandPool.GetCommandPool(),
-		m_DeviceManager.GetGraphicsQueue(), TEXTURE_MODEL_PATH, NORMAL_MAP_PATH);
+		m_DeviceManager.GetGraphicsQueue(), TEXTURE_MODEL_PATH, NORMAL_MAP_PATH, SPECULAR_MAP_PATH); 
 
 	m_ImageManager.CreateTextureImageView(device);
 	m_ImageManager.CreateDiffuseTextureSampler(device, m_DeviceManager.GetPhysicalDevice());
 	m_ImageManager.CreateNormalMapSampler(device, m_DeviceManager.GetPhysicalDevice());
+	m_ImageManager.CreateSpecularMapSampler(device, m_DeviceManager.GetPhysicalDevice());
 
 	m_DepthBuffer.CreateDepthResources(device, m_DeviceManager.GetPhysicalDevice(), m_SwapChain.GetSwapChainExtent(),
 		m_ImageManager, m_CommandPool.GetCommandPool(), m_DeviceManager.GetGraphicsQueue());

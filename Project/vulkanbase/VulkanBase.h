@@ -82,6 +82,7 @@ private:
 
 	const std::string TEXTURE_MODEL_PATH = "textures/vehicle_diffuse.png";
 	const std::string NORMAL_MAP_PATH = "textures/vehicle_normal.png";
+	const std::string SPECULAR_MAP_PATH = "textures/vehicle_specular.png";
 
 	VkInstance m_Instance;
 	VkDebugUtilsMessengerEXT m_DebugMessenger;

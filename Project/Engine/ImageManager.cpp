@@ -12,10 +12,12 @@ ImageManager::ImageManager()
 }
 
 void ImageManager::CreateTextureImage(const VkDevice& device, const VkPhysicalDevice& physicalDevice,
-	const VkCommandPool& commandPool, const VkQueue& graphicsQueue, const std::string& diffuseTexturePath, const std::string& normalPathPath)
+	const VkCommandPool& commandPool, const VkQueue& graphicsQueue, const std::string& diffuseTexturePath,
+	const std::string& normalPath, const std::string& specularPath)
 {
 	m_DiffuseTexture.CreateTextureImage(device, physicalDevice, commandPool, graphicsQueue, diffuseTexturePath);
-	m_NormalMap.CreateTextureImage(device, physicalDevice, commandPool, graphicsQueue, normalPathPath);
+	m_NormalMap.CreateTextureImage(device, physicalDevice, commandPool, graphicsQueue, normalPath);
+	m_SpecularMap.CreateTextureImage(device, physicalDevice, commandPool, graphicsQueue, specularPath);
 }
 
 void ImageManager::CreateImage(const VkDevice& device, uint32_t width, uint32_t height, const VkFormat& format,
@@ -67,6 +69,7 @@ void ImageManager::TransitionImageLayout(const VkDevice& device, const VkCommand
 {
 	m_DiffuseTexture.TransitionImageLayout(device, commandPool, graphicsQueue, image, format, oldLayout, newLayout); 
 	m_NormalMap.TransitionImageLayout(device, commandPool, graphicsQueue, image, format, oldLayout, newLayout);
+	m_SpecularMap.TransitionImageLayout(device, commandPool, graphicsQueue, image, format, oldLayout, newLayout);
 }
 
 void ImageManager::CopyBufferToImage(const VkBuffer& buffer, const VkImage& image, uint32_t width,
@@ -74,12 +77,14 @@ void ImageManager::CopyBufferToImage(const VkBuffer& buffer, const VkImage& imag
 {
 	m_DiffuseTexture.CopyBufferToImage(buffer, image, width, height, commandPool, device, graphicsQueue);
 	m_NormalMap.CopyBufferToImage(buffer, image, width, height, commandPool, device, graphicsQueue);
+	m_SpecularMap.CopyBufferToImage(buffer, image, width, height, commandPool, device, graphicsQueue);
 }
 
 void ImageManager::CleanUp(const VkDevice& device)
 {
 	m_DiffuseTexture.CleanUp(device);
 	m_NormalMap.CleanUpWithoutImageViews(device);
+	m_SpecularMap.CleanUpWithoutImageViews(device);
 	
 }
 
@@ -87,6 +92,7 @@ void ImageManager::CreateTextureImageView(const VkDevice& device)
 {
 	m_DiffuseTexture.CreateTextureImageView(device);
 	m_NormalMap.CreateTextureImageView(device);
+	m_SpecularMap.CreateTextureImageView(device);
 }
 
 VkImageView& ImageManager::CreateImageView(const VkImage& image, const VkFormat& format, const VkDevice& device,
@@ -102,5 +108,10 @@ void ImageManager::CreateDiffuseTextureSampler(const VkDevice& device, const VkP
 void ImageManager::CreateNormalMapSampler(const VkDevice& device, const VkPhysicalDevice& physicalDevice)
 {
 	return m_NormalMap.CreateTextureSampler(device, physicalDevice);
+}
+
+void ImageManager::CreateSpecularMapSampler(const VkDevice& device, const VkPhysicalDevice& physicalDevice)
+{
+	return m_SpecularMap.CreateTextureSampler(device, physicalDevice);
 }
 

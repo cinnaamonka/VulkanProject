@@ -97,6 +97,30 @@ bool CheckDeviceExtensionSupport(const VkPhysicalDevice& device)
 
 	return requiredExtensions.empty();
 }
+Vertex3D loadVertex(const tinyobj::attrib_t& attrib, const tinyobj::index_t& index)
+{
+	Vertex3D vertex{};
+	vertex.position = {
+		attrib.vertices[3 * index.vertex_index + 0],
+		attrib.vertices[3 * index.vertex_index + 1],
+		attrib.vertices[3 * index.vertex_index + 2]
+	};
+	vertex.normal = {
+		attrib.normals[3 * index.normal_index + 0],
+		attrib.normals[3 * index.normal_index + 1],
+		attrib.normals[3 * index.normal_index + 2]
+	};
+	vertex.color = {
+		attrib.colors[3 * index.vertex_index + 0],
+		attrib.colors[3 * index.vertex_index + 1],
+		attrib.colors[3 * index.vertex_index + 2]
+	};
+	vertex.texCoord = {
+		attrib.texcoords[2 * index.texcoord_index + 0],
+		attrib.texcoords[2 * index.texcoord_index + 1]
+	};
+	return vertex;
+}
 
 void LoadModel(const std::string& filename, std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, Mesh3D& mesh)
 {
@@ -120,48 +144,61 @@ void LoadModel(const std::string& filename, std::vector<Vertex3D>& vertices, std
 
 	std::unordered_map<Vertex3D, uint32_t> uniqueVertices{};
 
-	// Loop trough every shape that was read from the file
-	for (const auto& shape : shapes)
-	{
-		// Loop trough all indices in current shape
-		for (const auto& index : shape.mesh.indices)
-		{
-			// Create empty vertex
-			Vertex3D vertex{};
+	// Temporary storage for tangent calculation
+	std::vector<glm::vec3> tangents(vertices.size(), glm::vec3(0.0f));
 
-			// Add position to vertex
-			vertex.position = {
-				attrib.vertices[static_cast<uint64_t>(3) * index.vertex_index],
-				attrib.vertices[static_cast<uint64_t>(3) * index.vertex_index + static_cast<uint64_t>(1)],
-				attrib.vertices[static_cast<uint64_t>(3) * index.vertex_index + static_cast<uint64_t>(2)]
-			};
+	// Loop through every shape that was read from the file
+	for (const auto& shape : shapes) {
+		// Loop through all indices in the current shape
+		for (size_t i = 0; i < shape.mesh.indices.size(); i += 3) {
+			tinyobj::index_t idx0 = shape.mesh.indices[i];
+			tinyobj::index_t idx1 = shape.mesh.indices[i + 1];
+			tinyobj::index_t idx2 = shape.mesh.indices[i + 2];
 
-			// Add normal to vertex
-			vertex.normal = {
-				attrib.normals[static_cast<uint64_t>(3) * index.normal_index],
-				attrib.normals[static_cast<uint64_t>(3) * index.normal_index + static_cast<uint64_t>(1)],
-				attrib.normals[static_cast<uint64_t>(3) * index.normal_index + static_cast<uint64_t>(2)]
-			};
+			Vertex3D v0 = loadVertex(attrib, idx0);
+			Vertex3D v1 = loadVertex(attrib, idx1);
+			Vertex3D v2 = loadVertex(attrib, idx2);
 
-			// Add color to vertex
-			vertex.color = {
-				attrib.colors[static_cast<uint64_t>(3) * index.vertex_index],
-				attrib.colors[static_cast<uint64_t>(3) * index.vertex_index + static_cast<uint64_t>(1)],
-				attrib.colors[static_cast<uint64_t>(3) * index.vertex_index + static_cast<uint64_t>(2)]
-			};
+			glm::vec3 edge1 = v1.position - v0.position;
+			glm::vec3 edge2 = v2.position - v0.position;
 
-			vertex.texCoord = {
-				  attrib.texcoords[static_cast<uint64_t>(2) * index.texcoord_index],
-				  attrib.texcoords[static_cast<uint64_t>(2) * index.texcoord_index + static_cast<uint64_t>(1)]
-			};
+			glm::vec2 deltaUV1 = v1.texCoord - v0.texCoord;
+			glm::vec2 deltaUV2 = v2.texCoord - v0.texCoord;
 
-			if (uniqueVertices.count(vertex) == 0)
-			{
-				uniqueVertices[vertex] = static_cast<uint32_t>(vertices.size());
-				vertices.push_back(vertex);
+			float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+			glm::vec3 tangent;
+			tangent.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+			tangent.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+			tangent.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+
+			v0.tangent += tangent;
+			v1.tangent += tangent;
+			v2.tangent += tangent;
+
+			if (uniqueVertices.count(v0) == 0) {
+				uniqueVertices[v0] = static_cast<uint32_t>(vertices.size());
+				vertices.push_back(v0);
 			}
-			indices.push_back(uniqueVertices[vertex]);
+			indices.push_back(uniqueVertices[v0]);
+
+			if (uniqueVertices.count(v1) == 0) {
+				uniqueVertices[v1] = static_cast<uint32_t>(vertices.size());
+				vertices.push_back(v1);
+			}
+			indices.push_back(uniqueVertices[v1]);
+
+			if (uniqueVertices.count(v2) == 0) {
+				uniqueVertices[v2] = static_cast<uint32_t>(vertices.size());
+				vertices.push_back(v2);
+			}
+			indices.push_back(uniqueVertices[v2]);
 		}
+	}
+
+	// Normalize tangents
+	for (auto& vertex : vertices) {
+		vertex.tangent = glm::normalize(vertex.tangent);
 	}
 
 	mesh.SetVertices(vertices);

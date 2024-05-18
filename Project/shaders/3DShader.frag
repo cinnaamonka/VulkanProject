@@ -1,33 +1,45 @@
 #version 450
 
 layout(location = 0) in vec3 fragColor;
-// Remove the fragNormal input variable, as we'll be using the normal sampled from the normal map
-
+layout(location = 1) in vec3 fragNormal;
 layout(location = 2) in vec2 fragTexCoord;
+layout(location = 3) in vec3 fragTangent;
 
 layout(location = 0) out vec4 outColor;
+
 layout(binding = 1) uniform sampler2D texSampler;
 layout(binding = 2) uniform sampler2D normalMapSampler; 
+layout(binding = 3) uniform sampler2D specularMapSampler; 
 
 void main() 
 {
     const vec3 lightDirection = normalize(vec3(-0.5, -0.5, -0.5));
 
-    // Sample the normal from the normal map
-    vec3 sampledNormal = texture(normalMapSampler, fragTexCoord).rgb * 2.0 - 1.0; // Convert from [0, 1] to [-1, 1] range
+    vec4 ambientOcclusion = vec4(0.05f, 0.05f, 0.05f, 1.0f);
+    float sampledPhongExponent = 20.0f;
+    float sampledSpecularStrength = 2.0f;
+    float diffuseStrengthKd = 7.0f;
 
-    // Ensure the sampled normal is normalized
-    vec3 normal = normalize(sampledNormal);
+    //normal mapping
+    vec3 binormal = cross(fragNormal, fragTangent);
+    mat3 tangentSpaceAxis = mat3(fragTangent, binormal, fragNormal);
+    vec3 sampledNormalColor = texture(normalMapSampler, fragTexCoord).xyz * 2.0 - 1.0;
+    vec3 resultNormal = normalize(tangentSpaceAxis * sampledNormalColor);
 
-    // Calculate the dot product between the normal and the light direction
-    float diff = max(dot(normal, lightDirection), 0.2);
+    //cos angle
+    float cosTheta = max(dot(resultNormal, lightDirection), 0.0);
 
-    // Sample the texture
-    vec4 texColor = texture(texSampler, fragTexCoord);
+    //diffuse
+    vec4 sampleDiffuse = texture(texSampler, fragTexCoord);
+    vec3 lamberDiffuse = sampleDiffuse.xyz * cosTheta * diffuseStrengthKd; 
 
-    // Simple diffuse lighting
-    vec3 diffuse = diff * vec3(1.0); // Assuming white light
+    //specular
+    vec3 reflection = reflect(normalize(lightDirection), resultNormal);
+    float cosAlpha = max(dot(reflection, normalize(vec3(0.0, 0.0, 1.0))), 0.0); 
+    vec3 sampledSpecular = texture(specularMapSampler,fragTexCoord).rgb;
 
-    // Output color
-    outColor = vec4(texColor.rgb * diffuse, texColor.a); // Use diffuse color instead of fragColor
+    vec4 specularColor = vec4(sampledSpecularStrength * pow(cosAlpha, sampledPhongExponent) * sampledSpecular, 1.0);
+
+
+    outColor = vec4((lamberDiffuse.rgb + specularColor.rgb + ambientOcclusion.rgb) * cosTheta, 1.0);
 }

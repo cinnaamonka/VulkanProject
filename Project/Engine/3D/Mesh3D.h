@@ -118,8 +118,24 @@ public:
 		bottomLeft.texCoord = glm::vec2(1.0f, 0.0f); 
 		topLeft.texCoord = glm::vec2(0.0f, 0.0f); 
 		topRight.texCoord = glm::vec2(0.0f, 1.0f); 
-		//bottomLeft.texCoord = glm::vec2(1.0f, 1.0f); 
 		bottomRight.texCoord = glm::vec2(1.0f, 1.0f);
+
+		glm::vec3 tangent{};
+
+		glm::vec3 edge1 = topLeft.position - bottomLeft.position;
+		glm::vec3 edge2 = topRight.position - bottomLeft.position;
+		glm::vec2 deltaUV1 = topLeft.texCoord - bottomLeft.texCoord;
+		glm::vec2 deltaUV2 = topRight.texCoord - bottomLeft.texCoord;
+		float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+		tangent.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+		tangent.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+		tangent.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+		tangent = glm::normalize(tangent); 
+
+		bottomLeft.tangent = tangent;
+		topLeft.tangent = tangent;
+		bottomRight.tangent = tangent;
+		topRight.tangent = tangent;
 
 		if (isClockWise) {
 			
