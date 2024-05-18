@@ -30,6 +30,7 @@ public:
 		const VkCommandPool& commandPool, const VkDevice& device, const VkQueue& graphicsQueue);
 
 	void CleanUp(const VkDevice& device);
+	void CleanUpWithoutImageViews(const VkDevice& device);
 
 	void CreateTextureImageView(const VkDevice& device);
 

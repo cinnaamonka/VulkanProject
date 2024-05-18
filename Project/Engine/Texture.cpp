@@ -213,11 +213,20 @@ void Texture::CopyBufferToImage(const VkBuffer& buffer, const VkImage& image, ui
 void Texture::CleanUp(const VkDevice& device)
 {
 	vkDestroySampler(device, m_TextureSampler, nullptr);
+
 	vkDestroyImageView(device, m_TextureImageView, nullptr);
 	vkDestroyImageView(device, m_ImageView, nullptr);
 	vkDestroyImage(device, m_TextureImage, nullptr);
 	vkFreeMemory(device, m_TextureImageMemory, nullptr);
 
+}
+
+void Texture::CleanUpWithoutImageViews(const VkDevice& device)
+{
+	vkDestroySampler(device, m_TextureSampler, nullptr);
+	vkDestroyImageView(device, m_ImageView, nullptr);
+	vkDestroyImage(device, m_TextureImage, nullptr);
+	vkFreeMemory(device, m_TextureImageMemory, nullptr);
 }
 
 void Texture::CreateTextureImageView(const VkDevice& device)

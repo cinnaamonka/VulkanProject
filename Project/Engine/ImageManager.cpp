@@ -23,7 +23,6 @@ void ImageManager::CreateImage(const VkDevice& device, uint32_t width, uint32_t 
 	VkImage& image, VkDeviceMemory& imageMemory, const VkPhysicalDevice& physicalDevice)
 {
 	m_DiffuseTexture.CreateImage(device, width, height, format, tiling, usage, properties, image, imageMemory, physicalDevice);
-	m_NormalMap.CreateImage(device, width, height, format, tiling, usage, properties, image, imageMemory, physicalDevice); 
 }
 
 VkCommandBuffer& ImageManager::BeginSingleTimeCommands(const VkDevice& device, const VkCommandPool& commandPool)
@@ -80,7 +79,7 @@ void ImageManager::CopyBufferToImage(const VkBuffer& buffer, const VkImage& imag
 void ImageManager::CleanUp(const VkDevice& device)
 {
 	m_DiffuseTexture.CleanUp(device);
-	m_NormalMap.CleanUp(device);
+	m_NormalMap.CleanUpWithoutImageViews(device);
 	
 }
 
