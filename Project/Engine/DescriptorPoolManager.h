@@ -91,7 +91,7 @@ inline void DAEDescriptorPool<UBO>::initialize(const VkPhysicalDevice& physicalD
 	const VkMemoryPropertyFlags& properties,
 	const VkDeviceSize& size,ImageManager& imageMamager)
 {
-	std::array<VkDescriptorPoolSize, 4> poolSizes{}; 
+	std::array<VkDescriptorPoolSize, 5> poolSizes{}; 
 	poolSizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER; 
 	poolSizes[0].descriptorCount = static_cast<uint32_t>(m_Count);
 	poolSizes[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER; 
@@ -100,6 +100,8 @@ inline void DAEDescriptorPool<UBO>::initialize(const VkPhysicalDevice& physicalD
 	poolSizes[2].descriptorCount = static_cast<uint32_t>(m_Count);
 	poolSizes[3].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
 	poolSizes[3].descriptorCount = static_cast<uint32_t>(m_Count);
+	poolSizes[4].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+	poolSizes[4].descriptorCount = static_cast<uint32_t>(m_Count);
 
 	VkDescriptorPoolCreateInfo poolInfo{}; 
 	poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO; 
@@ -156,7 +158,12 @@ void DAEDescriptorPool<UBO>::createDescriptorSets(ImageManager& imageManager)
 		specularMapInfo.imageView = imageManager.GetSpecularMapImageView();
 		specularMapInfo.sampler = imageManager.GetSpecularMapTextureSampler(); 
 
-		std::array<VkWriteDescriptorSet, 4> descriptorWrites{}; 
+		VkDescriptorImageInfo roughnessMapInfo{};
+		roughnessMapInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		roughnessMapInfo.imageView = imageManager.GetRoughnessMapImageView(); 
+		roughnessMapInfo.sampler = imageManager.GetRoughnessMapTextureSampler(); 
+
+		std::array<VkWriteDescriptorSet, 5> descriptorWrites{}; 
 
 		descriptorWrites[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 		descriptorWrites[0].dstSet = m_DescriptorSets[descriptorIndex];
@@ -190,7 +197,15 @@ void DAEDescriptorPool<UBO>::createDescriptorSets(ImageManager& imageManager)
 		descriptorWrites[3].dstArrayElement = 0;
 		descriptorWrites[3].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
 		descriptorWrites[3].descriptorCount = 1;
-		descriptorWrites[3].pImageInfo = &specularMapInfo; 
+		descriptorWrites[3].pImageInfo = &specularMapInfo;
+
+		descriptorWrites[4].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+		descriptorWrites[4].dstSet = m_DescriptorSets[descriptorIndex];
+		descriptorWrites[4].dstBinding = 4;
+		descriptorWrites[4].dstArrayElement = 0;
+		descriptorWrites[4].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+		descriptorWrites[4].descriptorCount = 1;
+		descriptorWrites[4].pImageInfo = &roughnessMapInfo;
 
 		
 		vkUpdateDescriptorSets(m_Device, static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
@@ -243,7 +258,14 @@ inline void DAEDescriptorPool<UBO>::CreateDescriptorSetLayout(const VkDevice& de
 	thirdSamplerLayoutBinding.pImmutableSamplers = nullptr;
 	thirdSamplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 
-	std::array<VkDescriptorSetLayoutBinding, 4> bindings = { uboLayoutBinding, samplerLayoutBinding,secondSamplerLayoutBinding,thirdSamplerLayoutBinding };
+	VkDescriptorSetLayoutBinding fourthSamplerLayoutBinding{};
+	fourthSamplerLayoutBinding.binding = 4;
+	fourthSamplerLayoutBinding.descriptorCount = 1;
+	fourthSamplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+	fourthSamplerLayoutBinding.pImmutableSamplers = nullptr;
+	fourthSamplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+
+	std::array<VkDescriptorSetLayoutBinding, 5> bindings = { uboLayoutBinding, samplerLayoutBinding,secondSamplerLayoutBinding,thirdSamplerLayoutBinding,fourthSamplerLayoutBinding };
 	VkDescriptorSetLayoutCreateInfo layoutInfoSampler{};
 	layoutInfoSampler.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
 	layoutInfoSampler.bindingCount = static_cast<uint32_t>(bindings.size());

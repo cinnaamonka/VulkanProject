@@ -10,7 +10,7 @@ public:
 
 	void CreateTextureImage(const VkDevice& device,const VkPhysicalDevice& physicalDevice, 
 		const VkCommandPool& commandPool, const VkQueue& graphicsQueue,const std::string& diffuseTexturePath,
-		const std::string& normalPathPath, const std::string& normalPath);
+		const std::string& normalPathPath, const std::string& normalPath, const std::string& roughnessPath);
 
 	void CreateImage(const VkDevice& device, uint32_t width, uint32_t height,const VkFormat& format,
 		const VkImageTiling& tiling,const VkImageUsageFlags& usage,const VkMemoryPropertyFlags& properties, VkImage& image,
@@ -34,6 +34,7 @@ public:
 	void CreateDiffuseTextureSampler(const VkDevice& device, const VkPhysicalDevice& physicalDevice);
 	void CreateNormalMapSampler(const VkDevice& device, const VkPhysicalDevice& physicalDevice);
 	void CreateSpecularMapSampler(const VkDevice& device, const VkPhysicalDevice& physicalDevice);
+	void CreateRoughnessMapSampler(const VkDevice& device, const VkPhysicalDevice& physicalDevice);
 		
 	VkImageView& GetDiffuseTextureImageView()
 	{
@@ -65,10 +66,21 @@ public:
 	{
 		return m_SpecularMap.GetTextureSampler();;
 	}
+
+	VkImageView& GetRoughnessMapImageView()
+	{
+		return  m_RoughnessMap.GetTextureImageView();;
+	}
+
+	VkSampler& GetRoughnessMapTextureSampler()
+	{
+		return m_RoughnessMap.GetTextureSampler();;
+	}
 private:
 	Texture m_DiffuseTexture;
 	Texture m_NormalMap;
 	Texture m_SpecularMap;
+	Texture m_RoughnessMap;
 	
 	VkCommandBuffer m_CommandBuffer;
 };
